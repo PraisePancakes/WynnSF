@@ -3,11 +3,18 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include "../Include/Player.hpp"
+#include "../Include/Camera.hpp"
+
 
 #define WINDOW_W 1280
 #define WINDOW_H 720
 
 const char* title = "WynnSF";
+
+/*
+	TO DO
+	seperate implementation details into source files
+*/
 
 
 class Game {
@@ -19,9 +26,8 @@ class Game {
 	int m_CurrentFrame;
 	bool m_Started = false;
 	std::unique_ptr<Player> m_Player;
+	std::unique_ptr<Camera> m_Camera;
 	
-	
-	void testgit() {};
 	void SUserInput() {
 		sf::Event e;
 		auto& p = em.GetEntities("Player")[0];
@@ -69,6 +75,14 @@ class Game {
 		auto& player = em.AddEntity("Player");
 		this->m_Player = std::make_unique<Player>(player, (float)m_Window.getSize().x / 2, (float)m_Window.getSize().y / 2, name);
 	};
+
+
+	/*
+		void spawnTestDummy() {
+			auto& testD = em.AddEntity("Dummy");
+			testD.AddComponent<SpriteComponent>("src/Assets/Player/Idle/idle0.png", 1.f, 1.f, WINDOW_W / 2, WINDOW_H / 2);
+		};
+	*/
 
 	void initMenu() {
 		auto& logo = em.AddEntity("Logo");
@@ -130,12 +144,17 @@ class Game {
 
 
 	void SRender() {
+		//auto& test = em.GetEntities("Dummy")[0];
+		//auto test_sc = test->GetComponent<SpriteComponent>();
 
 		if (!m_Started) {
 			renderMenu();
 		}
 		else {
 			m_Player->Render(&m_Window, m_CurrentFrame);
+			//m_Window.draw(test_sc->sprite);
+			m_Camera->Update(m_Player->entity->GetComponent<TransformComponent>()->Velocity.x, m_Player->entity->GetComponent<TransformComponent>()->Velocity.y);
+			m_Window.setView(m_Camera->GetView());
 		}
 		
 	}
@@ -150,11 +169,16 @@ public:
 
 		m_Window.create(sf::VideoMode(WINDOW_W, WINDOW_H), title, sf::Style::Close | sf::Style::Titlebar);
 		spawnPlayer(username);
+		//spawnTestDummy();
 		initMenu();
+
 		m_Paused = false;
 		m_Running = true;
 		m_CurrentFrame = 0;
 		m_Window.setFramerateLimit(60);
+		m_Camera = std::make_unique<Camera>(WINDOW_W, WINDOW_H, m_Player->entity->GetComponent<TransformComponent>()->Position.x, m_Player->entity->GetComponent<TransformComponent>()->Position.y);
+		m_Window.setView(m_Camera->GetView());
+
 	
 	};
 	void Run() {
@@ -163,7 +187,7 @@ public:
 		while (m_Running) {
 			
 			em.Update();
-			em.LogEntites();
+		
 			m_Window.clear();
 			if (!m_Paused) {	
 				SUserInput();
