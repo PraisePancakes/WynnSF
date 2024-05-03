@@ -21,7 +21,7 @@ class Game {
 	std::unique_ptr<Player> m_Player;
 	
 	
-
+	void testgit() {};
 	void SUserInput() {
 		sf::Event e;
 		auto& p = em.GetEntities("Player")[0];
