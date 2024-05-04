@@ -59,6 +59,9 @@
     <ClInclude Include="src\Include\Camera.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Include\SceneManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\Assets\Player\Run\run0.png">
@@ -98,6 +101,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="src\Assets\Logo\logo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\Grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\Water.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -155,6 +155,7 @@
     <ClInclude Include="src\Game\Game.hpp" />
     <ClInclude Include="src\Include\Camera.hpp" />
     <ClInclude Include="src\Include\Player.hpp" />
+    <ClInclude Include="src\Include\SceneManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\Assets\Logo\logo.png" />
@@ -170,6 +171,8 @@
     <Image Include="src\Assets\Player\Run\run2.png" />
     <Image Include="src\Assets\Player\Run\run3.png" />
     <Image Include="src\Assets\Player\Run\run4.png" />
+    <Image Include="src\Assets\Tiles\Grass.png" />
+    <Image Include="src\Assets\Tiles\Water.png" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="src\Assets\Font\PixelFont.ttf" />
