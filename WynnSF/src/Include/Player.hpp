@@ -36,7 +36,7 @@ public:
 		sc->sprite.setPosition(tc->Position.x, tc->Position.y);
 		auto ic = entity->GetComponent<InputComponent>();
 		auto ac = entity->GetComponent<AnimatorComponent>();
-		auto usernameTextc = entity->GetComponent<TextComponent>()->Text;
+		sf::Text usernameTextc = entity->GetComponent<TextComponent>()->Text;
 
 		if (IsMoving()) {
 			if (LookingLeft()) {

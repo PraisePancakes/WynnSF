@@ -78,6 +78,9 @@ public:
 	}
 
 	EntityVector& GetEntities(const std::string& tag) {
+		if (this->m_EntityMap[tag].size() == 0) {
+			std::cout << "Tag vector : " << tag << " has a size of 0" << std::endl;
+		}
 		return this->m_EntityMap[tag];
 	}
 

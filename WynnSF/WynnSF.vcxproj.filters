@@ -103,10 +103,16 @@
     <Image Include="src\Assets\Logo\logo.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="src\Assets\Tiles\Grass.png">
+    <Image Include="src\Assets\Tiles\Water.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="src\Assets\Tiles\Water.png">
+    <Image Include="src\Assets\Tiles\Grass\Grass_1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\Grass\Grass_2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\Grass\Grass_3.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

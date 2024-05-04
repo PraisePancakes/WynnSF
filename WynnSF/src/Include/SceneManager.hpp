@@ -18,17 +18,56 @@ class SceneManager {
 	std::vector<std::vector<int>> map;
 	sf::RenderWindow *ctx;
 
+	void clearPrevScene() {
+		auto& grassTiles = em->GetEntities("Grass");
+		auto& waterTiles = em->GetEntities("Water");
 
-public:
-	SceneManager( sf::RenderWindow* ctx, EntityManager* em, Scenes scene) {
-		this->em = em;
-		this->ctx = ctx;
-		this->m_CurrentSceneIdx = scene;
-		
+		for (auto& g : grassTiles) {
+			g->DestroyEntity();
+		}
+
+		for (auto& w : waterTiles) {
+			w->DestroyEntity();
+		}
+	}
+
+	void initScene() {
+		switch (m_CurrentSceneIdx) {
+		case Scenes::SCENE_MENU:
+			break;
+		case Scenes::SCENE_RAGNI:
+			this->map = {
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 2, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+			};
+			break;
+		}
+
+
+
 	};
 
-
-	void InitScene() {
+	void loadScene() {
+		initScene();
 		switch (m_CurrentSceneIdx) {
 		case Scenes::SCENE_MENU:
 		{
@@ -46,20 +85,53 @@ public:
 			textc->Text.setPosition(sc->originalXpos - 100, sc->originalYpos + 150);
 			quitTextc->Text.setPosition(sc->originalXpos - 100, sc->originalYpos + 200);
 		}
-			break;
+		break;
 		case Scenes::SCENE_RAGNI:
-			
+			for (size_t i = 0; i < map.size(); ++i) {
+				for (size_t j = 0; j < map[i].size(); ++j) {
+					switch (map[i][j]) {
+					case 0:
+						em->AddEntity("Grass").AddComponent<SpriteComponent>("src/Assets/Tiles/Grass/Grass_1.png", 1, 1, (j * 100), (i * 100)); // Assuming each tile is 32x32 pixels
+						break;
+
+					case 1:
+						em->AddEntity("Grass").AddComponent<SpriteComponent>("src/Assets/Tiles/Grass/Grass_2.png", 1, 1, (j * 100), (i * 100));
+						break;
+
+					case 2:
+						em->AddEntity("Grass").AddComponent<SpriteComponent>("src/Assets/Tiles/Grass/Grass_3.png", 1, 1, (j * 100), (i * 100));
+						break;
+
+					default:
+						break;
+					}
+				}
+			}
+
+
 			break;
 		}
 	}
+
+
+public:
+	SceneManager( sf::RenderWindow* ctx, EntityManager* em) {
+		this->em = em;
+		this->ctx = ctx;
+		loadScene();
+		
+	};
+
+
+	
 
 	Scenes GetCurrentScene() const {
 		return m_CurrentSceneIdx;
 	}
 
 	void RenderScene() {
-		switch (m_CurrentSceneIdx) {
-		case Scenes::SCENE_MENU:
+
+		if (m_CurrentSceneIdx == Scenes::SCENE_MENU) {
 			auto logoSc = em->GetEntities("Logo")[0]->GetComponent<SpriteComponent>();
 			const int MAX_OSC = ctx->getSize().x / 2 + 50;
 			const int MIN_OSC = ctx->getSize().x / 2 - 50;
@@ -85,45 +157,27 @@ public:
 
 			ctx->draw(playText->GetComponent<TextComponent>()->Text);
 			ctx->draw(logoSc->sprite);
-			break;
-
 		}
+		else {
+			for (auto& waterTile : em->GetEntities("Water")) {
+				ctx->draw(waterTile->GetComponent<SpriteComponent>()->sprite);
+			}
+
+			for (auto& grassTile : em->GetEntities("Grass")) {
+				ctx->draw(grassTile->GetComponent<SpriteComponent>()->sprite);
+			}
+		}
+
 	};
 
-	void LoadScene() {
-		switch (m_CurrentSceneIdx) {
-		case Scenes::SCENE_MENU:
-			break;
-		case Scenes::SCENE_RAGNI:
-			this->map = {
-						{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-						{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-			};
-			break;
-		}
-		
-	};
+	
+
+	
 
 	void SetScene(Scenes scene) {
 		m_CurrentSceneIdx = scene;
+		clearPrevScene();
+		loadScene();
+		em->Update();
 	};
 };

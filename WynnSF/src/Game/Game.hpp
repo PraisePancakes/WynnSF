@@ -21,14 +21,14 @@ const char* title = "WynnSF";
 class Game {
 	
 	sf::RenderWindow m_Window;
-	bool m_Running;
+	bool m_Running = false;
 	EntityManager em;
-	bool m_Paused;
-	int m_CurrentFrame;
+	bool m_Paused = false;
+	int m_CurrentFrame = 0;
 	bool m_Started = false;
-	std::unique_ptr<Player> m_Player;
-	std::unique_ptr<Camera> m_Camera;
-	std::unique_ptr<SceneManager> sm;
+	std::unique_ptr<Player> m_Player = nullptr;
+	std::unique_ptr<Camera> m_Camera = nullptr;
+	std::unique_ptr<SceneManager> sm = nullptr;
 	
 	void SUserInput() {
 		sf::Event e;
@@ -43,8 +43,9 @@ class Game {
 				m_Player->HandleInput(e);
 			}
 			else {
-				if (e.type == sf::Event::MouseButtonPressed) {
+				if (e.type == sf::Event::MouseButtonPressed && sm->GetCurrentScene() == Scenes::SCENE_MENU) {
 					sm->SetScene(Scenes::SCENE_RAGNI);
+					
 				}
 
 				if (e.type == sf::Event::KeyPressed) {
@@ -54,6 +55,8 @@ class Game {
 						break;
 					}
 				}
+
+				
 			}
 
 		}
@@ -88,7 +91,7 @@ class Game {
 		auto& test = em.GetEntities("Dummy")[0];
 		auto test_sc = test->GetComponent<SpriteComponent>();
 
-		
+			
 			sm->RenderScene();
 
 			if (sm->GetCurrentScene() != Scenes::SCENE_MENU) {
@@ -96,6 +99,7 @@ class Game {
 				m_Window.draw(test_sc->sprite); /*TEST*/
 				m_Camera->Update(m_Player->entity->GetComponent<TransformComponent>()->Velocity.x, m_Player->entity->GetComponent<TransformComponent>()->Velocity.y);
 				m_Window.setView(m_Camera->GetView());
+				
 			}
 		
 		
@@ -121,10 +125,9 @@ public:
 		m_Window.setFramerateLimit(60);
 		m_Camera = std::make_unique<Camera>(WINDOW_W, WINDOW_H, m_Player->entity->GetComponent<TransformComponent>()->Position.x, m_Player->entity->GetComponent<TransformComponent>()->Position.y);
 		m_Window.setView(m_Camera->GetView());
-		sm = std::make_unique<SceneManager>(&m_Window, &em, Scenes::SCENE_MENU);
-		sm->InitScene();
-
+		sm = std::make_unique<SceneManager>(&m_Window, &em);
 	
+		
 	};
 	void Run() {
 
@@ -132,7 +135,7 @@ public:
 		while (m_Running) {
 			
 			em.Update();
-		
+			
 			m_Window.clear();
 			if (!m_Paused) {	
 				SUserInput();
@@ -142,8 +145,11 @@ public:
 
 			
 			SRender();
-			m_CurrentFrame++;
 			
+			m_CurrentFrame++;
+
+			em.Destroy();
+
 			m_Window.display();
 		}
 
