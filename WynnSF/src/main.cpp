@@ -1,11 +1,9 @@
 #include <iostream>
-#include "Game/Game.hpp"
+#include "Game.hpp"
 
-int main(int arc, char* argv[]) {
-	
-	Game g;
+int main(int argc, char* argv[]) {
+	Game g("Test");
 	g.Run();
-	
-	std::cout << "Process Finished" << std::endl;
-	return EXIT_SUCCESS;
+
+	return 0;
 }

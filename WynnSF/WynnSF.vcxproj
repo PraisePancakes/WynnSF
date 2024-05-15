@@ -142,23 +142,21 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\components\AnimatorComponent.hpp" />
-    <ClInclude Include="core\components\ColliderComponent.hpp" />
-    <ClInclude Include="core\components\InputComponent.hpp" />
-    <ClInclude Include="core\components\SpriteComponent.hpp" />
-    <ClInclude Include="core\components\TextComponent.hpp" />
-    <ClInclude Include="core\components\TransformComponent.hpp" />
+    <ClInclude Include="core\Components\CAnimator.hpp" />
+    <ClInclude Include="core\Components\CCollider.hpp" />
+    <ClInclude Include="core\Components\CInput.hpp" />
+    <ClInclude Include="core\Components\CSprite.hpp" />
+    <ClInclude Include="core\Components\CTransform.hpp" />
     <ClInclude Include="core\ECS.hpp" />
-    <ClInclude Include="core\manager\EntityManager.hpp" />
-    <ClInclude Include="core\physics\Vec2.hpp" />
-    <ClInclude Include="core\utils\utils.hpp" />
-    <ClInclude Include="src\Game\Game.hpp" />
-    <ClInclude Include="src\Include\Camera.hpp" />
-    <ClInclude Include="src\Include\Player.hpp" />
-    <ClInclude Include="src\Include\SceneManager.hpp" />
+    <ClInclude Include="core\Manager\EntityManager.hpp" />
+    <ClInclude Include="core\Physics\Vec2D.hpp" />
+    <ClInclude Include="core\Utils\Utils.hpp" />
+    <ClInclude Include="src\Game.hpp" />
+    <ClInclude Include="src\Player.hpp" />
+    <ClInclude Include="src\SceneManager.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="src\Assets\Logo\logo.png" />
+    <Image Include="src\Assets\Sprites\Logo\logo.png" />
     <Image Include="src\Assets\Player\Idle\idle0.png" />
     <Image Include="src\Assets\Player\Idle\idle1.png" />
     <Image Include="src\Assets\Player\Idle\idle2.png" />
@@ -174,10 +172,13 @@
     <Image Include="src\Assets\Tiles\Grass\Grass_1.png" />
     <Image Include="src\Assets\Tiles\Grass\Grass_2.png" />
     <Image Include="src\Assets\Tiles\Grass\Grass_3.png" />
+    <Image Include="src\Assets\Tiles\Wall\LWall.png" />
+    <Image Include="src\Assets\Tiles\Wall\RWall.png" />
+    <Image Include="src\Assets\Tiles\Wall\Wall_1.png" />
     <Image Include="src\Assets\Tiles\Water.png" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="src\Assets\Font\PixelFont.ttf" />
+    <Font Include="src\Assets\Fonts\PixelFont.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

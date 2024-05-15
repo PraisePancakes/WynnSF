@@ -23,43 +23,37 @@
     <ClInclude Include="core\ECS.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\components\ColliderComponent.hpp">
+    <ClInclude Include="core\Components\CCollider.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\physics\Vec2.hpp">
+    <ClInclude Include="core\Physics\Vec2D.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\utils\utils.hpp">
+    <ClInclude Include="core\Utils\Utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\manager\EntityManager.hpp">
+    <ClInclude Include="core\Manager\EntityManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\components\TransformComponent.hpp">
+    <ClInclude Include="core\Components\CTransform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\components\SpriteComponent.hpp">
+    <ClInclude Include="core\Components\CSprite.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\Game.hpp">
+    <ClInclude Include="src\Game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\components\InputComponent.hpp">
+    <ClInclude Include="core\Components\CInput.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\components\AnimatorComponent.hpp">
+    <ClInclude Include="core\Components\CAnimator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\components\TextComponent.hpp">
+    <ClInclude Include="src\Player.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Include\Player.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Include\Camera.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Include\SceneManager.hpp">
+    <ClInclude Include="src\SceneManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -100,7 +94,7 @@
     <Image Include="src\Assets\Player\Idle\idle6.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="src\Assets\Logo\logo.png">
+    <Image Include="src\Assets\Sprites\Logo\logo.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="src\Assets\Tiles\Water.png">
@@ -115,8 +109,17 @@
     <Image Include="src\Assets\Tiles\Grass\Grass_3.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="src\Assets\Tiles\Wall\Wall_1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\Wall\RWall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\Wall\LWall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="src\Assets\Font\PixelFont.ttf" />
+    <Font Include="src\Assets\Fonts\PixelFont.ttf" />
   </ItemGroup>
 </Project>

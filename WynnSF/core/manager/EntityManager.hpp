@@ -1,105 +1,81 @@
 #pragma once
-#include <vector>
-#include <memory>
-#include <map>
 #include "../ECS.hpp"
-#include "../components/ColliderComponent.hpp"
-#include "../components/TransformComponent.hpp"
-#include "../components/SpriteComponent.hpp"
-#include "../components/InputComponent.hpp"
-#include "../components/AnimatorComponent.hpp"
-#include "../components/TextComponent.hpp"
+#include "../Components/CTransform.hpp"
+#include "../Components/CAnimator.hpp"
+#include "../Components/CInput.hpp"
+#include "../Components/CCollider.hpp"
+#include "../Components/CSprite.hpp"
 
-typedef std::vector<std::shared_ptr<Entity>> EntityVector;
-typedef std::map<std::string, EntityVector> EntityMap;
+#include <memory>
+#include <vector>
+#include <map>
+#include <algorithm>
+
+typedef std::vector<std::shared_ptr<Entity>> EntityVec;
+typedef std::map<std::string, EntityVec> EntityMap; //maps entities of a tag to a vector
+
 
 class EntityManager {
-	
-	EntityMap m_EntityMap;
-	EntityID m_EntitiesSize = 0;
-	EntityVector m_ToAdd;
-	
+
+
+	EntityMap m_entityMap = {};
+	EntityVec m_toAdd = {}; //prevent iterator invalidation, where some entites might not be counted when the m_entities gets modified therefore, we add all entities here then at the same time push them to the m_entities vector
+
 public:
-	EntityVector Entities;
+	EntityVec m_entities = {};
 	EntityManager() {};
 
-	Entity& AddEntity() {
-		std::shared_ptr<Entity> e(new Entity());
-		Entity& addedEntity = *e;
-		m_ToAdd.push_back(e);
-		
-		return addedEntity;
+
+	std::shared_ptr<Entity> AddEntity() {
+		auto e = std::shared_ptr<Entity>(new Entity);
+		m_toAdd.push_back(e);
+		return e;
 	};
 
-	Entity& AddEntity(const std::string& tag) {
-		std::shared_ptr<Entity> e(new Entity(tag));
-		Entity& addedEntity = *e;
-		m_ToAdd.push_back(e);
-		
-		return addedEntity;
+	std::shared_ptr<Entity> AddEntity(const std::string& tag) {
+		auto e = std::shared_ptr<Entity>(new Entity(tag));
+		m_toAdd.push_back(e);
+		return e;
 	};
+
+	EntityVec GetEntities() {
+		return this->m_entityMap["Default"];
+	}
+
+	EntityVec GetEntities(const std::string& tag) {
+		return this->m_entityMap[tag];
+	}
 
 	void Update() {
-		
-		for (auto& e : m_ToAdd) {
-			Entities.push_back(e);
-			m_EntityMap[e->m_Tag].push_back(e);
+		for (auto& e : m_toAdd) {
+			m_entities.push_back(e);
+			m_entityMap[e->GetTag()].push_back(e);
 		}
 
-		m_ToAdd.clear();
-		
-	}
 
-	void LogEntites() const {
-		for (auto& e : Entities) {
-			e->LogEntity();
-			std::cout << "	Components :";
-			if (e->GetComponentsLength() == 0) {
-				std::cout << " No Components" << std::endl;
-			}
-			else {		
-				std::cout << "\n\t{" << std::endl;
-				for (auto c : e->m_Components) {
-					if (c) {
-						c->LogComponent();
-						
-					}
-				}
+		m_entities.erase(std::remove_if(m_entities.begin(), m_entities.end(), [](const std::shared_ptr<Entity>& e) {
+			return !e->IsActive();
+			}), m_entities.end());
 
-				std::cout << "\t}" << std::endl;
 
-			}
-			
+
+		for (auto& pair : m_entityMap) {
+			pair.second.erase(std::remove_if(pair.second.begin(), pair.second.end(), [](const std::shared_ptr<Entity>& e) {
+				return !e->IsActive();
+				}), pair.second.end());
 		}
-	}
 
-	EntityVector& GetEntities() {
-		return this->m_EntityMap["Default"];
-	}
+		m_toAdd.clear();
 
-	EntityVector& GetEntities(const std::string& tag) {
-		if (this->m_EntityMap[tag].size() == 0) {
-			std::cout << "Tag vector : " << tag << " has a size of 0" << std::endl;
-		}
-		return this->m_EntityMap[tag];
-	}
+	};
 
-	void Destroy() {
-		Entities.erase(std::remove_if(Entities.begin(), Entities.end(),
-			[](const std::shared_ptr<Entity>& entity) {
-				return !entity->IsActive();
-			}),
-			Entities.end());
 
-		for (auto& pair : m_EntityMap) {
-			pair.second.erase(std::remove_if(pair.second.begin(), pair.second.end(),
-				[](const std::shared_ptr<Entity>& entity) {
-					return !entity->IsActive();
-				}),
-				pair.second.end());
-		}
-	}
+	EntityManager(const EntityManager& other) = delete;
+	EntityManager(const EntityManager&& other) = delete;
+	EntityManager& operator=(const EntityManager& other) = delete;
+	~EntityManager() = default;
 
 
 
 };
+

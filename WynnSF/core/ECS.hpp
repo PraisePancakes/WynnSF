@@ -1,133 +1,117 @@
 #pragma once
 #include <iostream>
-#include <vector>
 #include <memory>
-#define MAX_COMPONENT_SIZE 10
+#include "Manager/EntityManager.hpp"
+#define MAX_COMPONENTS_SIZE 10
 
-
-class Entity;
 class Component;
+class Entity;
 
-using EntityID = std::uint32_t;
-using ComponentTypeID = std::size_t;
+using ComponentID = std::size_t;
+using EntityID = std::uint64_t;
 
-ComponentTypeID GenComponentTypeID() {
-	static ComponentTypeID lastID = 0;
+ComponentID GenComponentTypeID() {
+	static ComponentID lastID = 0;
+
 	return lastID++;
 };
 
-
-template<typename T>
-inline ComponentTypeID GenComponentTypeID() {
-	static ComponentTypeID id = GenComponentTypeID();
-	return id;
+template<class T>
+ComponentID GenComponentTypeID() {
+	static ComponentID typeID = GenComponentTypeID();
+	return typeID;
 }
 
-
-class Entity {
-	friend class EntityManager;
-
-	EntityID m_EntityID;
-	std::shared_ptr<Component> m_Components[MAX_COMPONENT_SIZE] = { nullptr };
-
-	
-	std::string m_Tag = "Default";
-	bool m_IsActive = true;
-
-	EntityID _genEntityID() const {
-		static EntityID id = 0;
-		return id++;
-	};
-
-	Entity() {
-	
-		static EntityID id = 0;
-		this->m_EntityID = _genEntityID();
-	};
-
-	Entity(const std::string& tag) {
-		
-		static EntityID id = 0;
-		this->m_EntityID = _genEntityID();
-		this->m_Tag = tag;
-	};
+class Component {
+	ComponentID m_id;
 
 public:
+	Component(ComponentID generatedID) { this->m_id = generatedID; };
+	Entity* owner = nullptr;
 
-
-	template<typename T>
-	std::shared_ptr<T> GetComponent() {
-		ComponentTypeID typeID = GenComponentTypeID<T>();
-
-		if (HasComponent<T>()) {
-			return std::static_pointer_cast<T>(m_Components[typeID]);
-		}
-		std::cout << typeID;
-		std::cout << "Component " << typeid(T).name() << " for entity #" << this->m_EntityID << " not found" << std::endl;
-		throw std::runtime_error("Invalid Component");
-	};
-
-	template<typename T, typename ...TArgs>
-	std::shared_ptr<T> AddComponent(TArgs&&...args) {
-		ComponentTypeID typeID = GenComponentTypeID<T>();
-		if (HasComponent<T>()) {
-			return GetComponent<T>();
-		}
-		
-		std::shared_ptr<T> subComponent = std::make_shared<T>(std::forward<TArgs>(args)...);
-		subComponent->Owner = this;
-		this->m_Components[typeID] = subComponent;
-		return subComponent;
+	ComponentID GetComponentTypeID() const {
+		return this->m_id;
 	}
-	ComponentTypeID GetComponentsLength() const { return 5; /*change this, not correct size */ };
 
-	template<typename T>
-	bool HasComponent() {
-		ComponentTypeID typeID = GenComponentTypeID<T>();
-
-		if (typeID <= 10 && m_Components[typeID] != nullptr)
-		{
-			return true;
-		}
-		return false;
-
-	
-		
-	};
-
-
-
-	EntityID GetEntityID() const { return this->m_EntityID; };
-	bool IsActive() const { return this->m_IsActive; };
-
-	void DestroyEntity() { this->m_IsActive = false; };
-
-	void LogEntity() const {
-		std::cout << "Entity" << std::endl;
-		std::cout << " ID : " << GetEntityID() << std::endl;
-		std::cout << " Tag: " << m_Tag << std::endl;
-	}
-	~Entity() {};
-
-	
 };
 
 
 
+class Entity {
 
-class Component {
-	ComponentTypeID m_ComponentID;
+	friend class EntityManager;
 
+private:
+	EntityID m_eId;
+	EntityID genUEID() {
+		static EntityID lastID = 0;
+		return lastID++;
+	};
+
+	std::shared_ptr<Component> m_Components[MAX_COMPONENTS_SIZE];
+
+	std::string m_eTag = "Default";
+
+	Entity() {
+		this->m_eId = genUEID();
+	};
+
+	Entity(const std::string& tag) {
+		this->m_eId = genUEID();
+		this->m_eTag = tag;
+	}
+
+
+	bool m_active = true;
 
 public:
-	Entity* Owner = nullptr;
-	Component(ComponentTypeID id) {
-		this->m_ComponentID = id;
+
+
+
+	template<class T, typename ...TArgs>
+	std::shared_ptr<T> AddComponent(TArgs&&... args) {
+		std::shared_ptr<T> newComponent = std::make_shared<T>(std::forward<TArgs>(args)...);
+		newComponent->owner = this;
+		m_Components[newComponent->GetComponentTypeID()] = newComponent;
+		return newComponent;
 	};
-	
-	inline ComponentTypeID GetTypeID() const { return this->m_ComponentID; };
-	Entity& GetOwner() const { return *this->Owner; };
-	virtual void LogComponent() const = 0;
-	virtual ~Component() {};
+
+	template<class T>
+	bool HasComponent() const {
+		ComponentID id = GenComponentTypeID<T>();
+
+		if (m_Components[id] != nullptr) {
+			return true;
+		}
+
+		return false;
+
+	};
+
+	std::string GetTag() const {
+		return m_eTag;
+	}
+
+	EntityID GetID() const { return this->m_eId; };
+
+	template<class T>
+	std::shared_ptr<T> GetComponent() {
+		ComponentID id = GenComponentTypeID<T>();
+
+		if (m_Components[id] != nullptr) {
+			return std::static_pointer_cast<T>(m_Components[id]);
+		}
+
+		std::cout << "Component : " << typeid(T).name() << " does not exist" << std::endl;
+
+	}
+
+	void DestroyEntity() {
+		this->m_active = false;
+	}
+
+	bool IsActive() const {
+		return this->m_active;
+	}
 
 };
