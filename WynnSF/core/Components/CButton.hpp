@@ -47,9 +47,9 @@ public:
 			}
 		}
 		else {
-			if (hovered) {
+		
 				hovered = false;
-			}
+		
 		}
 
 		if (!hovered) {
