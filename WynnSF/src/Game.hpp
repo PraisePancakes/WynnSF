@@ -49,8 +49,9 @@ class Game {
 		m_Player->HandleMovement();
 	};
 
-	void update() {
+	void sUpdate() {
 		m_Player->Update();
+		m_sceneManager->Update();
 	}
 
 
@@ -108,11 +109,10 @@ class Game {
 			m_Window.draw(sc->sprite);
 			m_Cam.setCenter(m_Player->GetPos().x, m_Player->GetPos().y);
 			m_Window.setView(m_Cam);
+			
 		}
-		else {
-			m_sceneManager->RenderMenu();
-		}
-
+		
+		m_sceneManager->RenderScene();
 
 	};
 
@@ -141,11 +141,15 @@ public:
 			m_Window.clear();
 			sUserInput();
 
+			if (m_sceneManager->GetCurrentScene() == Scenes::SCENE_QUIT) {
+				m_running = false;
+				m_Window.close();
+			}
 			//handle game events
 			if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
 				sCollider();
 				sMovement();
-				update();
+				sUpdate();
 			}
 			sRenderer();
 			m_Window.display();

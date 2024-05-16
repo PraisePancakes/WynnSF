@@ -5,6 +5,8 @@
 #include "../Components/CInput.hpp"
 #include "../Components/CCollider.hpp"
 #include "../Components/CSprite.hpp"
+#include "../Components/CText.hpp"
+#include "../Components/CButton.hpp"
 
 #include <memory>
 #include <vector>
