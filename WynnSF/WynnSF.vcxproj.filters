@@ -62,6 +62,9 @@
     <ClInclude Include="core\Components\CButton.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="core\Components\CShape.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\Assets\Player\Run\run0.png">

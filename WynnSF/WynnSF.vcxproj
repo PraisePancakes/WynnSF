@@ -146,6 +146,7 @@
     <ClInclude Include="core\Components\CButton.hpp" />
     <ClInclude Include="core\Components\CCollider.hpp" />
     <ClInclude Include="core\Components\CInput.hpp" />
+    <ClInclude Include="core\Components\CShape.hpp" />
     <ClInclude Include="core\Components\CSprite.hpp" />
     <ClInclude Include="core\Components\CText.hpp" />
     <ClInclude Include="core\Components\CTransform.hpp" />

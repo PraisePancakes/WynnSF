@@ -7,6 +7,7 @@
 #include "../Components/CSprite.hpp"
 #include "../Components/CText.hpp"
 #include "../Components/CButton.hpp"
+#include "../Components/CShape.hpp"
 
 #include <memory>
 #include <vector>
