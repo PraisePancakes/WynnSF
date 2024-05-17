@@ -1,6 +1,7 @@
 #pragma once
+#include "../core/Manager/EntityManager.hpp"
+#include "Menu.hpp"
 
-#include "../core/Components/CTransform.hpp"
 #include <ctime>
 
 #define PARTICLE_COUNT 100
@@ -61,7 +62,7 @@ class SceneManager {
 			std::cout << randomPos.x << std::endl;
 			auto particle = em->AddEntity("Menu-particle");
 		
-			auto sc = particle->AddComponent<CShape>(50, 3, sf::Color(20, 80, 35), sf::Color(20, 80, 35));
+			auto sc = particle->AddComponent<CShape>(50, 3, sf::Color(20, 80, 35), sf::Color(20, 80, 35), 2, 2);
 
 			sc->shape.setPosition(randomPos.x, randomPos.y);
 
@@ -70,10 +71,7 @@ class SceneManager {
 
 	};
 
-	
-	
-	void test() {
-	};
+
 
 	void renderMenuButtons() {
 		std::shared_ptr<Entity> btn = em->GetEntities("Play-btn")[0];
@@ -134,6 +132,8 @@ class SceneManager {
 			std::shared_ptr<Entity> e = particles[i];
 			auto shapeC = e->GetComponent<CShape>();
 			
+			 
+
 			if (shapeC->shape.getPosition().x >= MAX_X_BOUND) {
 				shapeC->xStep = -shapeC->xStep;
 			}
@@ -149,7 +149,9 @@ class SceneManager {
 			if (shapeC->shape.getPosition().y <= MIN_Y_BOUND) {
 				shapeC->yStep = -shapeC->yStep;
 			}
-			
+			if (i % 2 == 0) {
+				shapeC->xStep = -shapeC->xStep;
+			}
 		
 			shapeC->shape.move(shapeC->xStep, shapeC->yStep);
 			ctx->draw(shapeC->shape);
@@ -210,10 +212,11 @@ class SceneManager {
 	};
 
 public:
-	SceneManager(Scenes startingScene, sf::RenderWindow* ctx, EntityManager* em) {
+	SceneManager(Scenes startingScene, sf::RenderWindow* ctx, EntityManager* em)  {
 		m_currentScene = startingScene;
 		this->ctx = ctx;
 		this->em = em;
+	
 		initMenu();
 	};
 

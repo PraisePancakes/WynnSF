@@ -155,6 +155,7 @@
     <ClInclude Include="core\Physics\Vec2D.hpp" />
     <ClInclude Include="core\Utils\Utils.hpp" />
     <ClInclude Include="src\Game.hpp" />
+    <ClInclude Include="src\Menu.hpp" />
     <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\SceneManager.hpp" />
   </ItemGroup>
