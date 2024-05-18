@@ -52,6 +52,7 @@ class Game {
 	void sUpdate() {
 		m_Player->Update();
 		m_sceneManager->Update();
+	
 	}
 
 
@@ -149,8 +150,10 @@ public:
 			if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
 				sCollider();
 				sMovement();
-				sUpdate();
+				
 			}
+
+			sUpdate();
 			sRenderer();
 			m_Window.display();
 

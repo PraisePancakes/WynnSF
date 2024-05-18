@@ -1,10 +1,11 @@
 #pragma once
-#include "../core/Manager/EntityManager.hpp"
+
 #define PARTICLE_COUNT 100
 
 class Menu {
-	sf::RenderWindow* ctx;
+	
 	EntityManager* em;
+	sf::RenderWindow* ctx;
 
 	Core::Physics::Vec2D getRandomParticlePos(sf::RenderWindow* ctx) {
 
@@ -18,8 +19,63 @@ class Menu {
 
 	};
 
-	void init() {
 
+	void renderMenuText() {
+		std::shared_ptr<Entity> play = em->GetEntities("Play-text")[0];
+
+
+		auto playTextC = play->GetComponent<CText>();
+
+		std::shared_ptr<Entity> quit = em->GetEntities("Quit-text")[0];
+
+
+		auto quitTextC = quit->GetComponent<CText>();
+		ctx->draw(quitTextC->text);
+		ctx->draw(playTextC->text);
+	};
+
+	void renderMenuParticles() {
+		EntityVec particles = em->GetEntities("Menu-particle");
+
+
+		const float MIN_X_BOUND = 0;
+		const float MIN_Y_BOUND = 0;
+		const float MAX_X_BOUND = ctx->getSize().x;
+		const float MAX_Y_BOUND = ctx->getSize().y;
+
+		for (size_t i = 0; i < particles.size(); i++) {
+			std::shared_ptr<Entity> e = particles[i];
+			auto shapeC = e->GetComponent<CShape>();
+
+
+
+			if (shapeC->shape.getPosition().x >= MAX_X_BOUND) {
+				shapeC->xStep = -shapeC->xStep;
+			}
+
+			if (shapeC->shape.getPosition().y >= MAX_Y_BOUND) {
+				shapeC->yStep = -shapeC->yStep;
+			}
+
+			if (shapeC->shape.getPosition().x <= MIN_X_BOUND) {
+				shapeC->xStep = -shapeC->xStep;
+			}
+
+			if (shapeC->shape.getPosition().y <= MIN_Y_BOUND) {
+				shapeC->yStep = -shapeC->yStep;
+			}
+			if (i % 2 == 0) {
+				shapeC->xStep = -shapeC->xStep;
+			}
+
+			shapeC->shape.move(shapeC->xStep, shapeC->yStep);
+			ctx->draw(shapeC->shape);
+		}
+
+
+	};
+
+	void initMenu() {
 		std::srand(std::time(NULL));
 		auto logo = em->AddEntity("Logo");
 
@@ -44,7 +100,7 @@ class Menu {
 
 		for (size_t i = 0; i < PARTICLE_COUNT; i++) {
 			Core::Physics::Vec2D randomPos = getRandomParticlePos(ctx);
-			std::cout << randomPos.x << std::endl;
+			
 			auto particle = em->AddEntity("Menu-particle");
 
 			auto sc = particle->AddComponent<CShape>(50, 3, sf::Color(20, 80, 35), sf::Color(20, 80, 35), 2, 2);
@@ -55,53 +111,6 @@ class Menu {
 		}
 	
 	};
-
-	int HandleQuit() {
-		std::shared_ptr<Entity> quitbtn = em->GetEntities("Quit-btn")[0];
-	
-		auto qbtnC = quitbtn->GetComponent<CButton>();
-		qbtnC->OnHover(ctx, [qbtnC]() {
-			qbtnC->buttonRect.setOutlineColor(sf::Color::Red);
-
-		});
-
-		int event = 0;
-
-		qbtnC->OnClick(ctx, [&event]() {
-			event = 1;
-		});
-
-		return event;
-
-	}
-
-	int HandlePlay() {
-		std::shared_ptr<Entity> playBtn = em->GetEntities("Play-btn")[0];
-		auto playBtnC = playBtn->GetComponent<CButton>();
-		int event = 0;
-		playBtnC->OnHover(ctx, [playBtnC]() {
-			playBtnC->buttonRect.setOutlineColor(sf::Color::Green);
-			});
-
-		playBtnC->OnClick(ctx, [&event]() {
-			event = 2;
-		});
-
-
-		return event;
-
-	}
-
-	void renderMenuButtons() {
-		std::shared_ptr<Entity> btn = em->GetEntities("Play-btn")[0];
-		auto btnC = btn->GetComponent<CButton>();
-
-		std::shared_ptr<Entity> quitbtn = em->GetEntities("Quit-btn")[0];
-
-		auto qbtnC = quitbtn->GetComponent<CButton>();
-		
-		
-	}
 
 	void renderLogo() {
 		std::shared_ptr<Entity> logo = em->GetEntities("Logo")[0];
@@ -145,68 +154,59 @@ class Menu {
 		ctx->draw(sc->sprite);
 	}
 
-	void renderMenuParticles() {
-		EntityVec particles = em->GetEntities("Menu-particle");
+	
+
+	void renderMenuButtons() {
+		std::shared_ptr<Entity> btn = em->GetEntities("Play-btn")[0];
+		auto btnC = btn->GetComponent<CButton>();
+
+		std::shared_ptr<Entity> quitbtn = em->GetEntities("Quit-btn")[0];
+
+		auto qbtnC = quitbtn->GetComponent<CButton>();
+
+		qbtnC->OnHover(ctx, [qbtnC]() {
+			qbtnC->buttonRect.setOutlineColor(sf::Color::Red);
+
+			});
+
+		btnC->OnHover(ctx, [btnC]() {
+			btnC->buttonRect.setOutlineColor(sf::Color::Green);
+			});
 
 
-		const float MIN_X_BOUND = 0;
-		const float MIN_Y_BOUND = 0;
-		const float MAX_X_BOUND = ctx->getSize().x;
-		const float MAX_Y_BOUND = ctx->getSize().y;
-
-		for (size_t i = 0; i < particles.size(); i++) {
-			std::shared_ptr<Entity> e = particles[i];
-			auto shapeC = e->GetComponent<CShape>();
-
-			if (shapeC->shape.getPosition().x >= MAX_X_BOUND) {
-				shapeC->xStep = -shapeC->xStep;
-			}
-
-			if (shapeC->shape.getPosition().y >= MAX_Y_BOUND) {
-				shapeC->yStep = -shapeC->yStep;
-			}
-
-			if (shapeC->shape.getPosition().x <= MIN_X_BOUND) {
-				shapeC->xStep = -shapeC->xStep;
-			}
-
-			if (shapeC->shape.getPosition().y <= MIN_Y_BOUND) {
-				shapeC->yStep = -shapeC->yStep;
-			}
+		ctx->draw(qbtnC->buttonRect);
+		ctx->draw(btnC->buttonRect);
+	}
 
 
-			shapeC->shape.move(shapeC->xStep, shapeC->yStep);
-			ctx->draw(shapeC->shape);
-		}
-
-
-	};
-
-	void renderMenuText() {
-		std::shared_ptr<Entity> play = em->GetEntities("Play-text")[0];
-
-
-		auto playTextC = play->GetComponent<CText>();
-
-		std::shared_ptr<Entity> quit = em->GetEntities("Quit-text")[0];
-
-
-		auto quitTextC = quit->GetComponent<CText>();
-		ctx->draw(quitTextC->text);
-		ctx->draw(playTextC->text);
-	};
 
 public:
-	Menu(EntityManager* em, sf::RenderWindow* window) {
-		
+	Menu(EntityManager* em, sf::RenderWindow* ctx) {
 		this->em = em;
-		this->ctx = window;
+		this->ctx = ctx;
+		initMenu();
 	};
 
-	int HandleMenuEvents() {
-		HandlePlay();
-		HandleQuit();
-		return 0;
+	int GetMenuEvents() const {
+		int event = 0;
+
+		std::shared_ptr<Entity> playbtn = em->GetEntities("Play-btn")[0];
+		auto playbtnC = playbtn->GetComponent<CButton>();
+
+		std::shared_ptr<Entity> quitbtn = em->GetEntities("Quit-btn")[0];
+		auto quitbtnC = quitbtn->GetComponent<CButton>();
+
+		playbtnC->OnClick(this->ctx, [&event]() {
+			event = 1;
+		});
+
+		quitbtnC->OnClick(this->ctx, [&event]() {
+			event = 2;
+			});
+		
+
+		return event;
+
 	};
 
 	void Render() {
@@ -214,7 +214,10 @@ public:
 		renderLogo();
 		renderMenuButtons();
 		renderMenuText();
+		
 	};
 
+
 	~Menu() = default;
+
 };
