@@ -39,6 +39,7 @@ class Game {
 	};
 
 	void sUpdate() {
+		m_entManager.Update();
 		m_Player->Update();
 		m_sceneManager->Update();
 	
