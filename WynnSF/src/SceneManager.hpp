@@ -25,6 +25,63 @@ class SceneManager {
 	std::unique_ptr<Menu> menu = nullptr;
 	std::vector<std::vector<int>> scenemap = { {} };
 
+	void initScene() {
+		switch (m_currentScene) {
+		case Scenes::SCENE_RAGNI:
+			
+			this->scenemap = { 
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+			};
+			break;
+		}
+	};
+
+	void loadScene() {
+		for (size_t i = 0; i < scenemap.size(); i++) {
+			for (size_t j = 0; j < scenemap[i].size(); j++) {
+				switch (scenemap[i][j]) {
+				case 0 :
+					{
+						
+						auto grassTile = em->AddEntity("TileGrass");
+						
+						auto sc = grassTile->AddComponent<CSprite>("src/Assets/Tiles/Grass.png", sf::IntRect(0, 0, 128, 128), 128, 128);
+						sc->sprite.setPosition(i * 128, j * 128);
+						
+					}
+					break;
+				case 1 :
+					
+					break;
+				}
+			}
+		}
+
+		
+	
+	};
+
+
+
 public:
 	SceneManager(Scenes startingScene, sf::RenderWindow* ctx, EntityManager* em)  {
 		m_currentScene = startingScene;
@@ -38,7 +95,14 @@ public:
 	SceneManager& operator=(const SceneManager& other) = delete;
 
 	void SetScene(Scenes scene) {
+		if (scene == Scenes::SCENE_QUIT) {
+			this->m_currentScene = scene;
+			return;
+		}
 		this->m_currentScene = scene;
+		initScene();
+		loadScene();
+		em->Update();
 	};
 
 	void Update() {
@@ -48,10 +112,10 @@ public:
 			int event = menu->GetMenuEvents();
 			switch (event) {
 			case 1 :
-				m_currentScene = Scenes::SCENE_RAGNI;
+				SetScene(Scenes::SCENE_RAGNI);
 				break;
 			case 2 :
-				m_currentScene = Scenes::SCENE_QUIT;
+				SetScene(Scenes::SCENE_QUIT);
 				break;
 			default:
 				break;
@@ -68,7 +132,13 @@ public:
 			menu->Render();
 		}
 		else {
-			//render scene
+			
+			auto grassTiles = em->GetEntities("TileGrass");
+			
+			for (auto g : grassTiles) {
+				ctx->draw(g->GetComponent<CSprite>()->sprite);
+			}
+			
 		}
 
 	}

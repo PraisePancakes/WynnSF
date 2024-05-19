@@ -75,6 +75,21 @@ class Menu {
 
 	};
 
+	void initMenuParticles() {
+		for (size_t i = 0; i < PARTICLE_COUNT; i++) {
+			Core::Physics::Vec2D randomPos = getRandomParticlePos(ctx);
+
+			auto particle = em->AddEntity("Menu-particle");
+
+			auto sc = particle->AddComponent<CShape>(50, 3, sf::Color(20, 80, 35), sf::Color(20, 80, 35), 2, 2);
+
+			sc->shape.setPosition(randomPos.x, randomPos.y);
+
+
+		}
+
+	}
+
 	void initMenu() {
 		std::srand(std::time(NULL));
 		auto logo = em->AddEntity("Logo");
@@ -98,17 +113,8 @@ class Menu {
 		auto quitBtn = em->AddEntity("Quit-btn");
 		auto quitBtnC = quitBtn->AddComponent<CButton>(sf::RectangleShape(sf::Vector2f(quitTextC->text.getGlobalBounds().width + 10, quitTextC->text.getGlobalBounds().height + 10)), sf::Vector2f(quitTextC->text.getPosition().x - quitTextC->text.getGlobalBounds().width / 2 - 3, quitTextC->text.getPosition().y + 5), sf::Color::White, sf::Color::Black);
 
-		for (size_t i = 0; i < PARTICLE_COUNT; i++) {
-			Core::Physics::Vec2D randomPos = getRandomParticlePos(ctx);
-			
-			auto particle = em->AddEntity("Menu-particle");
-
-			auto sc = particle->AddComponent<CShape>(50, 3, sf::Color(20, 80, 35), sf::Color(20, 80, 35), 2, 2);
-
-			sc->shape.setPosition(randomPos.x, randomPos.y);
-
-
-		}
+		//initMenuParticles();
+		
 	
 	};
 
@@ -210,7 +216,7 @@ public:
 	};
 
 	void Render() {
-		renderMenuParticles();
+		//renderMenuParticles();
 		renderLogo();
 		renderMenuButtons();
 		renderMenuText();

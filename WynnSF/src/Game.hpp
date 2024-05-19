@@ -30,17 +30,6 @@ class Game {
 			if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
 				m_Player->HandleInput(&e);
 			}
-
-			if (m_sceneManager->GetCurrentScene() == Scenes::SCENE_MENU) {
-				if (e.type == sf::Event::KeyPressed) {
-
-					if (e.key.code == sf::Keyboard::Space) {
-						m_sceneManager->SetScene(Scenes::SCENE_RAGNI);
-					}
-				}
-			}
-
-
 		}
 
 	};
@@ -101,7 +90,7 @@ class Game {
 	};
 
 	void sRenderer() {
-
+		m_sceneManager->RenderScene();
 		if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
 			std::shared_ptr<Entity> dum = m_entManager.GetEntities("Dummy")[0];
 			auto sc = dum->GetComponent<CSprite>();
@@ -113,7 +102,7 @@ class Game {
 			
 		}
 		
-		m_sceneManager->RenderScene();
+	
 
 	};
 
@@ -141,7 +130,7 @@ public:
 		while (m_running) {
 			m_Window.clear();
 			sUserInput();
-
+			sUpdate();
 			if (m_sceneManager->GetCurrentScene() == Scenes::SCENE_QUIT) {
 				m_running = false;
 				m_Window.close();
@@ -153,7 +142,7 @@ public:
 				
 			}
 
-			sUpdate();
+			
 			sRenderer();
 			m_Window.display();
 

@@ -25,7 +25,7 @@ public:
 
 
 		sprite.setOrigin((float)(srcRect.left + srcRect.width / 2), (float)(srcRect.top + srcRect.height / 2));
-		std::cout << sprite.getScale().x << " : " << sprite.getScale().y << std::endl;
+		
 	};
 
 
@@ -44,7 +44,7 @@ public:
 
 		float newWidth = 1 * wScale;
 		float newHeight = 1 * hScale;
-
+		
 		sprite.setScale(newWidth, newHeight);
 
 	}
