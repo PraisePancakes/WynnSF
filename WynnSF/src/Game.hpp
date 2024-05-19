@@ -127,7 +127,7 @@ public:
 
 
 	void Run() {
-		m_entManager.Update();
+		
 		while (m_running) {
 			m_Window.clear();
 			sUserInput();

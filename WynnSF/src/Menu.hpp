@@ -113,7 +113,7 @@ class Menu {
 		auto quitBtn = em->AddEntity("Quit-btn");
 		auto quitBtnC = quitBtn->AddComponent<CButton>(sf::RectangleShape(sf::Vector2f(quitTextC->text.getGlobalBounds().width + 10, quitTextC->text.getGlobalBounds().height + 10)), sf::Vector2f(quitTextC->text.getPosition().x - quitTextC->text.getGlobalBounds().width / 2 - 3, quitTextC->text.getPosition().y + 5), sf::Color::White, sf::Color::Black);
 
-		//initMenuParticles();
+		initMenuParticles();
 		
 	
 	};
@@ -216,7 +216,7 @@ public:
 	};
 
 	void Render() {
-		//renderMenuParticles();
+		renderMenuParticles();
 		renderLogo();
 		renderMenuButtons();
 		renderMenuText();

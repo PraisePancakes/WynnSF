@@ -173,10 +173,10 @@
     <Image Include="src\Assets\Player\Run\run2.png" />
     <Image Include="src\Assets\Player\Run\run3.png" />
     <Image Include="src\Assets\Player\Run\run4.png" />
-    <Image Include="src\Assets\Tiles\Grass.png" />
     <Image Include="src\Assets\Tiles\Grass\Grass_1.png" />
     <Image Include="src\Assets\Tiles\Grass\Grass_2.png" />
     <Image Include="src\Assets\Tiles\Grass\Grass_3.png" />
+    <Image Include="src\Assets\Tiles\TXGrassSet.png" />
     <Image Include="src\Assets\Tiles\Wall\LWall.png" />
     <Image Include="src\Assets\Tiles\Wall\RWall.png" />
     <Image Include="src\Assets\Tiles\Wall\Wall_1.png" />
