@@ -1,6 +1,7 @@
 #pragma once
 
-#define PARTICLE_COUNT 100
+#define PARTICLE_COUNT 500
+#define PARTICLE_SPEED 3
 
 class Menu {
 	
@@ -37,38 +38,28 @@ class Menu {
 	void renderMenuParticles() {
 		EntityVec particles = em->GetEntities("Menu-particle");
 
-
-		const float MIN_X_BOUND = 0;
 		const float MIN_Y_BOUND = 0;
-		const float MAX_X_BOUND = ctx->getSize().x;
 		const float MAX_Y_BOUND = ctx->getSize().y;
-
+	
 		for (size_t i = 0; i < particles.size(); i++) {
 			std::shared_ptr<Entity> e = particles[i];
 			auto shapeC = e->GetComponent<CShape>();
+			auto tc = e->GetComponent<CTransform>();
 
-
-
-			if (shapeC->shape.getPosition().x >= MAX_X_BOUND) {
-				shapeC->xStep = -shapeC->xStep;
+			tc->Velocity.Normalize();
+			
+			tc->Velocity.y *= PARTICLE_SPEED;
+			tc->Position.y += tc->Velocity.y;
+			
+		
+			if (tc->Position.y > MAX_Y_BOUND) {
+				tc->Position.y = MIN_Y_BOUND;
+				tc->Position.x = std::rand() % ctx->getSize().x;
+				shapeC->shape.setPosition(tc->Position.x, tc->Position.y);
 			}
-
-			if (shapeC->shape.getPosition().y >= MAX_Y_BOUND) {
-				shapeC->yStep = -shapeC->yStep;
-			}
-
-			if (shapeC->shape.getPosition().x <= MIN_X_BOUND) {
-				shapeC->xStep = -shapeC->xStep;
-			}
-
-			if (shapeC->shape.getPosition().y <= MIN_Y_BOUND) {
-				shapeC->yStep = -shapeC->yStep;
-			}
-			if (i % 2 == 0) {
-				shapeC->xStep = -shapeC->xStep;
-			}
-
-			shapeC->shape.move(shapeC->xStep, shapeC->yStep);
+		
+			
+			shapeC->shape.move(tc->Velocity.x, tc->Velocity.y);
 			ctx->draw(shapeC->shape);
 		}
 
@@ -81,9 +72,9 @@ class Menu {
 
 			auto particle = em->AddEntity("Menu-particle");
 
-			auto sc = particle->AddComponent<CShape>(50, 3, sf::Color(20, 80, 35), sf::Color(20, 80, 35), 2, 2);
-
-			sc->shape.setPosition(randomPos.x, randomPos.y);
+			auto sc = particle->AddComponent<CShape>(50, 3, sf::Color(20, 80, 35), sf::Color(20, 80, 35));
+			auto tc = particle->AddComponent<CTransform>(Core::Physics::Vec2D(randomPos.x, randomPos.y), Core::Physics::Vec2D(0, 5), 0);
+			sc->shape.setPosition(tc->Position.x, tc->Position.y);
 
 
 		}
