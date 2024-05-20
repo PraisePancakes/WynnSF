@@ -2,6 +2,8 @@
 
 #define PARTICLE_COUNT 50
 #define PARTICLE_SPEED 3
+#define PARTICLE_VERTICES 4
+#define PARTICLE_RADIUS 5
 
 class Menu {
 	
@@ -54,7 +56,6 @@ class Menu {
 		
 			if (tc->Position.y > MAX_Y_BOUND) {
 				tc->Position.y = MIN_Y_BOUND;
-				tc->Position.x = std::rand() % ctx->getSize().x;
 				shapeC->shape.setPosition(tc->Position.x, tc->Position.y);
 			}
 		
@@ -72,7 +73,7 @@ class Menu {
 
 			auto particle = em->AddEntity("Menu-particle");
 
-			auto sc = particle->AddComponent<CShape>(4, 5, sf::Color(20, 80, 35), sf::Color(20, 80, 35));
+			auto sc = particle->AddComponent<CShape>(PARTICLE_VERTICES, PARTICLE_RADIUS, sf::Color(20, 80, 35), sf::Color(20, 80, 35));
 			auto tc = particle->AddComponent<CTransform>(Core::Physics::Vec2D(randomPos.x, randomPos.y), Core::Physics::Vec2D(0, 5), 0);
 			sc->shape.setPosition(tc->Position.x, tc->Position.y);
 
