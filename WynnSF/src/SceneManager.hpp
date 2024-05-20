@@ -165,6 +165,7 @@ public:
 			return;
 		}
 		this->m_currentScene = scene;
+	
 		initScene();
 		loadScene();
 		
@@ -178,6 +179,7 @@ public:
 			switch (event) {
 			case 1 :
 				SetScene(Scenes::SCENE_RAGNI);
+				menu->Clean();
 				break;
 			case 2 :
 				SetScene(Scenes::SCENE_QUIT);

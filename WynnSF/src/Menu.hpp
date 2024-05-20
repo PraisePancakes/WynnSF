@@ -1,6 +1,6 @@
 #pragma once
 
-#define PARTICLE_COUNT 500
+#define PARTICLE_COUNT 50
 #define PARTICLE_SPEED 3
 
 class Menu {
@@ -72,7 +72,7 @@ class Menu {
 
 			auto particle = em->AddEntity("Menu-particle");
 
-			auto sc = particle->AddComponent<CShape>(50, 3, sf::Color(20, 80, 35), sf::Color(20, 80, 35));
+			auto sc = particle->AddComponent<CShape>(4, 5, sf::Color(20, 80, 35), sf::Color(20, 80, 35));
 			auto tc = particle->AddComponent<CTransform>(Core::Physics::Vec2D(randomPos.x, randomPos.y), Core::Physics::Vec2D(0, 5), 0);
 			sc->shape.setPosition(tc->Position.x, tc->Position.y);
 
@@ -206,6 +206,19 @@ public:
 
 	};
 
+	void Clean() {
+		std::cout << "Particles destroyed " << std::endl;
+		EntityVec particles = em->GetEntities("Menu-particle");
+
+		for (auto& p : particles) {
+			p->DestroyEntity();
+		}
+
+		particles.clear();
+
+		
+	}
+
 	void Render() {
 		renderMenuParticles();
 		renderLogo();
@@ -215,6 +228,9 @@ public:
 	};
 
 
-	~Menu() = default;
+	~Menu() {
+		
+		Clean();
+	};
 
 };

@@ -107,8 +107,9 @@ public:
 	}
 
 	void DestroyEntity() {
-		
+	
 		this->m_active = false;
+	
 	}
 
 	bool IsActive() const {
