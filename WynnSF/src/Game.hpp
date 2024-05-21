@@ -80,12 +80,13 @@ class Game {
 	}
 
 	void checkTileCollisions() {
-		EntityVec tiles = m_entManager.GetEntities("Tiles");
+		//tlTiles (top-layer tiles) will be the only tiles that have collision, blTiles (base-layer tiles) will be traversable by the player
+		EntityVec tlTiles = m_entManager.GetEntities("tlTiles");
 
 		float plx = m_Player->GetPos().x;
 		float ply = m_Player->GetPos().y;
 
-		for (auto& te : tiles) {
+		for (auto& te : tlTiles) {
 			if (te->HasComponent<CCollider>()) {
 				float tlx = te->GetComponent<CSprite>()->sprite.getPosition().x;
 				float tly = te->GetComponent<CSprite>()->sprite.getPosition().y;
