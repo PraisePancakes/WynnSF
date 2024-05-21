@@ -21,11 +21,12 @@ public:
 		sprite.setTexture(this->texture);
 		sprite.setTextureRect(srcRect);
 		this->srcRect = srcRect;
-		ScaleToN(&srcRect, finalDimensionX, finalDimensionY);
-
-
-		sprite.setOrigin((float)(srcRect.left + srcRect.width / 2), (float)(srcRect.top + srcRect.height / 2));
 		
+		sf::FloatRect gb = sprite.getGlobalBounds();
+
+		
+		ScaleToN(&srcRect, finalDimensionX, finalDimensionY);
+		sprite.setOrigin(gb.width / 2, gb.height / 2);
 	};
 
 

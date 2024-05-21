@@ -133,6 +133,9 @@
     <Image Include="src\Assets\Tiles\TXGrassSet.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="src\Assets\Tiles\TXWallSet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="src\Assets\Fonts\PixelFont.ttf" />

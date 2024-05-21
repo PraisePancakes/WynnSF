@@ -45,8 +45,19 @@ class Game {
 	
 	}
 
+	void checkNpcCollisions() {
+		/*
+			@TEST : currently only checking the dummy, to implement, we retrieve all collideable npcs via 
+				EntityVec npc = m_entManager.GetEntities("npc");
+				in this case all npcs has a collider component
 
-	void sCollider() {
+				then loop through each 
+
+				for each e : npc
+				{
+					...handle collision
+				}
+		*/
 		std::shared_ptr<Entity> dum = m_entManager.GetEntities("Dummy")[0];
 
 		float plx = m_Player->GetPos().x;
@@ -66,6 +77,40 @@ class Game {
 			m_Player->GetEntityInstance()->GetComponent<CTransform>()->Position.x -= m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.x;
 			m_Player->GetEntityInstance()->GetComponent<CTransform>()->Position.y -= m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.y;
 		}
+	}
+
+	void checkTileCollisions() {
+		EntityVec tiles = m_entManager.GetEntities("Tiles");
+
+		float plx = m_Player->GetPos().x;
+		float ply = m_Player->GetPos().y;
+
+		for (auto& te : tiles) {
+			if (te->HasComponent<CCollider>()) {
+				float tlx = te->GetComponent<CSprite>()->sprite.getPosition().x;
+				float tly = te->GetComponent<CSprite>()->sprite.getPosition().y;
+				float xDiff = (plx - tlx) * (plx - tlx);
+				float yDiff = (ply - tly) * (ply - tly);
+
+				float distance = std::sqrt(xDiff + yDiff);
+				float pr = m_Player->GetEntityInstance()->GetComponent<CCollider>()->radius;
+				float tr = te->GetComponent<CCollider>()->radius;
+
+				if (distance < pr + tr) {
+					m_Player->GetEntityInstance()->GetComponent<CTransform>()->Position.x -= m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.x;
+					m_Player->GetEntityInstance()->GetComponent<CTransform>()->Position.y -= m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.y;
+				}
+
+			}
+
+		}
+	}
+
+
+	void sCollider() {
+	
+		checkTileCollisions();
+		checkNpcCollisions();
 
 	};
 

@@ -19,10 +19,16 @@ enum class Scenes {
 
 struct TXTiles {
 	const std::string TXGrassSetPath = "src/Assets/Tiles/TXGrassSet.png";
-	sf::IntRect grass = {0, 0, 128, 128};
-	sf::IntRect flower = {128, 0, 128, 128};
-	sf::IntRect stone = { 0, 128, 128, 128 };
-	sf::IntRect stone2 = { 128, 128, 128, 128 };
+	const std::string TXWallSetPath = "src/Assets/Tiles/TXWallSet.png";
+
+	//Ground tiles
+	const sf::IntRect grass = {0, 0, 128, 128};
+	const sf::IntRect flower = {128, 0, 128, 128};
+	const sf::IntRect stone = { 0, 128, 128, 128 };
+	const sf::IntRect stone2 = { 128, 128, 128, 128 };
+
+	//Wall tiles
+	sf::IntRect wall = { 32, 192, 128, 64 };
 };
 
 class SceneManager {
@@ -47,7 +53,7 @@ class SceneManager {
 		switch (m_currentScene) {
 		case Scenes::SCENE_RAGNI:
 			this->scenemap = { 
-				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{4,4,4,4,4,4,4,4,4,4,0,4,4,4,4,4,4,4,4,4},
 				{0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0},
@@ -113,14 +119,14 @@ class SceneManager {
 						auto flowerTile = em->AddEntity("Tiles");
 
 						auto sc = flowerTile->AddComponent<CSprite>(tiles->TXGrassSetPath, tiles->flower, 128, 128);
-						sc->sprite.setPosition((i + 1) * 128, (j) * 128);
+						sc->sprite.setPosition(i * 128, j * 128);
 					}
 					break;
 				case 2 :
 					{
 						auto stoneTile = em->AddEntity("Tiles");
 						auto sc = stoneTile->AddComponent<CSprite>(tiles->TXGrassSetPath, tiles->stone, 128, 128);
-						sc->sprite.setPosition((i) * 128, (j + 1) * 128);
+						sc->sprite.setPosition(i * 128, j * 128);
 						
 					}
 					break;
@@ -128,12 +134,15 @@ class SceneManager {
 					{
 					auto stoneTile = em->AddEntity("Tiles");
 					auto sc = stoneTile->AddComponent<CSprite>(tiles->TXGrassSetPath, tiles->stone2, 128, 128);
-					sc->sprite.setPosition((i + 1) * 128, (j + 1 )* 128);
+					sc->sprite.setPosition(i * 128, j* 128);
 					}
 					break;
 				case 4:
 				{
-					
+					auto wallTile = em->AddEntity("Tiles");
+					auto sc = wallTile->AddComponent<CSprite>(tiles->TXWallSetPath, tiles->wall, 128, 128);
+					sc->sprite.setPosition(i * 128, j * 128);
+					wallTile->AddComponent<CCollider>(sc->sprite.getLocalBounds().height);
 				}
 				break;
 				}
