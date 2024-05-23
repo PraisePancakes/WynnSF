@@ -160,6 +160,7 @@
     <ClInclude Include="src\SceneManager.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="diagrams\collision.png" />
     <Image Include="src\Assets\Sprites\Logo\logo.png" />
     <Image Include="src\Assets\Player\Idle\idle0.png" />
     <Image Include="src\Assets\Player\Idle\idle1.png" />
@@ -176,6 +177,7 @@
     <Image Include="src\Assets\Tiles\Grass\Grass_1.png" />
     <Image Include="src\Assets\Tiles\Grass\Grass_2.png" />
     <Image Include="src\Assets\Tiles\Grass\Grass_3.png" />
+    <Image Include="src\Assets\Tiles\TXStoneGroundSet.png" />
     <Image Include="src\Assets\Tiles\TXWallSet.png" />
     <Image Include="src\Assets\Tiles\TXGrassSet.png" />
     <Image Include="src\Assets\Tiles\Wall\LWall.png" />

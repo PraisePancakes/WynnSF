@@ -8,7 +8,7 @@ class Player {
 	bool moving = false;
 	bool movingAnimationInitialized = false;
 	bool lookingLeft = false;
-
+	bool sprinting = false;
 
 
 public:
@@ -100,11 +100,13 @@ public:
 	void HandleInput(sf::Event* e) {
 		auto ic = entity->GetComponent<CInput>();
 		if (e->type == sf::Event::KeyPressed) {
+			
 			if (e->key.scancode == sf::Keyboard::W) {
 				ic->iup = true;
 			}
 
 			if (e->key.scancode == sf::Keyboard::A) {
+				
 				ic->ileft = true;
 			}
 
@@ -114,6 +116,11 @@ public:
 
 			if (e->key.scancode == sf::Keyboard::D) {
 				ic->iright = true;
+			}
+			
+			if (e->key.scancode == 128) {
+				
+				sprinting = true;
 			}
 
 
@@ -134,6 +141,10 @@ public:
 			if (e->key.scancode == sf::Keyboard::D) {
 				ic->iright = false;
 			}
+
+			if (e->key.scancode == 128) {
+				sprinting = false;
+			}
 		}
 	}
 
@@ -146,8 +157,12 @@ public:
 	void HandleMovement() {
 
 		auto playerInput = entity->GetComponent<CInput>();
-		const float MOVEMENT_SPEED = 3.0f;
+		float MOVEMENT_SPEED = 3.0f;
 		auto tc = entity->GetComponent<CTransform>();
+
+		if (sprinting) {
+			MOVEMENT_SPEED = 5.f;
+		}
 
 		float velX = 0;
 		float velY = 0;

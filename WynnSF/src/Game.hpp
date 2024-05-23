@@ -29,6 +29,8 @@ class Game {
 				m_running = false;
 			}
 
+		
+
 			if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
 				m_Player->HandleInput(&e);
 			}
