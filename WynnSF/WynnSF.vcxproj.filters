@@ -146,4 +146,7 @@
   <ItemGroup>
     <Font Include="src\Assets\Fonts\PixelFont.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Data\Scenes\ragni.txt" />
+  </ItemGroup>
 </Project>

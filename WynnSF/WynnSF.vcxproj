@@ -188,6 +188,9 @@
   <ItemGroup>
     <Font Include="src\Assets\Fonts\PixelFont.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Data\Scenes\ragni.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

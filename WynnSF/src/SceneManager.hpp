@@ -3,6 +3,8 @@
 #include "Menu.hpp"
 #include <ctime>
 
+#include <fstream>
+
 
 
 
@@ -47,12 +49,74 @@ class SceneManager {
 	sf::RenderWindow* ctx;
 	EntityManager* em;
 	std::unique_ptr<Menu> menu = nullptr;
-	std::vector<std::vector<int>> scenemap = { {} };
-	std::vector<std::vector<int>> scenebl = { {} };
+	std::vector<std::vector<int>> scenetl = {};
+	std::vector<std::vector<int>> scenebl = {};
 
 	std::unique_ptr<TXBaseLayerTiles> blTiles;
 	std::unique_ptr<TXTopLayerTiles> tlTiles;
+
+	void loadSceneData(const std::string& filename) {
+
+		std::ifstream file(filename);
+		if (!file.is_open()) {
+			std::cerr << "Unable to open file: " << filename << std::endl;
+			return;
+		}
+
+		std::string line;
+		std::string b;
+		std::string t;
+		bool onB = false;
+		bool onT = false;
+
+		while (std::getline(file, line)) {
+			if (line == "b") {
+				onB = true;
+				onT = false;
+				continue;
+			}
+
+			if (line == "t") {
+				onT = true;
+				onB = false;
+				continue;
+			}
+
+			if (onB) {
+				b += line;
+			}
+			else {
+				t += line;
+			}
+		}
+
 	
+
+		std::vector<int> row;
+		for (size_t i = 0; i < b.length(); i++) {
+			if (b[i] == 'e') {
+				scenebl.push_back(row);
+				row.clear();
+			}
+			else {
+				row.push_back(b[i] - '0');
+			}
+		}
+
+
+		for (size_t i = 0; i < t.length(); i++) {
+			if (t[i] == 'e') {
+				scenetl.push_back(row);
+				row.clear();
+			}
+			else {
+				row.push_back(t[i] - '0');
+			}
+		}
+
+		
+		file.close();
+	}
 
 	void clearPrevScene() {
 		auto blTiles = em->GetEntities("blTiles");
@@ -67,71 +131,15 @@ class SceneManager {
 			t->DestroyEntity();
 		}
 
-		scenemap.clear();
+		scenetl.clear();
 		scenebl.clear();
 	}
 
-	/*
-		enums 
-			0 grass
-			1 flower
-			2 stone_path
-			3 stone_path2
-			4 stone_ground
-	
-	
-	*/
-
 	void initScene() {
-		//read scene data from file?
+		
 		switch (m_currentScene) {
 		case Scenes::SCENE_RAGNI: {
-			this->scenebl = {
-			{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4},
-			{0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,1,0,0,0,3,0,0,0,3,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,2,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4},
-			
-			};
-
-			this->scenemap = {
-			{5,4,4,4,4,4,4,4,4,0,0,4,4,4,4,4,4,4,4,5},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{5,4,4,4,4,4,4,4,4,4,0,4,4,4,4,4,4,4,4,5},
-			};
+			loadSceneData("src/Data/Scenes/ragni.txt");
 		}
 			break;
 		
@@ -186,9 +194,9 @@ class SceneManager {
 	};
 
 	void loadTopLayer() {
-		for (size_t i = 0; i < scenemap.size(); i++) {
-			for (size_t j = 0; j < scenemap[i].size(); j++) {
-				switch (scenemap[j][i]) {
+		for (size_t i = 0; i < scenetl.size(); i++) {
+			for (size_t j = 0; j < scenetl[i].size(); j++) {
+				switch (scenetl[j][i]) {
 				
 				case 1:
 				{
@@ -260,7 +268,7 @@ public:
 			return;
 		}
 		this->m_currentScene = scene;
-	
+		
 		initScene();
 		loadScene();
 		

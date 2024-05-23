@@ -161,7 +161,7 @@ public:
 		auto tc = entity->GetComponent<CTransform>();
 
 		if (sprinting) {
-			MOVEMENT_SPEED = 5.f;
+			MOVEMENT_SPEED = 4.f;
 		}
 
 		float velX = 0;
