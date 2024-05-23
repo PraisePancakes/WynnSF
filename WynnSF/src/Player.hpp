@@ -78,6 +78,16 @@ public:
 		ctx.draw(ac->sprite);
 	};
 
+
+	void SetPos(float x, float y) {
+		auto tc = this->entity->GetComponent<CTransform>();
+		tc->Position.x = x;
+		tc->Position.y = y;
+		auto ac = entity->GetComponent<CAnimator>();
+		ac->sprite.setPosition(x, y);
+
+	}
+
 	bool IsMoving() {
 		if (entity->GetComponent<CTransform>()->Velocity.x != 0 || entity->GetComponent<CTransform>()->Velocity.y != 0) {
 			moving = true;

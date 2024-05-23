@@ -5,9 +5,11 @@
 #include "../core/Manager/EntityManager.hpp"
 #include "SceneManager.hpp"
 #include "Player.hpp"
-
+#include <cmath>
 #define WINDOW_W 1280
 #define WINDOW_H 720
+#define PI 3.14159265
+
 
 class Game {
 
@@ -44,75 +46,58 @@ class Game {
 		m_sceneManager->Update();
 	
 	}
+	/*
+		since we are using a circle collider, the collision system will work based positioning of each circle collider when collision occurs
 
-	void checkNpcCollisions() {
-		/*
-			@TEST : currently only checking the dummy, to implement, we retrieve all collideable npcs via 
-				EntityVec npc = m_entManager.GetEntities("npc");
-				in this case all npcs has a collider component
+		refer to diagrams/collision.png
+		
+		 
+	*/
 
-				then loop through each 
-
-				for each e : npc
-				{
-					...handle collision
-				}
-		*/
-		std::shared_ptr<Entity> dum = m_entManager.GetEntities("Dummy")[0];
+	void checkCollision(EntityVec& ev) {
 
 		float plx = m_Player->GetPos().x;
 		float ply = m_Player->GetPos().y;
-		float dlx = dum->GetComponent<CTransform>()->Position.x;
-		float dly = dum->GetComponent<CTransform>()->Position.y;
+		
 
-		float xDiff = (plx - dlx) * (plx - dlx);
-		float yDiff = (ply - dly) * (ply - dly);
+		for (auto& e : ev) {
+			if (e->HasComponent<CCollider>()) {
+				float ex = e->GetComponent<CSprite>()->sprite.getPosition().x;
+				float ey = e->GetComponent<CSprite>()->sprite.getPosition().y;
+				float xDiff = plx - ex;
+				float yDiff = ply - ey;
 
-		float distance = std::sqrt(xDiff + yDiff);
-		float pr = m_Player->GetEntityInstance()->GetComponent<CCollider>()->radius;
-		float dr = dum->GetComponent<CCollider>()->radius;
-
-		if (distance < pr + dr) {
-			//std::cout << "Collision has occured " << std::endl;
-			m_Player->GetEntityInstance()->GetComponent<CTransform>()->Position.x -= m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.x;
-			m_Player->GetEntityInstance()->GetComponent<CTransform>()->Position.y -= m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.y;
-		}
-	}
-
-	void checkTileCollisions() {
-		//tlTiles (top-layer tiles) will be the only tiles that have collision, blTiles (base-layer tiles) will be traversable by the player
-		EntityVec tlTiles = m_entManager.GetEntities("tlTiles");
-
-		float plx = m_Player->GetPos().x;
-		float ply = m_Player->GetPos().y;
-
-		for (auto& te : tlTiles) {
-			if (te->HasComponent<CCollider>()) {
-				float tlx = te->GetComponent<CSprite>()->sprite.getPosition().x;
-				float tly = te->GetComponent<CSprite>()->sprite.getPosition().y;
-				float xDiff = (plx - tlx) * (plx - tlx);
-				float yDiff = (ply - tly) * (ply - tly);
-
-				float distance = std::sqrt(xDiff + yDiff);
+				float distance = std::sqrt(xDiff * xDiff + yDiff * yDiff);
 				float pr = m_Player->GetEntityInstance()->GetComponent<CCollider>()->radius;
-				float tr = te->GetComponent<CCollider>()->radius;
+				float er = e->GetComponent<CCollider>()->radius;
 
-				if (distance < pr + tr) {
-					m_Player->GetEntityInstance()->GetComponent<CTransform>()->Position.x -= m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.x;
-					m_Player->GetEntityInstance()->GetComponent<CTransform>()->Position.y -= m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.y;
+				if (distance < pr + er) {
+					auto tc = m_Player->GetEntityInstance()->GetComponent<CTransform>();
+					
+					if (xDiff < 0 && std::abs(xDiff) > std::abs(yDiff)) { 
+						tc->Position.x -= std::abs(m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.x);
+					}
+					else if (xDiff > 0 && std::abs(xDiff) > std::abs(yDiff)) { 
+						tc->Position.x += std::abs(m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.x);
+					}
+					else if (yDiff < 0 && std::abs(yDiff) > std::abs(xDiff)) { 
+						tc->Position.y -= std::abs(m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.y);
+					}
+					else if (yDiff > 0 && std::abs(yDiff) > std::abs(xDiff)) { 
+						tc->Position.y += std::abs(m_Player->GetEntityInstance()->GetComponent<CTransform>()->Velocity.y);
+					}
 				}
-
 			}
-
 		}
-	}
+	};
+
 
 
 	void sCollider() {
-	
-		checkTileCollisions();
-		checkNpcCollisions();
-
+		EntityVec tlTiles = m_entManager.GetEntities("tlTiles");
+		EntityVec dumVec /*npc vec*/ = m_entManager.GetEntities("Dummy");
+		checkCollision(dumVec);
+		checkCollision(tlTiles);
 	};
 
 
