@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <memory>
 #include "Manager/EntityManager.hpp"
@@ -10,11 +11,7 @@ class Entity;
 using ComponentID = std::size_t;
 using EntityID = std::uint64_t;
 
-ComponentID GenComponentTypeID() {
-	static ComponentID lastID = 0;
-
-	return lastID++;
-};
+ComponentID GenComponentTypeID();
 
 template<class T>
 ComponentID GenComponentTypeID() {
@@ -29,7 +26,7 @@ public:
 	Component(ComponentID generatedID) { this->m_id = generatedID; };
 	Entity* owner = nullptr;
 
-	ComponentID GetComponentTypeID() const {
+	inline ComponentID GetComponentTypeID() const {
 		return this->m_id;
 	}
 
@@ -43,24 +40,16 @@ class Entity {
 
 private:
 	EntityID m_eId;
-	EntityID genUEID() {
-		static EntityID lastID = 0;
-		return lastID++;
-	};
+	
 
 	std::shared_ptr<Component> m_Components[MAX_COMPONENTS_SIZE];
 
 	std::string m_eTag = "Default";
 
-	Entity() {
-		this->m_eId = genUEID();
-	};
+	EntityID genUEID();
 
-	Entity(const std::string& tag) {
-		this->m_eId = genUEID();
-		this->m_eTag = tag;
-	}
-
+	Entity();
+	Entity(const std::string& tag);
 
 	bool m_active = true;
 
@@ -88,11 +77,11 @@ public:
 
 	};
 
-	std::string GetTag() const {
+	inline std::string GetTag() const {
 		return m_eTag;
 	}
 
-	EntityID GetID() const { return this->m_eId; };
+	inline EntityID GetID() const { return this->m_eId; };
 
 	template<class T>
 	std::shared_ptr<T> GetComponent() {
@@ -106,13 +95,13 @@ public:
 
 	}
 
-	void DestroyEntity() {
+	inline void DestroyEntity() {
 	
 		this->m_active = false;
 	
 	}
 
-	bool IsActive() const {
+	inline bool IsActive() const {
 		return this->m_active;
 	}
 
