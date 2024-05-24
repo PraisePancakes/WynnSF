@@ -5,32 +5,36 @@
 #include "Manager/EntityManager.hpp"
 #define MAX_COMPONENTS_SIZE 10
 
-class Component;
+
 class Entity;
 
 using ComponentID = std::size_t;
 using EntityID = std::uint64_t;
 
-ComponentID GenComponentTypeID();
 
-template<class T>
-ComponentID GenComponentTypeID() {
-	static ComponentID typeID = GenComponentTypeID();
-	return typeID;
-}
+class BaseComponent {
 
-class Component {
-	ComponentID m_id;
+protected:
+	ComponentID m_id = 0;
 
 public:
-	Component(ComponentID generatedID) { this->m_id = generatedID; };
-	Entity* owner = nullptr;
+	BaseComponent() {};
 
-	inline ComponentID GetComponentTypeID() const {
-		return this->m_id;
-	}
-
+	virtual ~BaseComponent() {};
 };
+
+
+template <class T> class Component : public BaseComponent {
+
+public:
+	Component() : BaseComponent() { this->m_id = typeid(T).hash_code() % MAX_COMPONENTS_SIZE; };
+	Entity* owner = nullptr;
+	inline std::size_t GetID() const { return this->m_id; };
+	~Component() {};
+};
+
+
+
 
 
 
@@ -42,7 +46,7 @@ private:
 	EntityID m_eId;
 	
 
-	std::shared_ptr<Component> m_Components[MAX_COMPONENTS_SIZE];
+	std::shared_ptr<BaseComponent> m_Components[MAX_COMPONENTS_SIZE];
 
 	std::string m_eTag = "Default";
 
@@ -61,15 +65,15 @@ public:
 	std::shared_ptr<T> AddComponent(TArgs&&... args) {
 		std::shared_ptr<T> newComponent = std::make_shared<T>(std::forward<TArgs>(args)...);
 		newComponent->owner = this;
-		m_Components[newComponent->GetComponentTypeID()] = newComponent;
+		m_Components[newComponent->GetID()] = newComponent;
 		return newComponent;
 	};
 
 	template<class T>
 	bool HasComponent() const {
-		ComponentID id = GenComponentTypeID<T>();
-
-		if (m_Components[id] != nullptr) {
+		T component = {};
+	
+		if (m_Components[component.GetID()] != nullptr) {
 			return true;
 		}
 
@@ -85,13 +89,15 @@ public:
 
 	template<class T>
 	std::shared_ptr<T> GetComponent() {
-		ComponentID id = GenComponentTypeID<T>();
+		T component = {};
 
-		if (m_Components[id] != nullptr) {
-			return std::static_pointer_cast<T>(m_Components[id]);
+		if (m_Components[component.GetID()] != nullptr) {
+			return std::static_pointer_cast<T>(m_Components[component.GetID()]);
 		}
 
 		std::cout << "Component : " << typeid(T).name() << " does not exist" << std::endl;
+		return nullptr;
+		
 
 	}
 

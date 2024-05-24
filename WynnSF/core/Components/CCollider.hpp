@@ -1,11 +1,13 @@
 #pragma once
 #include "../ECS.hpp"
 
-class CCollider : public Component {
+class CCollider : public Component<CCollider> {
 public:
 	float radius = 0.f;
 
-	CCollider(float r) : Component(GenComponentTypeID<CCollider>()) {
+	CCollider() {};
+
+	CCollider(float r) {
 		this->radius = r;
 
 	};

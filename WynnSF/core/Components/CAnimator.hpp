@@ -8,7 +8,7 @@
 
 
 
-class CAnimator : public Component {
+class CAnimator : public Component<CAnimator> {
 public:
 	sf::Sprite sprite;
 	sf::Texture texture;
@@ -20,8 +20,8 @@ public:
 		const int MAX_DIM_X = nx;
 		const int MAX_DIM_Y = ny;
 
-		float w = rect->getSize().x;
-		float h = rect->getSize().y;
+		float w = (float)rect->getSize().x;
+		float h = (float)rect->getSize().y;
 		float wScale = 0;
 		float hScale = 0;
 
@@ -35,8 +35,8 @@ public:
 		sprite.setScale(newWidth, newHeight);
 
 	}
-
-	CAnimator(const std::string& texturePath, sf::IntRect srcRect, const int finalDimensionX, const int finalDimensionY) : Component(GenComponentTypeID<CAnimator>()) {
+	CAnimator() {};
+	CAnimator(const std::string& texturePath, sf::IntRect srcRect, const int finalDimensionX, const int finalDimensionY)  {
 		if (!this->texture.loadFromFile(texturePath)) {
 			std::cerr << "Error opening file at path : " << texturePath << std::endl;
 		};
@@ -53,7 +53,7 @@ public:
 	};
 
 
-	void Play(float minFrame, float maxFrame, float fps) {
+	void Play(int minFrame, int maxFrame, float fps) {
 		if (m_Clock.getElapsedTime().asSeconds() > fps) {
 
 			if (this->srcRect.left == maxFrame) {

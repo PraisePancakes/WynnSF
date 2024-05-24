@@ -14,8 +14,14 @@ enum class Scenes {
 };
 
 
+//TO DO implement middle layer for shadows etc...
+
+static std::string basepath = "src/Assets/Tiles/PATDTx/";
+
 struct TXTopLayerTiles {
-	const std::string TXWallSetPath = "src/Assets/Tiles/TXWallSet.png";
+	const std::string TXWallSetPath = basepath + "TXWallSet.png";
+	const std::string TXPlantSetPath = basepath + "TXPlantSet.png";
+	const sf::IntRect grass_patch = { 0, 384, 128, 128 };
 	//Wall tiles
 	const sf::IntRect wall = { 32, 192, 128, 64 };
 	const sf::IntRect cornerWall = { 384, 64, 64, 96 };
@@ -23,16 +29,20 @@ struct TXTopLayerTiles {
 	const sf::IntRect rightWall = {344, 31, 13, 96};
 };
 
+
+
 struct TXBaseLayerTiles {
 	
-	const std::string TXGrassSetPath = "src/Assets/Tiles/TXGrassSet.png";
-	const std::string TXStoneGroundSetPath = "src/Assets/Tiles/TXStoneGroundSet.png";
+	const std::string TXGrassSetPath = basepath + "TXGrassSet.png";
+	const std::string TXStoneGroundSetPath = basepath + "TXStoneGroundSet.png";
+	
 	//Ground tiles
 	const sf::IntRect grass = { 0, 0, 128, 128 };
 	const sf::IntRect flower = { 128, 0, 128, 128 };
 	const sf::IntRect stone_path = { 0, 128, 128, 128 };
 	const sf::IntRect stone_path2 = { 128, 128, 128, 128 };
 	const sf::IntRect stone_ground = {160, 0, 95, 95};
+	
 
 };
 

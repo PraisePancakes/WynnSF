@@ -9,19 +9,19 @@ Player::Player(std::shared_ptr<Entity> e, float spawnX, float spawnY) {
 	auto tc = entity->AddComponent<CTransform>(Core::Physics::Vec2D(spawnX, spawnY), Core::Physics::Vec2D(0, 0), 0);
 	entity->AddComponent<CInput>();
 	std::cout << "Player" << std::endl;
-	auto ac = entity->AddComponent<CAnimator>("src/Assets/Sprites/Player/playersheet.png", sf::IntRect(0, 0, 50, 40.7), 64, 64);
+	auto ac = entity->AddComponent<CAnimator>("src/Assets/Sprites/Player/playersheet.png", sf::IntRect(0, 0, 50, 40), 64, 64);
 	entity->AddComponent<CCollider>(ac->sprite.getGlobalBounds().width / 2);
 	InitIdleAnimation();
 };
 
 void Player::InitIdleAnimation() {
 	auto ac = entity->GetComponent<CAnimator>();
-	ac->Set(sf::IntRect(0, 0, 50, 40.7));
+	ac->Set(sf::IntRect(0, 0, 50, 40));
 };
 
 void Player::InitMovingAnimation() {
 	auto ac = entity->GetComponent<CAnimator>();
-	ac->Set(sf::IntRect(50, 39.9, 50, 39.9));
+	ac->Set(sf::IntRect(50, 40, 50, 40));
 }
 
 void Player::PlayIdleAnimation() {

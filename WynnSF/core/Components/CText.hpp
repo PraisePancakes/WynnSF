@@ -2,11 +2,12 @@
 #include "../ECS.hpp"
 #include <SFML/Graphics.hpp>
 
-class CText : public Component {
+class CText : public Component<CText> {
 public:
 	sf::Text text;
 	sf::Font font;
-	CText(const std::string& str, const std::string& fontPath, int fontSize, float xPos, float yPos) : Component(GenComponentTypeID<CText>()) {
+	CText() {};
+	CText(const std::string& str, const std::string& fontPath, int fontSize, float xPos, float yPos)  {
 		if (!font.loadFromFile(fontPath)) {
 			std::cout << "Error loading font at path : " << fontPath << std::endl;
 		}

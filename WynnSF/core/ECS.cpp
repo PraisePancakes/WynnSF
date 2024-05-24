@@ -15,8 +15,3 @@ Entity::Entity(const std::string& tag) {
 }
 
 
-ComponentID GenComponentTypeID() {
-	static ComponentID lastID = 0;
-
-	return lastID++;
-};

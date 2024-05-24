@@ -88,13 +88,19 @@ void SceneManager::loadSceneData(const std::string& filename) {
 	bool onB = false;
 	bool onT = false;
 
+
+	
 	while (std::getline(file, line)) {
+		if (line == " ") {
+			continue;
+		}
+
 		if (line == "b") {
 			onB = true;
 			onT = false;
 			continue;
 		}
-
+		
 		if (line == "t") {
 			onT = true;
 			onB = false;
@@ -108,11 +114,14 @@ void SceneManager::loadSceneData(const std::string& filename) {
 			t += line;
 		}
 	}
-
+	std::cout << b << std::endl;
 
 
 	std::vector<int> row;
 	for (size_t i = 0; i < b.length(); i++) {
+		if (b[i] == ' ') {
+			continue;
+		}
 		if (b[i] == 'e') {
 			scenebl.push_back(row);
 			row.clear();
@@ -124,6 +133,10 @@ void SceneManager::loadSceneData(const std::string& filename) {
 
 
 	for (size_t i = 0; i < t.length(); i++) {
+		if (t[i] == ' ') {
+			continue;
+		}
+
 		if (t[i] == 'e') {
 			scenetl.push_back(row);
 			row.clear();
@@ -206,6 +219,7 @@ void SceneManager::loadBaseLayer() {
 				sc->sprite.setPosition(i * 128, j * 128);
 			}
 			break;
+		
 			}
 		}
 	}
@@ -248,6 +262,13 @@ void SceneManager::loadTopLayer() {
 				auto sc = cornerWall->AddComponent<CSprite>(tlTiles->TXWallSetPath, tlTiles->cornerWall, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
 				cornerWall->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+			}
+			break;
+			case 6:
+			{
+				auto grassPatchTile = em->AddEntity("tlTiles");
+				auto sc = grassPatchTile->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->grass_patch, 128, 128);
+				sc->sprite.setPosition(i * 128, j * 128);
 			}
 			break;
 

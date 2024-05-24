@@ -151,16 +151,28 @@
     <Image Include="src\Assets\Tiles\Wall\LWall.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="src\Assets\Tiles\TXGrassSet.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="src\Assets\Tiles\TXWallSet.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="diagrams\collision.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="src\Assets\Tiles\TXStoneGroundSet.png">
+    <Image Include="src\Assets\Tiles\PATDTx\TXPlantSet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\PATDTx\TXPropSet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\PATDTx\TXStructSet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\PATDTx\TXGrassSet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\PATDTx\TXStoneGroundSet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\PATDTx\TXWallSet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Sprites\Player\playersheet.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

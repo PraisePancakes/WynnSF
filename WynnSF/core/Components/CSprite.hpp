@@ -3,7 +3,7 @@
 
 
 //static sprite use only, dynamic sprites (animators) used by CAnimator component
-class CSprite : public Component {
+class CSprite : public Component<CSprite> {
 
 
 
@@ -12,7 +12,8 @@ public:
 	sf::Texture texture;
 	sf::IntRect srcRect;
 
-	CSprite(const std::string& spritePath, sf::IntRect srcRect, const int finalDimensionX, const int finalDimensionY) : Component(GenComponentTypeID<CSprite>()) {
+	CSprite() {};
+	CSprite(const std::string& spritePath, sf::IntRect srcRect, const int finalDimensionX, const int finalDimensionY) {
 
 		if (!this->texture.loadFromFile(spritePath)) {
 			std::cerr << "Error opening file at path : " << spritePath << std::endl;

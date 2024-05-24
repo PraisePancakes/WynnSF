@@ -3,14 +3,14 @@
 #include <functional>
 
 
-class CButton : public Component {
+class CButton : public Component<CButton> {
 
 	sf::RectangleShape initialRect;
 	bool hovered = false;
 
 public:
 	sf::RectangleShape buttonRect;
-	CButton(sf::RectangleShape btnRect, sf::Vector2f pos, sf::Color outline, sf::Color fill) : Component(GenComponentTypeID<CButton>()) {
+	CButton(sf::RectangleShape btnRect, sf::Vector2f pos, sf::Color outline, sf::Color fill) {
 		this->buttonRect = btnRect;
 		buttonRect.setOutlineThickness(1);
 		buttonRect.setOutlineColor(outline);
@@ -20,14 +20,14 @@ public:
 		initialRect = buttonRect;
 	};
 
-	CButton() : Component(GenComponentTypeID<CButton>()) {};
+	CButton() {};
 
-	CButton(const CButton& other) : Component(GenComponentTypeID<CButton>()){
+	CButton(const CButton& other) {
 		this->buttonRect = other.buttonRect;
 		this->hovered = other.hovered;
 	};
 
-	CButton(sf::RectangleShape btnRect) : Component(GenComponentTypeID<CButton>()) {
+	CButton(sf::RectangleShape btnRect)  {
 		this->buttonRect = btnRect;
 	};
 	

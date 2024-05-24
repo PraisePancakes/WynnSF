@@ -3,7 +3,7 @@
 #include "../Physics/Vec2D.hpp"
 
 
-class CTransform : public Component {
+class CTransform : public Component<CTransform> {
 public:
 
 	Core::Physics::Vec2D Position = { 0.f, 0.f };
@@ -12,12 +12,9 @@ public:
 	
 
 	CTransform(Core::Physics::Vec2D pos, Core::Physics::Vec2D vel, float ang)
-		: Component(GenComponentTypeID<CTransform>()), Position(pos), Velocity(vel), Angle(ang) {
+		: Position(pos), Velocity(vel), Angle(ang) {
 	
 	};
 
-	CTransform()
-		: Component(GenComponentTypeID<CTransform>()) {
-	
-	};
+	CTransform() {};
 };
