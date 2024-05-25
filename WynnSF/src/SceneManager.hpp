@@ -21,7 +21,11 @@ static std::string basepath = "src/Assets/Tiles/PATDTx/";
 struct TXTopLayerTiles {
 	const std::string TXWallSetPath = basepath + "TXWallSet.png";
 	const std::string TXPlantSetPath = basepath + "TXPlantSet.png";
+
+	//Plant tiles
 	const sf::IntRect grass_patch = { 0, 384, 128, 128 };
+	const sf::IntRect tree1 = { 0, 0, 159, 159 };
+
 	//Wall tiles
 	const sf::IntRect wall = { 32, 192, 128, 64 };
 	const sf::IntRect cornerWall = { 384, 64, 64, 96 };
@@ -60,7 +64,7 @@ class SceneManager {
 	std::unique_ptr<TXBaseLayerTiles> blTiles;
 	std::unique_ptr<TXTopLayerTiles> tlTiles;
 
-	void loadSceneData(const std::string& filename);
+	void parseSceneData(const std::string& filename);
 	void clearPrevScene();
 	void loadBaseLayer();
 	void loadTopLayer();

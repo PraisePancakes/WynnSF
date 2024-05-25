@@ -34,10 +34,6 @@ public:
 };
 
 
-
-
-
-
 class Entity {
 
 	friend class EntityManager;

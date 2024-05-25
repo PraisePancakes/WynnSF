@@ -74,7 +74,7 @@ void SceneManager::RenderScene() {
 
 }
 
-void SceneManager::loadSceneData(const std::string& filename) {
+void SceneManager::parseSceneData(const std::string& filename) {
 
 	std::ifstream file(filename);
 	if (!file.is_open()) {
@@ -114,8 +114,6 @@ void SceneManager::loadSceneData(const std::string& filename) {
 			t += line;
 		}
 	}
-	std::cout << b << std::endl;
-
 
 	std::vector<int> row;
 	for (size_t i = 0; i < b.length(); i++) {
@@ -171,7 +169,7 @@ void SceneManager::initScene() {
 
 	switch (m_currentScene) {
 	case Scenes::SCENE_RAGNI: {
-		loadSceneData("src/Data/Scenes/ragni.txt");
+		parseSceneData("src/Data/Scenes/ragni.txt");
 	}
 	break;
 
@@ -269,6 +267,14 @@ void SceneManager::loadTopLayer() {
 				auto grassPatchTile = em->AddEntity("tlTiles");
 				auto sc = grassPatchTile->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->grass_patch, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
+			}
+			break;
+			case 7 :
+			{
+				auto tree1 = em->AddEntity("tlTiles");
+				auto sc = tree1->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->tree1, 256, 256);
+				sc->sprite.setPosition(i * 128, j * 128);
+				tree1->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
 			}
 			break;
 
