@@ -129,7 +129,7 @@ void SceneManager::parseSceneData(const std::string& filename) {
 		}
 	}
 
-
+	std::cout << t << std::endl;
 	for (size_t i = 0; i < t.length(); i++) {
 		if (t[i] == ' ') {
 			continue;
@@ -140,7 +140,20 @@ void SceneManager::parseSceneData(const std::string& filename) {
 			row.clear();
 		}
 		else {
-			row.push_back(t[i] - '0');
+			if (t[i + 1] != ' ') {
+				std::string numStr;
+				while (t[i] != ' ') {
+					numStr += t[i];
+					i++;
+				}
+				int num = std::stoi(numStr);
+				row.push_back(num);
+			}
+			else {
+				row.push_back(t[i] - '0');
+			}
+
+			
 		}
 	}
 
@@ -277,7 +290,30 @@ void SceneManager::loadTopLayer() {
 				tree1->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
 			}
 			break;
-
+			case 8:
+			{
+				auto bushSmall = em->AddEntity("tlTiles");
+				auto sc = bushSmall->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->bushSmall, 64, 64);
+				sc->sprite.setPosition(i * 128, j * 128);
+				bushSmall->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+			}
+			break;
+			case 9:
+			{
+				auto bushBig = em->AddEntity("tlTiles");
+				auto sc = bushBig->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->bushBig, 75, 75);
+				sc->sprite.setPosition(i * 128, j * 128);
+				bushBig->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+			}
+			break;
+			case 10:
+			{
+				auto house1 = em->AddEntity("tlTiles");
+				auto sc = house1->AddComponent<CSprite>(tlTiles->TXSVSet, tlTiles->house1, 128, 128);
+				sc->sprite.setPosition(i * 128, j * 128);
+				house1->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+			}
+			break;
 			default:
 				break;
 			}
