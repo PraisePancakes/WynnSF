@@ -18,9 +18,7 @@ public:
 		
 		this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
 		this->text.setPosition(xPos, yPos);
-		std::cout << "Text Size : " << text.getGlobalBounds().width << " x " << text.getGlobalBounds().height << std::endl;
-		std::cout << "Text Pos : " << text.getPosition().x << " : " << text.getPosition().y << std::endl;
-		std::cout << "Text Origin : " << text.getOrigin().x << " : " << text.getOrigin().y << std::endl;
+		
 	};
 
 

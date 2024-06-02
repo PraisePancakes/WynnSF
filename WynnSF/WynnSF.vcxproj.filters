@@ -39,6 +39,9 @@
     <ClCompile Include="core\ECS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GlobalChatLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\ECS.hpp">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Menu.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GlobalChatLogger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -173,6 +179,87 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="src\Assets\Sprites\Player\playersheet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\campfire_16x16.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\campfire_16x16.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\campfire_32x32.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\campfire_32x32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\campfire_48x48.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\campfire_48x48.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\door_16x16.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\door_16x16.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\door_32x32.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\door_32x32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\door_48x48.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\door_48x48.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\water_waves_16x16.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\water_waves_16x16.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\water_waves_32x32.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\water_waves_32x32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\water_waves_48x48.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\Animated stuff\water_waves_48x48.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\RPG_MAKER_MV\!$Campfire.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\RPG_MAKER_MV\!$door.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\RPG_MAKER_MV\Houses_TILESET_B-C-D-E.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\RPG_MAKER_MV\Outside_Stuff_TILESET_B-C-D-E.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\RPG_MAKER_VX_ACE\B-C-D-E_Serene_Village_01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\RPG_MAKER_VX_ACE\B-C-D-E_Serene_Village_02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\RPG_MAKER_VX_ACE\B-C-D-E_Serene_Village_03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\RPG_MAKER_XP\Serene_Village_XP.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\Tiles\SVRTx\TXSvrSet.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "SceneManager.hpp"
 #include "../core/Components/CCollider.hpp"
 #include "../core/Components/CSprite.hpp"
-
+#include "GlobalChatLogger.hpp"
 
 SceneManager::SceneManager(Scenes startingScene, sf::RenderWindow* ctx, EntityManager* em) {
 	m_currentScene = startingScene;
@@ -19,9 +19,19 @@ void SceneManager::SetScene(Scenes scene) {
 	clearPrevScene();
 	if (scene == Scenes::SCENE_QUIT) {
 		this->m_currentScene = scene;
+		
 		return;
 	}
 	this->m_currentScene = scene;
+	switch (this->m_currentScene) {
+	case Scenes::SCENE_RAGNI:
+		GlobalChatLogger::Log("Welcome To Ragni");
+		GlobalChatLogger::Log("Welcome To Ragni");
+		GlobalChatLogger::Log("Welcome To Ragni");
+	
+	
+		break;
+	}
 
 	initScene();
 	loadScene();
@@ -125,11 +135,22 @@ void SceneManager::parseSceneData(const std::string& filename) {
 			row.clear();
 		}
 		else {
-			row.push_back(b[i] - '0');
+			if (b[i + 1] != ' ') {
+				std::string numStr;
+				while (b[i] != ' ') {
+					numStr += b[i];
+					i++;
+				}
+				int num = std::stoi(numStr);
+				row.push_back(num);
+			}
+			else {
+				row.push_back(b[i] - '0');
+			}
 		}
 	}
 
-	std::cout << t << std::endl;
+
 	for (size_t i = 0; i < t.length(); i++) {
 		if (t[i] == ' ') {
 			continue;
@@ -309,7 +330,7 @@ void SceneManager::loadTopLayer() {
 			case 10:
 			{
 				auto house1 = em->AddEntity("tlTiles");
-				auto sc = house1->AddComponent<CSprite>(tlTiles->TXSVSet, tlTiles->house1, 128, 128);
+				auto sc = house1->AddComponent<CSprite>(tlTiles->TXSVSet, tlTiles->house1, 256, 256);
 				sc->sprite.setPosition(i * 128, j * 128);
 				house1->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
 			}

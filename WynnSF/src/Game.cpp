@@ -2,6 +2,9 @@
 #include "../core/Components/CSprite.hpp"
 #include "../core/Components/CCollider.hpp"
 #include "../core/Components/CTransform.hpp"
+#include "GlobalChatLogger.hpp"
+
+//TO-DO make chat log relative to player pos
 
 Game::Game(const std::string & title) {
 	m_running = true;
@@ -66,6 +69,7 @@ void Game::sUpdate() {
 	m_entManager.Update();
 	m_Player->Update();
 	m_sceneManager->Update();
+	GlobalChatLogger::Update(&this->m_entManager);
 
 }
 /*
@@ -148,11 +152,12 @@ void Game::sRenderer() {
 	if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
 		std::shared_ptr<Entity> dum = m_entManager.GetEntities("Dummy")[0];
 		auto sc = dum->GetComponent<CSprite>();
-		m_sceneManager->RenderScene();
+		//m_sceneManager->RenderScene();
 		m_Player->Render(this->m_Window);
 		m_Window.draw(sc->sprite);
 		m_Cam.setCenter(m_Player->GetPos().x, m_Player->GetPos().y);
 		m_Window.setView(m_Cam);
+		GlobalChatLogger::Display(&this->m_Window, &this->m_entManager);
 
 	}
 
