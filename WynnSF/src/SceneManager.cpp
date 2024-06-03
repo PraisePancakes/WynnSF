@@ -1,7 +1,8 @@
 #include "SceneManager.hpp"
 #include "../core/Components/CCollider.hpp"
 #include "../core/Components/CSprite.hpp"
-#include "GlobalChatLogger.hpp"
+#include "GlobalChatBox.hpp"
+
 
 SceneManager::SceneManager(Scenes startingScene, sf::RenderWindow* ctx, EntityManager* em) {
 	m_currentScene = startingScene;
@@ -25,11 +26,7 @@ void SceneManager::SetScene(Scenes scene) {
 	this->m_currentScene = scene;
 	switch (this->m_currentScene) {
 	case Scenes::SCENE_RAGNI:
-		GlobalChatLogger::Log("Welcome To Ragni");
-		GlobalChatLogger::Log("Welcome To Ragni");
-		GlobalChatLogger::Log("Welcome To Ragni");
-	
-	
+		
 		break;
 	}
 
@@ -47,6 +44,22 @@ void SceneManager::Update() {
 		switch (event) {
 		case 1:
 			SetScene(Scenes::SCENE_RAGNI);
+			//@test
+			GlobalChatBox::Log("Welcome To Wynn1", em);
+			GlobalChatBox::Log("Welcome To Wynn2", em);
+			GlobalChatBox::Log("Welcome To Wynn3", em);
+			GlobalChatBox::Log("Welcome To Wynn4", em);
+			GlobalChatBox::Log("Welcome To Wynn5", em);
+			GlobalChatBox::Log("Welcome To Wynn6", em);
+			GlobalChatBox::Log("Welcome To Wyn7", em);
+			GlobalChatBox::Log("Welcome To Wynn8", em);
+			GlobalChatBox::Log("Welcome To Wynn9", em);
+			GlobalChatBox::Log("Welcome To Wynn10", em);
+			GlobalChatBox::Log("Welcome To Wynn11", em);
+			GlobalChatBox::Log("Welcome To Wynn12", em);
+			GlobalChatBox::Log("Welcome To Wynn13", em);
+		
+			
 			menu->Clean();
 			break;
 		case 2:
@@ -57,7 +70,7 @@ void SceneManager::Update() {
 		}
 	}
 	else {
-		//update
+		//update scene based on player actions
 	}
 
 };

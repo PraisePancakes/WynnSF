@@ -2,7 +2,7 @@
 #include "../core/Components/CSprite.hpp"
 #include "../core/Components/CCollider.hpp"
 #include "../core/Components/CTransform.hpp"
-#include "GlobalChatLogger.hpp"
+
 
 //TO-DO make chat log relative to player pos
 
@@ -14,6 +14,7 @@ Game::Game(const std::string & title) {
 	spawnTestDummy();
 	m_sceneManager = std::make_unique<SceneManager>(Scenes::SCENE_MENU, &this->m_Window, &this->m_entManager);
 	m_Cam.setSize(WINDOW_W, WINDOW_H);
+	m_chatBox = std::make_unique<GlobalChatBox>();
 
 };
 
@@ -22,8 +23,10 @@ void Game::Run() {
 
 	while (m_running) {
 		m_Window.clear();
+	
 		sUserInput();
 		sUpdate();
+		
 		if (m_sceneManager->GetCurrentScene() == Scenes::SCENE_QUIT) {
 			m_running = false;
 			m_Window.close();
@@ -32,11 +35,12 @@ void Game::Run() {
 		if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
 			sCollider();
 			sMovement();
-
+			
 		}
 
 
 		sRenderer();
+		this->m_entManager.Update();
 		m_Window.display();
 
 	}
@@ -52,10 +56,11 @@ void Game::sUserInput() {
 			m_running = false;
 		}
 
-
+		
 
 		if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
 			m_Player->HandleInput(&e);
+			m_chatBox->HandleScrollEvent(&e, &m_entManager);
 		}
 	}
 
@@ -66,10 +71,8 @@ void Game::sMovement() {
 };
 
 void Game::sUpdate() {
-	m_entManager.Update();
 	m_Player->Update();
 	m_sceneManager->Update();
-	GlobalChatLogger::Update(&this->m_entManager);
 
 }
 /*
@@ -152,12 +155,11 @@ void Game::sRenderer() {
 	if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
 		std::shared_ptr<Entity> dum = m_entManager.GetEntities("Dummy")[0];
 		auto sc = dum->GetComponent<CSprite>();
-		//m_sceneManager->RenderScene();
 		m_Player->Render(this->m_Window);
 		m_Window.draw(sc->sprite);
 		m_Cam.setCenter(m_Player->GetPos().x, m_Player->GetPos().y);
 		m_Window.setView(m_Cam);
-		GlobalChatLogger::Display(&this->m_Window, &this->m_entManager);
+		m_chatBox->Render(&m_entManager, &m_Window);
 
 	}
 

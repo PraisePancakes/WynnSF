@@ -39,7 +39,7 @@
     <ClCompile Include="core\ECS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GlobalChatLogger.cpp">
+    <ClCompile Include="src\GlobalChatBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,7 +92,7 @@
     <ClInclude Include="src\Menu.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GlobalChatLogger.hpp">
+    <ClInclude Include="src\GlobalChatBox.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
