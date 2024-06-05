@@ -14,7 +14,7 @@ class Player {
 
 
 public:
-	Player(std::shared_ptr<Entity> e, float spawnX, float spawnY);
+	Player(float spawnX, float spawnY);
 
 	void InitIdleAnimation();
 	void InitMovingAnimation();

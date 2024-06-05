@@ -4,8 +4,8 @@
 #include "../core/Components/CInput.hpp"
 #include "../core/Components/CCollider.hpp"
 
-Player::Player(std::shared_ptr<Entity> e, float spawnX, float spawnY) {
-	this->entity = e;
+Player::Player(float spawnX, float spawnY) {
+	this->entity = EntityManager::GetInstance()->AddEntity("Player");
 	auto tc = entity->AddComponent<CTransform>(Core::Physics::Vec2D(spawnX, spawnY), Core::Physics::Vec2D(0, 0), 0);
 	entity->AddComponent<CInput>();
 	std::cout << "Player" << std::endl;

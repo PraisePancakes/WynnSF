@@ -18,7 +18,7 @@ class Game {
 
 	bool m_running = false;
 	sf::RenderWindow m_Window;
-	EntityManager m_entManager;
+
 	sf::View m_Cam;
 	std::unique_ptr<Player> m_Player = nullptr;
 	std::unique_ptr<SceneManager> m_sceneManager;
@@ -37,7 +37,7 @@ class Game {
 
 	void checkCollision(EntityVec& ev);
 	void sCollider();
-
+	void updateCam();
 
 	//TEST
 	void spawnTestDummy();

@@ -12,7 +12,7 @@ Game::Game(const std::string & title) {
 	m_Window.setFramerateLimit(60);
 	spawnPlayer();
 	spawnTestDummy();
-	m_sceneManager = std::make_unique<SceneManager>(Scenes::SCENE_MENU, &this->m_Window, &this->m_entManager);
+	m_sceneManager = std::make_unique<SceneManager>(Scenes::SCENE_MENU, &this->m_Window);
 	m_Cam.setSize(WINDOW_W, WINDOW_H);
 	m_chatBox = std::make_unique<GlobalChatBox>();
 
@@ -40,7 +40,7 @@ void Game::Run() {
 
 
 		sRenderer();
-		this->m_entManager.Update();
+		EntityManager::GetInstance()->Update();
 		m_Window.display();
 
 	}
@@ -60,7 +60,7 @@ void Game::sUserInput() {
 
 		if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
 			m_Player->HandleInput(&e);
-			m_chatBox->HandleScrollEvent(&e, &m_entManager);
+			m_chatBox->HandleScrollEvent(&e);
 		}
 	}
 
@@ -70,10 +70,19 @@ void Game::sMovement() {
 	m_Player->HandleMovement();
 };
 
-void Game::sUpdate() {
-	m_Player->Update();
-	m_sceneManager->Update();
+void Game::updateCam() {
+	m_Cam.setCenter(m_Player->GetPos().x, m_Player->GetPos().y);
+	m_Window.setView(m_Cam);
+}
 
+void Game::sUpdate() {
+	
+	if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
+		m_Player->Update();
+		updateCam();
+		GlobalChatBox::Update(&this->m_Window);
+	}
+	m_sceneManager->Update();
 }
 /*
 	since we are using a circle collider, the collision system will work based positioning of each circle collider when collision occurs
@@ -123,8 +132,8 @@ void Game::checkCollision(EntityVec& ev) {
 
 
 void Game::sCollider() {
-	EntityVec tlTiles = m_entManager.GetEntities("tlTiles");
-	EntityVec dumVec /*npc vec*/ = m_entManager.GetEntities("Dummy");
+	EntityVec tlTiles = EntityManager::GetInstance()->GetEntities("tlTiles");
+	EntityVec dumVec /*npc vec*/ = EntityManager::GetInstance()->GetEntities("Dummy");
 	checkCollision(dumVec);
 	checkCollision(tlTiles);
 };
@@ -132,7 +141,7 @@ void Game::sCollider() {
 
 //TEST
 void Game::spawnTestDummy() {
-	auto dum = m_entManager.AddEntity("Dummy");
+	auto dum = EntityManager::GetInstance()->AddEntity("Dummy");
 	std::cout << "Dummy" << std::endl;
 	auto ac = dum->AddComponent<CSprite>("src/Assets/Sprites/Player/playersheet.png", sf::IntRect(0, 0, 50, 40.7), 64, 64);
 	dum->AddComponent<CCollider>(15);
@@ -142,24 +151,23 @@ void Game::spawnTestDummy() {
 };
 
 void Game::spawnPlayer() {
-	auto player = m_entManager.AddEntity("Player");
+	
 	float spawnX = WINDOW_W / 2 + 50;
 	float spawnY = WINDOW_H / 2 + 100;
 
-	m_Player = std::make_unique<Player>(player, spawnX, spawnY);
+	m_Player = std::make_unique<Player>(spawnX, spawnY);
 
 };
 
 void Game::sRenderer() {
 	m_sceneManager->RenderScene();
 	if (m_sceneManager->GetCurrentScene() != Scenes::SCENE_MENU) {
-		std::shared_ptr<Entity> dum = m_entManager.GetEntities("Dummy")[0];
+		std::shared_ptr<Entity> dum = EntityManager::GetInstance()->GetEntities("Dummy")[0];
 		auto sc = dum->GetComponent<CSprite>();
 		m_Player->Render(this->m_Window);
 		m_Window.draw(sc->sprite);
-		m_Cam.setCenter(m_Player->GetPos().x, m_Player->GetPos().y);
-		m_Window.setView(m_Cam);
-		m_chatBox->Render(&m_entManager, &m_Window);
+	
+		m_chatBox->Render(&m_Window);
 
 	}
 

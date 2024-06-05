@@ -64,7 +64,7 @@ class SceneManager {
 
 	Scenes m_currentScene = Scenes::SCENE_MENU;
 	sf::RenderWindow* ctx;
-	EntityManager* em;
+
 	std::unique_ptr<Menu> menu = nullptr;
 	std::vector<std::vector<int>> scenetl = {};
 	std::vector<std::vector<int>> scenebl = {};
@@ -81,7 +81,7 @@ class SceneManager {
 
 
 public:
-	SceneManager(Scenes startingScene, sf::RenderWindow* ctx, EntityManager* em);
+	SceneManager(Scenes startingScene, sf::RenderWindow* ctx);
 
 	SceneManager(const SceneManager& other) = delete;
 	SceneManager(SceneManager&& other) = delete;

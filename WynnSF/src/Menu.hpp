@@ -10,7 +10,6 @@
 
 class Menu {
 	
-	EntityManager* em;
 	sf::RenderWindow* ctx;
 
 	Core::Physics::Vec2D getRandomParticlePos(sf::RenderWindow* ctx);
@@ -32,7 +31,7 @@ class Menu {
 
 
 public:
-	Menu(EntityManager* em, sf::RenderWindow* ctx);
+	Menu( sf::RenderWindow* ctx);
 	int GetMenuEvents() const;
 	void Clean();
 	void Render();

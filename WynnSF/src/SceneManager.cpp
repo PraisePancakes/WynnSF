@@ -4,11 +4,11 @@
 #include "GlobalChatBox.hpp"
 
 
-SceneManager::SceneManager(Scenes startingScene, sf::RenderWindow* ctx, EntityManager* em) {
+SceneManager::SceneManager(Scenes startingScene, sf::RenderWindow* ctx) {
 	m_currentScene = startingScene;
 	this->ctx = ctx;
-	this->em = em;
-	menu = std::make_unique<Menu>(em, ctx);
+
+	menu = std::make_unique<Menu>(ctx);
 
 	blTiles = std::make_unique<TXBaseLayerTiles>();
 	tlTiles = std::make_unique<TXTopLayerTiles>();
@@ -20,16 +20,9 @@ void SceneManager::SetScene(Scenes scene) {
 	clearPrevScene();
 	if (scene == Scenes::SCENE_QUIT) {
 		this->m_currentScene = scene;
-		
 		return;
 	}
 	this->m_currentScene = scene;
-	switch (this->m_currentScene) {
-	case Scenes::SCENE_RAGNI:
-		
-		break;
-	}
-
 	initScene();
 	loadScene();
 
@@ -45,22 +38,22 @@ void SceneManager::Update() {
 		case 1:
 			SetScene(Scenes::SCENE_RAGNI);
 			//@test
-			GlobalChatBox::Log("Welcome To Wynn1", em);
-			GlobalChatBox::Log("Welcome To Wynn2", em);
-			GlobalChatBox::Log("Welcome To Wynn3", em);
-			GlobalChatBox::Log("Welcome To Wynn4", em);
-			GlobalChatBox::Log("Welcome To Wynn5", em);
-			GlobalChatBox::Log("Welcome To Wynn6", em);
-			GlobalChatBox::Log("Welcome To Wyn7", em);
-			GlobalChatBox::Log("Welcome To Wynn8", em);
-			GlobalChatBox::Log("Welcome To Wynn9", em);
-			GlobalChatBox::Log("Welcome To Wynn10", em);
-			GlobalChatBox::Log("Welcome To Wynn11", em);
-			GlobalChatBox::Log("Welcome To Wynn12", em);
-			GlobalChatBox::Log("Welcome To Wynn13", em);
+			GlobalChatBox::Log("Welcome To Wynn1");
+			GlobalChatBox::Log("Welcome To Wynn2");
+			GlobalChatBox::Log("Welcome To Wynn3");
+			GlobalChatBox::Log("Welcome To Wynn4");
+			GlobalChatBox::Log("Welcome To Wynn5");
+			GlobalChatBox::Log("Welcome To Wynn6");
+			GlobalChatBox::Log("Welcome To Wyn7");
+			GlobalChatBox::Log("Welcome To Wynn8");
+			GlobalChatBox::Log("Welcome To Wynn9");
+			GlobalChatBox::Log("Welcome To Wynn10");
+			GlobalChatBox::Log("Welcome To Wynn11");
+			GlobalChatBox::Log("Welcome To Wynn12");
+			GlobalChatBox::Log("Welcome To Wynn13");
 		
 			
-			menu->Clean();
+			
 			break;
 		case 2:
 			SetScene(Scenes::SCENE_QUIT);
@@ -70,6 +63,7 @@ void SceneManager::Update() {
 		}
 	}
 	else {
+	
 		//update scene based on player actions
 	}
 
@@ -81,13 +75,13 @@ void SceneManager::RenderScene() {
 	}
 	else {
 		//render base layer
-		auto blTiles = em->GetEntities("blTiles");
+		auto blTiles = EntityManager::GetInstance()->GetEntities("blTiles");
 		for (auto& blt : blTiles) { //im hungry can u tell
 			ctx->draw(blt->GetComponent<CSprite>()->sprite);
 		}
 
 		//render top layer
-		auto tlTiles = em->GetEntities("tlTiles");
+		auto tlTiles = EntityManager::GetInstance()->GetEntities("tlTiles");
 
 		for (auto& tlt : tlTiles) {
 			ctx->draw(tlt->GetComponent<CSprite>()->sprite);
@@ -196,13 +190,17 @@ void SceneManager::parseSceneData(const std::string& filename) {
 }
 
 void SceneManager::clearPrevScene() {
-	auto blTiles = em->GetEntities("blTiles");
+	if (m_currentScene == Scenes::SCENE_MENU) {
+		menu->Clean();
+	}
+
+	auto blTiles = EntityManager::GetInstance()->GetEntities("blTiles");
 
 	for (auto& blt : blTiles) {
 		blt->DestroyEntity();
 	}
 
-	auto tiles = em->GetEntities("tlTiles");
+	auto tiles = EntityManager::GetInstance()->GetEntities("tlTiles");
 
 	for (auto& t : tiles) {
 		t->DestroyEntity();
@@ -229,14 +227,14 @@ void SceneManager::loadBaseLayer() {
 			switch (scenebl[j][i]) {
 			case 0:
 			{
-				auto grassTile = em->AddEntity("blTiles");
+				auto grassTile = EntityManager::GetInstance()->AddEntity("blTiles");
 				auto sc = grassTile->AddComponent<CSprite>(blTiles->TXGrassSetPath, blTiles->grass, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
 			}
 			break;
 			case 1:
 			{
-				auto flowerTile = em->AddEntity("blTiles");
+				auto flowerTile = EntityManager::GetInstance()->AddEntity("blTiles");
 
 				auto sc = flowerTile->AddComponent<CSprite>(blTiles->TXGrassSetPath, blTiles->flower, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
@@ -244,7 +242,7 @@ void SceneManager::loadBaseLayer() {
 			break;
 			case 2:
 			{
-				auto stoneTile = em->AddEntity("blTiles");
+				auto stoneTile = EntityManager::GetInstance()->AddEntity("blTiles");
 				auto sc = stoneTile->AddComponent<CSprite>(blTiles->TXGrassSetPath, blTiles->stone_path, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
 
@@ -252,14 +250,14 @@ void SceneManager::loadBaseLayer() {
 			break;
 			case 3:
 			{
-				auto stoneTile = em->AddEntity("blTiles");
+				auto stoneTile = EntityManager::GetInstance()->AddEntity("blTiles");
 				auto sc = stoneTile->AddComponent<CSprite>(blTiles->TXGrassSetPath, blTiles->stone_path2, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
 			}
 			break;
 			case 4:
 			{
-				auto stoneTile = em->AddEntity("blTiles");
+				auto stoneTile = EntityManager::GetInstance()->AddEntity("blTiles");
 				auto sc = stoneTile->AddComponent<CSprite>(blTiles->TXStoneGroundSetPath, blTiles->stone_ground, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
 			}
@@ -278,7 +276,7 @@ void SceneManager::loadTopLayer() {
 
 			case 1:
 			{
-				auto leftWall = em->AddEntity("tlTiles");
+				auto leftWall = EntityManager::GetInstance()->AddEntity("tlTiles");
 				auto sc = leftWall->AddComponent<CSprite>(tlTiles->TXWallSetPath, tlTiles->leftWall, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
 				leftWall->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
@@ -286,7 +284,7 @@ void SceneManager::loadTopLayer() {
 			break;
 			case 2:
 			{
-				auto rightWall = em->AddEntity("tlTiles");
+				auto rightWall = EntityManager::GetInstance()->AddEntity("tlTiles");
 				auto sc = rightWall->AddComponent<CSprite>(tlTiles->TXWallSetPath, tlTiles->rightWall, 128, 128);
 				sc->sprite.setPosition((i * 128) + 50, j * 128);
 				rightWall->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
@@ -295,7 +293,7 @@ void SceneManager::loadTopLayer() {
 
 			case 4:
 			{
-				auto wallTile = em->AddEntity("tlTiles");
+				auto wallTile = EntityManager::GetInstance()->AddEntity("tlTiles");
 				auto sc = wallTile->AddComponent<CSprite>(tlTiles->TXWallSetPath, tlTiles->wall, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
 				wallTile->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
@@ -303,7 +301,7 @@ void SceneManager::loadTopLayer() {
 			break;
 			case 5:
 			{
-				auto cornerWall = em->AddEntity("tlTiles");
+				auto cornerWall = EntityManager::GetInstance()->AddEntity("tlTiles");
 				auto sc = cornerWall->AddComponent<CSprite>(tlTiles->TXWallSetPath, tlTiles->cornerWall, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
 				cornerWall->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
@@ -311,14 +309,14 @@ void SceneManager::loadTopLayer() {
 			break;
 			case 6:
 			{
-				auto grassPatchTile = em->AddEntity("tlTiles");
+				auto grassPatchTile = EntityManager::GetInstance()->AddEntity("tlTiles");
 				auto sc = grassPatchTile->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->grass_patch, 128, 128);
 				sc->sprite.setPosition(i * 128, j * 128);
 			}
 			break;
 			case 7 :
 			{
-				auto tree1 = em->AddEntity("tlTiles");
+				auto tree1 = EntityManager::GetInstance()->AddEntity("tlTiles");
 				auto sc = tree1->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->tree1, 256, 256);
 				sc->sprite.setPosition(i * 128, j * 128);
 				tree1->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
@@ -326,7 +324,7 @@ void SceneManager::loadTopLayer() {
 			break;
 			case 8:
 			{
-				auto bushSmall = em->AddEntity("tlTiles");
+				auto bushSmall = EntityManager::GetInstance()->AddEntity("tlTiles");
 				auto sc = bushSmall->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->bushSmall, 64, 64);
 				sc->sprite.setPosition(i * 128, j * 128);
 				bushSmall->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
@@ -334,7 +332,7 @@ void SceneManager::loadTopLayer() {
 			break;
 			case 9:
 			{
-				auto bushBig = em->AddEntity("tlTiles");
+				auto bushBig = EntityManager::GetInstance()->AddEntity("tlTiles");
 				auto sc = bushBig->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->bushBig, 75, 75);
 				sc->sprite.setPosition(i * 128, j * 128);
 				bushBig->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
@@ -342,7 +340,7 @@ void SceneManager::loadTopLayer() {
 			break;
 			case 10:
 			{
-				auto house1 = em->AddEntity("tlTiles");
+				auto house1 = EntityManager::GetInstance()->AddEntity("tlTiles");
 				auto sc = house1->AddComponent<CSprite>(tlTiles->TXSVSet, tlTiles->house1, 256, 256);
 				sc->sprite.setPosition(i * 128, j * 128);
 				house1->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);

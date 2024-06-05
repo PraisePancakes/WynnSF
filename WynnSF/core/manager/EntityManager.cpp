@@ -1,9 +1,18 @@
 #include "EntityManager.hpp"
 
 
-EntityManager::EntityManager() {};
+EntityManager* EntityManager::pinstance{ nullptr };
+ std::mutex EntityManager::mut;
 
+EntityManager* EntityManager::GetInstance() {
 
+	std::lock_guard<std::mutex> lock(mut);
+	if (pinstance == nullptr)
+	{
+		pinstance = new EntityManager();
+	}
+	return pinstance;
+};
 std::shared_ptr<Entity> EntityManager::AddEntity() {
 	auto e = std::shared_ptr<Entity>(new Entity);
 	m_toAdd.push_back(e);
@@ -48,6 +57,3 @@ void EntityManager::Update() {
 	m_toAdd.clear();
 
 };
-
-
-EntityManager::~EntityManager() {};

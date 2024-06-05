@@ -39,12 +39,12 @@ public:
 	// and if n >= N => k=N−i for i=0,1,2,…,N−1 k[N] = k[N - 1]
 	// 
 	//be able to call this anywhere on the 
-	static void Log(const std::string& str, EntityManager* em);
-	void Update(EntityManager* em, sf::RenderWindow* ctx);
-	void HandleScrollEvent(sf::Event* e, EntityManager* em);
+	static void Log(const std::string& str);
+	static void Update(sf::RenderWindow* ctx);
+	void HandleScrollEvent(sf::Event* e);
 	//we need a hold of the iterators here
 	
-	void Render(EntityManager* em, sf::RenderWindow* ctx);
+	void Render( sf::RenderWindow* ctx);
 
 
 
