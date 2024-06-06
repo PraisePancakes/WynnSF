@@ -5,7 +5,7 @@
 #include "../core/Manager/EntityManager.hpp"
 #include "SceneManager.hpp"
 #include "Player.hpp"
-#include "GlobalChatBox.hpp"
+#include "GlobalChatManager.hpp"
 
 #include <cmath>
 
@@ -22,7 +22,7 @@ class Game {
 	sf::View m_Cam;
 	std::unique_ptr<Player> m_Player = nullptr;
 	std::unique_ptr<SceneManager> m_sceneManager;
-	std::unique_ptr<GlobalChatBox> m_chatBox;
+	
 
 	void sUserInput();
 	void sMovement();

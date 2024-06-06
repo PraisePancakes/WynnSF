@@ -4,22 +4,29 @@
 #include <SFML/Graphics.hpp>
 #include "../core/Manager/EntityManager.hpp"
 #include "../core/Components/CText.hpp"
-
+#include <mutex>
 constexpr size_t CHAT_LOG_MAX_SIZE = 10;
 
 
+class GlobalChatManager {
 
+	static std::mutex mut;
+	static GlobalChatManager* pinstance;
 
-class GlobalChatBox {
-	static int min;
-	static int max;
-	static int currentSlide;
-	static sf::RectangleShape chatBox;
+protected:
 
+	 int min = 0;
+	 int max = 0;
+	 int currentSlide = 0;
+	 sf::RectangleShape chatBox;
+
+	GlobalChatManager();
+	
+	~GlobalChatManager();
 	
 public:
-	GlobalChatBox();
-
+	
+	static GlobalChatManager& GetInstance();
 	//two iterators to keep track of chat scrolling, use a sliding window algorithm to 'scroll' through the deque
 	// one iterator will point to the beginning at vec and one will gradually increase as more strings get pushed
 	// and an end iterator representing the oldest chat
@@ -40,12 +47,12 @@ public:
 	// and if n >= N => k=N−i for i=0,1,2,…,N−1 k[N] = k[N - 1]
 	// 
 	//be able to call this anywhere on the 
-	static void Log(const std::string& str);
-	static void Update(sf::RenderWindow* ctx);
+	void Log(const std::string& str);
+	void Update(sf::RenderWindow* ctx);
 	void HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx);
 	//we need a hold of the iterators here
 	
-	void Render( sf::RenderWindow* ctx);
+	 void Render( sf::RenderWindow* ctx);
 
 
 

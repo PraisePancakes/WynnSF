@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Scene.hpp"
 #include "Menu.hpp"
-#include "GlobalChatBox.hpp"
+#include "GlobalChatManager.hpp"
 
 class SceneManager {
 	std::vector<std::shared_ptr<Scene>> sceneTable = {};
@@ -16,7 +16,14 @@ class SceneManager {
 			break;
 		case Scenes::SCENE_RAGNI:
 			path = "src/Data/Scenes/ragni.txt";
-		
+			GlobalChatManager::GetInstance().Log("Testing");
+			GlobalChatManager::GetInstance().Log("Testing1");
+			GlobalChatManager::GetInstance().Log("Testing2");
+			GlobalChatManager::GetInstance().Log("Testing3");
+			GlobalChatManager::GetInstance().Log("Testing4");
+			GlobalChatManager::GetInstance().Log("Testing5");
+			GlobalChatManager::GetInstance().Log("Testing6");
+			GlobalChatManager::GetInstance().Log("Testing7");
 			break;
 		case Scenes::SCENE_DETLAS:
 			break;

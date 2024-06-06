@@ -1,13 +1,13 @@
-#include "GlobalChatBox.hpp"
+#include "GlobalChatManager.hpp"
 
 
 
-int GlobalChatBox::max = 0;
-int GlobalChatBox::min = 0;
-int GlobalChatBox::currentSlide = 0;
-sf::RectangleShape GlobalChatBox::chatBox;
 
-GlobalChatBox::GlobalChatBox() {
+std::mutex GlobalChatManager::mut;
+GlobalChatManager* GlobalChatManager::pinstance{ nullptr };
+
+
+GlobalChatManager::GlobalChatManager() {
 	chatBox.setSize(sf::Vector2f(500, 150));
 	
 	sf::Color fill(0, 0, 0, 100);
@@ -15,19 +15,26 @@ GlobalChatBox::GlobalChatBox() {
 	chatBox.setOutlineThickness(2);
 
 	chatBox.setFillColor(fill);
-	Log("Testing123");
-	Log("Testing126");
-	Log("Testing124");
-	Log("Testing125");
-	Log("Testing128reallylong with space");
-	Log("Testing133");
+	
 };
 
 
+GlobalChatManager& GlobalChatManager::GetInstance() {
+	
+	std::lock_guard<std::mutex> lock(mut);
 
-void GlobalChatBox::Log(const std::string& str) {
+	if (pinstance == nullptr) {
+		pinstance = new GlobalChatManager();
+
+	}
+	return *pinstance;
+
+};
+
+
+void GlobalChatManager::Log(const std::string& str) {
 		//push front
-		
+
 		auto logs = EntityManager::GetInstance()->GetEntities("ChatLog");
 		if (logs.size() >= CHAT_LOG_MAX_SIZE) {
 			std::shared_ptr<Entity> e = EntityManager::GetInstance()->GetEntities("ChatLog")[0];
@@ -44,7 +51,7 @@ void GlobalChatBox::Log(const std::string& str) {
 		min = std::max(0, max - 5);
 };
 
-void GlobalChatBox::Update( sf::RenderWindow* ctx) {
+void GlobalChatManager::Update( sf::RenderWindow* ctx) {
 
 		sf::Vector2f viewCenter = ctx->getView().getCenter();
 		sf::Vector2f viewSize = ctx->getView().getSize();
@@ -63,9 +70,9 @@ void GlobalChatBox::Update( sf::RenderWindow* ctx) {
 		
 };
 
-void GlobalChatBox::Render( sf::RenderWindow* ctx) {
+void GlobalChatManager::Render( sf::RenderWindow* ctx) {
 
-	ctx->draw(this->chatBox);
+	ctx->draw(chatBox);
 
 	for (size_t i = min; i < max; i++) {
 		std::shared_ptr<Entity> e = EntityManager::GetInstance()->GetEntities("ChatLog")[i];
@@ -78,7 +85,7 @@ void GlobalChatBox::Render( sf::RenderWindow* ctx) {
 
 };
 
-void GlobalChatBox::HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx) {
+void GlobalChatManager::HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx) {
 
 	auto logs = EntityManager::GetInstance()->GetEntities("ChatLog");
 	if (logs.size() > 5) {
@@ -124,6 +131,8 @@ void GlobalChatBox::HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx) {
 			
 		
 	}
-	
 
 }
+
+
+GlobalChatManager::~GlobalChatManager() {};

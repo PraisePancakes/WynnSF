@@ -143,7 +143,7 @@
     <ClCompile Include="core\Manager\EntityManager.cpp" />
     <ClCompile Include="core\Utils\Utils.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\GlobalChatBox.cpp" />
+    <ClCompile Include="src\GlobalChatManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -161,7 +161,7 @@
     <ClInclude Include="core\Manager\EntityManager.hpp" />
     <ClInclude Include="core\Physics\Vec2D.hpp" />
     <ClInclude Include="core\Utils\Utils.hpp" />
-    <ClInclude Include="src\GlobalChatBox.hpp" />
+    <ClInclude Include="src\GlobalChatManager.hpp" />
     <ClInclude Include="src\Game.hpp" />
     <ClInclude Include="src\Menu.hpp" />
     <ClInclude Include="src\Player.hpp" />
