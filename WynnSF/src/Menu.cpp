@@ -97,13 +97,13 @@ void Menu::initMenu() {
 	sc->sprite.setPosition(tc->Position.x, tc->Position.y);
 
 	auto playTxt = EntityManager::GetInstance()->AddEntity("Play-text");
-	auto playTextC = playTxt->AddComponent<CText>("Play", "src/Assets/Fonts/PixelFont.ttf", 36, (float)ctx->getSize().x / 2, (float)ctx->getSize().y / 2);
+	auto playTextC = playTxt->AddComponent<CText>("Play", "src/Assets/Fonts/PixelFont.ttf", 36, (float)ctx->getSize().x / 2, (float)ctx->getSize().y / 2, true);
 
 	auto playBtn = EntityManager::GetInstance()->AddEntity("Play-btn");
 	auto playBtnC = playBtn->AddComponent<CButton>(sf::RectangleShape(sf::Vector2f(playTextC->text.getGlobalBounds().width + 10, playTextC->text.getGlobalBounds().height + 10)), sf::Vector2f(playTextC->text.getPosition().x - playTextC->text.getGlobalBounds().width / 2 - 3, playTextC->text.getPosition().y), sf::Color::White, sf::Color::Black);
 
 	auto quitTxt = EntityManager::GetInstance()->AddEntity("Quit-text");
-	auto quitTextC = quitTxt->AddComponent<CText>("Quit", "src/Assets/Fonts/PixelFont.ttf", 36, (float)ctx->getSize().x / 2, (float)ctx->getSize().y / 2 + 50);
+	auto quitTextC = quitTxt->AddComponent<CText>("Quit", "src/Assets/Fonts/PixelFont.ttf", 36, (float)ctx->getSize().x / 2, (float)ctx->getSize().y / 2 + 50, true);
 
 	auto quitBtn = EntityManager::GetInstance()->AddEntity("Quit-btn");
 	auto quitBtnC = quitBtn->AddComponent<CButton>(sf::RectangleShape(sf::Vector2f(quitTextC->text.getGlobalBounds().width + 10, quitTextC->text.getGlobalBounds().height + 10)), sf::Vector2f(quitTextC->text.getPosition().x - quitTextC->text.getGlobalBounds().width / 2 - 3, quitTextC->text.getPosition().y + 5), sf::Color::White, sf::Color::Black);
@@ -165,14 +165,7 @@ void Menu::renderMenuButtons() {
 
 	auto qbtnC = quitbtn->GetComponent<CButton>();
 
-	qbtnC->OnHover(ctx, [qbtnC]() {
-		qbtnC->buttonRect.setOutlineColor(sf::Color::Red);
-
-		});
-
-	btnC->OnHover(ctx, [btnC]() {
-		btnC->buttonRect.setOutlineColor(sf::Color::Green);
-		});
+	
 
 
 	ctx->draw(qbtnC->buttonRect);
@@ -195,6 +188,15 @@ int Menu::GetMenuEvents() const {
 
 	quitbtnC->OnClick(this->ctx, [&event]() {
 		event = 2;
+		});
+
+	quitbtnC->OnHover(ctx, [quitbtnC]() {
+		quitbtnC->buttonRect.setOutlineColor(sf::Color::Red);
+
+		});
+
+	playbtnC->OnHover(ctx, [playbtnC]() {
+		playbtnC->buttonRect.setOutlineColor(sf::Color::Green);
 		});
 
 

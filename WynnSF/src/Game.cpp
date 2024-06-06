@@ -62,7 +62,7 @@ void Game::sUserInput() {
 
 		if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
 			m_Player->HandleInput(&e);
-			m_chatBox->HandleScrollEvent(&e);
+			m_chatBox->HandleScrollEvent(&e, &m_Window);
 		}
 
 		m_sceneManager->HandleEvents(&e);

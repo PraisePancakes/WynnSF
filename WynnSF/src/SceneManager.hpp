@@ -16,12 +16,7 @@ class SceneManager {
 			break;
 		case Scenes::SCENE_RAGNI:
 			path = "src/Data/Scenes/ragni.txt";
-			GlobalChatBox::Log("Welcome to ragni");
-			GlobalChatBox::Log("test1");
-			GlobalChatBox::Log("test2");
-			GlobalChatBox::Log("test3");
-			GlobalChatBox::Log("test4");
-			GlobalChatBox::Log("test5");
+		
 			break;
 		case Scenes::SCENE_DETLAS:
 			break;
@@ -76,15 +71,17 @@ public:
 
 	void SetScene(Scenes scene) {
 		this->currentSceneToProcess = scene;
+		//log welcome
 	}
 
 	void RenderScene() {
 		if (this->currentSceneToProcess == Scenes::SCENE_MENU) {
 			menu->Render();
+			return;
 		}
-		else {
-			sceneTable[(int)currentSceneToProcess]->RenderScene(ctx);
-		}
+		
+		sceneTable[(int)currentSceneToProcess]->RenderScene(ctx);
+		
 		
 	}
 

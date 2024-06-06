@@ -14,6 +14,7 @@ class GlobalChatBox {
 	static int min;
 	static int max;
 	static int currentSlide;
+	static sf::RectangleShape chatBox;
 
 	
 public:
@@ -41,7 +42,7 @@ public:
 	//be able to call this anywhere on the 
 	static void Log(const std::string& str);
 	static void Update(sf::RenderWindow* ctx);
-	void HandleScrollEvent(sf::Event* e);
+	void HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx);
 	//we need a hold of the iterators here
 	
 	void Render( sf::RenderWindow* ctx);
