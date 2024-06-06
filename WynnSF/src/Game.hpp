@@ -39,8 +39,7 @@ class Game {
 	void sCollider();
 	void updateCam();
 
-	//TEST
-	void spawnTestDummy();
+
 
 	void spawnPlayer();
 

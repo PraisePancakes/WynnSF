@@ -1,97 +1,94 @@
-#pragma once
-#include "../core/Manager/EntityManager.hpp"
+#include <iostream>
+#include "Scene.hpp"
 #include "Menu.hpp"
-#include <ctime>
-#include <fstream>
-
-enum class Scenes {
-	SCENE_MENU,
-	SCENE_RAGNI,
-	SCENE_DETLAS,
-	SCENE_ALMUJ,
-
-	SCENE_QUIT,
-};
-
-
-//TO DO implement middle layer for shadows etc...
-
-const static std::string padtxBasePath = "src/Assets/Tiles/PATDTx/";
-const static std::string svrtxBasePath = "src/Assets/Tiles/SVRTx/";
-
-struct TXTopLayerTiles {
-	const std::string TXWallSetPath = padtxBasePath + "TXWallSet.png";
-	const std::string TXPlantSetPath = padtxBasePath + "TXPlantSet.png";
-	const std::string TXSVSet = svrtxBasePath + "TXSvrSet.png";
-
-
-	//Plant tiles
-	const sf::IntRect grass_patch = { 0, 384, 128, 128 };
-	const sf::IntRect tree1 = { 0, 0, 159, 159 };
-	const sf::IntRect bushSmall = {37,195, 25, 25 };
-	const sf::IntRect bushBig = { 212, 185, 49, 45 };
-	//Wall tiles
-	const sf::IntRect wall = { 32, 192, 128, 64 };
-	const sf::IntRect cornerWall = { 384, 64, 64, 96 };
-	const sf::IntRect leftWall = { 288, 31, 13, 96 };
-	const sf::IntRect rightWall = {344, 31, 13, 96};
-
-	//Structure tiles
-	const sf::IntRect house1 = {0, 1026, 144, 159};
-
-};
-
-
-
-struct TXBaseLayerTiles {
-	
-	const std::string TXGrassSetPath = padtxBasePath + "TXGrassSet.png";
-	const std::string TXStoneGroundSetPath = padtxBasePath + "TXStoneGroundSet.png";
-	
-	//Ground tiles
-	const sf::IntRect grass = { 0, 0, 128, 128 };
-	const sf::IntRect flower = { 128, 0, 128, 128 };
-	const sf::IntRect stone_path = { 0, 128, 128, 128 };
-	const sf::IntRect stone_path2 = { 128, 128, 128, 128 };
-	const sf::IntRect stone_ground = {160, 0, 95, 95};
-	
-
-};
-
-
+#include "GlobalChatBox.hpp"
 
 class SceneManager {
-
-	Scenes m_currentScene = Scenes::SCENE_MENU;
+	std::vector<std::shared_ptr<Scene>> sceneTable = {};
+	Scenes currentSceneToProcess = Scenes::SCENE_MENU;
 	sf::RenderWindow* ctx;
+	std::unique_ptr<Menu> menu;
 
-	std::unique_ptr<Menu> menu = nullptr;
-	std::vector<std::vector<int>> scenetl = {};
-	std::vector<std::vector<int>> scenebl = {};
+	std::string getSceneFilePath(Scenes id) {
+		std::string path = "";
+		switch (id) {
+		case Scenes::SCENE_MENU:
+			break;
+		case Scenes::SCENE_RAGNI:
+			path = "src/Data/Scenes/ragni.txt";
+			GlobalChatBox::Log("Welcome to ragni");
+			GlobalChatBox::Log("test1");
+			GlobalChatBox::Log("test2");
+			GlobalChatBox::Log("test3");
+			GlobalChatBox::Log("test4");
+			GlobalChatBox::Log("test5");
+			break;
+		case Scenes::SCENE_DETLAS:
+			break;
+		case Scenes::SCENE_ALMUJ:
+			break;
+		case Scenes::SCENE_QUIT:
+			break;
+		}
 
-	std::unique_ptr<TXBaseLayerTiles> blTiles;
-	std::unique_ptr<TXTopLayerTiles> tlTiles;
+		return path;
+	};
 
-	void parseSceneData(const std::string& filename);
-	void clearPrevScene();
-	void loadBaseLayer();
-	void loadTopLayer();
-	void loadScene();
-	void initScene();
+	void initTable() {
+		for (Scenes scene = (Scenes)0; scene < Scenes::SCENE_QUIT; scene = static_cast<Scenes>((size_t)scene + 1)) {
+			std::shared_ptr<Scene> item = std::make_shared<Scene>(scene, getSceneFilePath(scene));
+			sceneTable.push_back(item);
+		}
+	};
 
+	void handleMenuEvent() {
+		if (currentSceneToProcess == Scenes::SCENE_MENU) {
+			int event = menu->GetMenuEvents();
+			switch (event) {
+			case 1:
+				currentSceneToProcess = Scenes::SCENE_RAGNI;
+			break;
+			case 2:
+				currentSceneToProcess = Scenes::SCENE_QUIT;
+				break;
+	
+				
+			}
 
+		}
+	}
 public:
-	SceneManager(Scenes startingScene, sf::RenderWindow* ctx);
+	SceneManager(sf::RenderWindow* ctx) {
+		menu = std::make_unique<Menu>(ctx);
+		initTable();
+		this->ctx = ctx;
+	};
 
-	SceneManager(const SceneManager& other) = delete;
-	SceneManager(SceneManager&& other) = delete;
-	SceneManager& operator=(const SceneManager& other) = delete;
 
-	void SetScene(Scenes scene);
-	void Update();
+	void HandleEvents(sf::Event* e) {
+		if (currentSceneToProcess == Scenes::SCENE_MENU) {
+			handleMenuEvent();
+		}
+		else {
+			//handle scene events if there are any
+		}
+	};
 
-	void RenderScene();
+	void SetScene(Scenes scene) {
+		this->currentSceneToProcess = scene;
+	}
 
-	inline Scenes GetCurrentScene() const { return m_currentScene; };
-	~SceneManager();
+	void RenderScene() {
+		if (this->currentSceneToProcess == Scenes::SCENE_MENU) {
+			menu->Render();
+		}
+		else {
+			sceneTable[(int)currentSceneToProcess]->RenderScene(ctx);
+		}
+		
+	}
+
+	std::shared_ptr<Scene> GetCurrentScene() const {
+		return sceneTable[(int)currentSceneToProcess];
+	}
 };

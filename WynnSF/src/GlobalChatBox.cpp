@@ -46,13 +46,12 @@ void GlobalChatBox::Update( sf::RenderWindow* ctx) {
 };
 
 void GlobalChatBox::Render( sf::RenderWindow* ctx) {
-	
-
 
 	for (size_t i = min; i < max; i++) {
 		std::shared_ptr<Entity> e = EntityManager::GetInstance()->GetEntities("ChatLog")[i];
 		auto txt = e->GetComponent<CText>();
 		ctx->draw(txt->text);
+		
 
 	}
 

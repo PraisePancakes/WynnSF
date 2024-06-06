@@ -147,7 +147,6 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Player.cpp" />
-    <ClCompile Include="src\SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Components\CAnimator.hpp" />
@@ -166,6 +165,7 @@
     <ClInclude Include="src\Game.hpp" />
     <ClInclude Include="src\Menu.hpp" />
     <ClInclude Include="src\Player.hpp" />
+    <ClInclude Include="src\Scene.hpp" />
     <ClInclude Include="src\SceneManager.hpp" />
   </ItemGroup>
   <ItemGroup>
