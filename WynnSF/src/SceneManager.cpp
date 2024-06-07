@@ -1,6 +1,7 @@
 #include "SceneManager.hpp"
 
-	std::string SceneManager::getSceneFilePath(Scenes id) {
+
+std::string SceneManager::getSceneFilePath(Scenes id) {
 		std::string path = "";
 		switch (id) {
 		case Scenes::SCENE_MENU:
@@ -51,7 +52,7 @@
 		}
 	}
 
-	SceneManager::SceneManager(sf::RenderWindow* ctx) {
+	SceneManager::SceneManager(sf::RenderWindow* ctx) : ctx(ctx ? ctx : nullptr) {
 		menu = std::make_unique<Menu>(ctx);
 		initTable();
 		this->ctx = ctx;

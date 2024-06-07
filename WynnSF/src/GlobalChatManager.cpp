@@ -15,7 +15,13 @@ GlobalChatManager::GlobalChatManager() {
 	chatBox.setOutlineThickness(2);
 
 	chatBox.setFillColor(fill);
-	
+
+	chatScroller.setPointCount(10);
+	chatScroller.setRadius(4);
+	chatScroller.setFillColor(sf::Color::Red);
+	chatScroller.setOutlineColor(sf::Color::White);
+	chatScroller.setOutlineThickness(2);
+
 };
 
 
@@ -57,13 +63,14 @@ void GlobalChatManager::Update( sf::RenderWindow* ctx) {
 		sf::Vector2f viewSize = ctx->getView().getSize();
 		sf::Vector2f bottomLeft(viewCenter.x - (viewSize.x / 2), viewCenter.y + viewSize.y / 2);
 		chatBox.setPosition(bottomLeft.x, bottomLeft.y - 150);
+		chatScroller.setPosition(chatBox.getPosition().x + 495, (bottomLeft.y) - (min * 50));
 
 		if (max > 0) {
 			for (size_t i = min; i < max; i++) {
 				std::shared_ptr<Entity> e = EntityManager::GetInstance()->GetEntities("ChatLog")[i];
 				auto txt = e->GetComponent<CText>();
 				txt->text.setPosition(bottomLeft.x + 50, (bottomLeft.y - 35) - ((i - min) * 30));
-
+				
 			}
 
 		}
@@ -73,7 +80,7 @@ void GlobalChatManager::Update( sf::RenderWindow* ctx) {
 void GlobalChatManager::Render( sf::RenderWindow* ctx) {
 
 	ctx->draw(chatBox);
-
+	ctx->draw(chatScroller);
 	for (size_t i = min; i < max; i++) {
 		std::shared_ptr<Entity> e = EntityManager::GetInstance()->GetEntities("ChatLog")[i];
 		auto txt = e->GetComponent<CText>();
@@ -91,8 +98,9 @@ void GlobalChatManager::HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx) {
 	if (logs.size() > 5) {
 		sf::Vector2i mousepixelpos = sf::Mouse::getPosition(*ctx);
 		sf::Vector2f mouseworldpos = ctx->mapPixelToCoords(mousepixelpos);
-
+		
 		if (chatBox.getGlobalBounds().contains(mouseworldpos)) {
+			
 			if (e->type == sf::Event::MouseWheelScrolled) {
 				if (e->mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
 					//hande sliding 
@@ -128,6 +136,9 @@ void GlobalChatManager::HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx) {
 
 			}
 		}
+		
+		//handle drag scroll
+
 			
 		
 	}

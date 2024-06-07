@@ -19,6 +19,7 @@ protected:
 	 int max = 0;
 	 int currentSlide = 0;
 	 sf::RectangleShape chatBox;
+	 sf::CircleShape chatScroller;
 
 	GlobalChatManager();
 	
@@ -51,6 +52,9 @@ public:
 	void Update(sf::RenderWindow* ctx);
 	void HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx);
 	//we need a hold of the iterators here
+
+	GlobalChatManager(const GlobalChatManager& other) = delete;
+	void operator=(const GlobalChatManager& other) = delete;
 	
 	 void Render( sf::RenderWindow* ctx);
 
