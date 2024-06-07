@@ -225,6 +225,7 @@
     <Image Include="src\Assets\Tiles\Wall\RWall.png" />
     <Image Include="src\Assets\Tiles\Wall\Wall_1.png" />
     <Image Include="src\Assets\Tiles\Water.png" />
+    <Image Include="src\Assets\UI\UI_ChatLog.png" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="src\Assets\Fonts\PixelFont.ttf" />

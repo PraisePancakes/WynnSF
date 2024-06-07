@@ -1,5 +1,5 @@
 #include "GlobalChatManager.hpp"
-
+#include "../core/Components/CSprite.hpp"
 
 
 
@@ -21,6 +21,9 @@ GlobalChatManager::GlobalChatManager() {
 	chatScroller.setFillColor(sf::Color::Red);
 	chatScroller.setOutlineColor(sf::Color::White);
 	chatScroller.setOutlineThickness(2);
+
+	auto ui_chatLogBanner = EntityManager::GetInstance()->AddEntity("UI_ChatLogBanner");
+	ui_chatLogBanner->AddComponent<CSprite>("src/Assets/UI/UI_ChatLog.png", sf::IntRect(0, 0, 645, 214), 500, 100);
 
 };
 
@@ -64,6 +67,9 @@ void GlobalChatManager::Update( sf::RenderWindow* ctx) {
 		sf::Vector2f bottomLeft(viewCenter.x - (viewSize.x / 2), viewCenter.y + viewSize.y / 2);
 		chatBox.setPosition(bottomLeft.x, bottomLeft.y - 150);
 		chatScroller.setPosition(chatBox.getPosition().x + 495, (bottomLeft.y) - (min * 50));
+		std::shared_ptr<Entity> ui_banner_entity = EntityManager::GetInstance()->GetEntities("UI_ChatLogBanner")[0];
+		auto banner = ui_banner_entity->GetComponent<CSprite>();
+		banner->sprite.setPosition(bottomLeft.x + (chatBox.getSize().x / 2), bottomLeft.y - (chatBox.getSize().y) - 50);
 
 		if (max > 0) {
 			for (size_t i = min; i < max; i++) {
@@ -78,7 +84,10 @@ void GlobalChatManager::Update( sf::RenderWindow* ctx) {
 };
 
 void GlobalChatManager::Render( sf::RenderWindow* ctx) {
+	std::shared_ptr<Entity> ui_banner_entity = EntityManager::GetInstance()->GetEntities("UI_ChatLogBanner")[0];
+	auto banner = ui_banner_entity->GetComponent<CSprite>();
 
+	ctx->draw(banner->sprite);
 	ctx->draw(chatBox);
 	ctx->draw(chatScroller);
 	for (size_t i = min; i < max; i++) {
