@@ -153,6 +153,7 @@
     <ClInclude Include="core\Components\CAnimator.hpp" />
     <ClInclude Include="core\Components\CButton.hpp" />
     <ClInclude Include="core\Components\CCollider.hpp" />
+    <ClInclude Include="core\Components\CHealth.hpp" />
     <ClInclude Include="core\Components\CInput.hpp" />
     <ClInclude Include="core\Components\CShape.hpp" />
     <ClInclude Include="core\Components\CSprite.hpp" />

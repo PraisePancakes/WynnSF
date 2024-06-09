@@ -62,7 +62,7 @@ void Game::sUserInput() {
 
 		if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
 			m_Player->HandleInput(&e);
-			GlobalChatManager::GetInstance().HandleScrollEvent(&e, &m_Window);
+			GUI::GlobalChatManager::GetInstance().HandleScrollEvent(&e, &m_Window);
 		}
 
 		m_sceneManager->HandleEvents(&e);
@@ -84,7 +84,7 @@ void Game::sUpdate() {
 	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
 		m_Player->Update();
 		updateCam();
-		GlobalChatManager::GetInstance().Update(&this->m_Window);
+		GUI::GlobalChatManager::GetInstance().Update(&this->m_Window);
 	}
 
 	
@@ -160,7 +160,7 @@ void Game::sRenderer() {
 	m_sceneManager->RenderScene();
 	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
 		m_Player->Render(this->m_Window);
-		GlobalChatManager::GetInstance().Render(&m_Window);
+		GUI::GlobalChatManager::GetInstance().Render(&m_Window);
 
 	}
 	

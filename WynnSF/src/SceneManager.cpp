@@ -8,14 +8,14 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			break;
 		case Scenes::SCENE_RAGNI:
 			path = "src/Data/Scenes/ragni.txt";
-			GlobalChatManager::GetInstance().Log("Testing");
-			GlobalChatManager::GetInstance().Log("Testing1");
-			GlobalChatManager::GetInstance().Log("Testing2");
-			GlobalChatManager::GetInstance().Log("Testing3");
-			GlobalChatManager::GetInstance().Log("Testing4");
-			GlobalChatManager::GetInstance().Log("Testing5");
-			GlobalChatManager::GetInstance().Log("Testing6");
-			GlobalChatManager::GetInstance().Log("Testing7");
+			GUI::GlobalChatManager::GetInstance().Log("Testing");
+			GUI::GlobalChatManager::GetInstance().Log("Testing1");
+			GUI::GlobalChatManager::GetInstance().Log("Testing2");
+			GUI::GlobalChatManager::GetInstance().Log("Testing3");
+			GUI::GlobalChatManager::GetInstance().Log("Testing4");
+			GUI::GlobalChatManager::GetInstance().Log("Testing5");
+			GUI::GlobalChatManager::GetInstance().Log("Testing6");
+			GUI::GlobalChatManager::GetInstance().Log("Testing7");
 			break;
 		case Scenes::SCENE_DETLAS:
 			break;
@@ -52,7 +52,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 		}
 	}
 
-	SceneManager::SceneManager(sf::RenderWindow* ctx) : ctx(ctx ? ctx : nullptr) {
+	SceneManager::SceneManager(sf::RenderWindow* ctx) {
 		menu = std::make_unique<Menu>(ctx);
 		initTable();
 		this->ctx = ctx;

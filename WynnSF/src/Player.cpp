@@ -3,14 +3,22 @@
 #include "../core/Components/CTransform.hpp"
 #include "../core/Components/CInput.hpp"
 #include "../core/Components/CCollider.hpp"
+#include "../core/Components/CHealth.hpp"
+#include "../core/Components/CText.hpp"
 
 Player::Player(float spawnX, float spawnY) {
 	this->entity = EntityManager::GetInstance()->AddEntity("Player");
+	auto playerHealthE = EntityManager::GetInstance()->AddEntity("Player-Health");
+
 	auto tc = entity->AddComponent<CTransform>(Core::Physics::Vec2D(spawnX, spawnY), Core::Physics::Vec2D(0, 0), 0);
 	entity->AddComponent<CInput>();
 	std::cout << "Player" << std::endl;
 	auto ac = entity->AddComponent<CAnimator>("src/Assets/Sprites/Player/playersheet.png", sf::IntRect(0, 0, 50, 40), 64, 64);
 	entity->AddComponent<CCollider>(ac->sprite.getGlobalBounds().width / 2);
+
+	auto healthC = playerHealthE->AddComponent<CHealth>(100);
+	auto healthTxtC= playerHealthE->AddComponent<CText>("", "src/Assets/Fonts/PixelFont.ttf", 24, 0, 0, true);
+	
 	InitIdleAnimation();
 };
 
@@ -34,11 +42,24 @@ void Player::PlayMovingAnimation() {
 	ac->Play(50, 300, .1f);
 };
 
+void updateHealth() {
+	std::shared_ptr<Entity> healthE = EntityManager::GetInstance()->GetEntities("Player-Health")[0];
+	auto player = EntityManager::GetInstance()->GetEntities("Player")[0];
+	auto tc = player->GetComponent<CTransform>();
+	auto healthTxtC = healthE->GetComponent<CText>();
+
+	healthTxtC->text.setPosition(tc->Position.x, tc->Position.y - 50);
+	auto healthC = healthE->GetComponent<CHealth>();
+	healthTxtC->text.setString(std::to_string(healthC->CurrHp));
+
+}
 
 
 void Player::Update() {
 	auto tc = entity->GetComponent<CTransform>();
 	auto ac = entity->GetComponent<CAnimator>();
+	updateHealth();
+
 	ac->sprite.setPosition(tc->Position.x, tc->Position.y);
 	if (IsMoving() && !movingAnimationInitialized) {
 		InitMovingAnimation();
@@ -60,13 +81,15 @@ void Player::Update() {
 
 void Player::Render(sf::RenderWindow& ctx) {
 	auto ac = entity->GetComponent<CAnimator>();
-
+	std::shared_ptr<Entity> healthE = EntityManager::GetInstance()->GetEntities("Player-Health")[0];
+	auto healthTxtC = healthE->GetComponent<CText>();
 	if (!moving) {
 		PlayIdleAnimation();
 	}
 	else {
 		PlayMovingAnimation();
 	}
+	ctx.draw(healthTxtC->text);
 	ctx.draw(ac->sprite);
 };
 

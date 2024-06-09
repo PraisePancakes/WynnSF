@@ -3,11 +3,11 @@
 
 
 
-std::mutex GlobalChatManager::mut;
-GlobalChatManager* GlobalChatManager::pinstance{ nullptr };
+std::mutex GUI::GlobalChatManager::mut;
+GUI::GlobalChatManager* GUI::GlobalChatManager::pinstance{ nullptr };
 
 
-GlobalChatManager::GlobalChatManager() {
+GUI::GlobalChatManager::GlobalChatManager() {
 	chatBox.setSize(sf::Vector2f(500, 150));
 	
 	sf::Color fill(0, 0, 0, 100);
@@ -28,7 +28,7 @@ GlobalChatManager::GlobalChatManager() {
 };
 
 
-GlobalChatManager& GlobalChatManager::GetInstance() {
+GUI::GlobalChatManager& GUI::GlobalChatManager::GetInstance() {
 	
 	std::lock_guard<std::mutex> lock(mut);
 
@@ -41,7 +41,7 @@ GlobalChatManager& GlobalChatManager::GetInstance() {
 };
 
 
-void GlobalChatManager::Log(const std::string& str) {
+void GUI::GlobalChatManager::Log(const std::string& str) {
 		//push front
 
 		auto logs = EntityManager::GetInstance()->GetEntities("ChatLog");
@@ -60,7 +60,7 @@ void GlobalChatManager::Log(const std::string& str) {
 		min = std::max(0, max - 5);
 };
 
-void GlobalChatManager::Update( sf::RenderWindow* ctx) {
+void GUI::GlobalChatManager::Update( sf::RenderWindow* ctx) {
 
 		sf::Vector2f viewCenter = ctx->getView().getCenter();
 		sf::Vector2f viewSize = ctx->getView().getSize();
@@ -83,7 +83,7 @@ void GlobalChatManager::Update( sf::RenderWindow* ctx) {
 		
 };
 
-void GlobalChatManager::Render( sf::RenderWindow* ctx) {
+void GUI::GlobalChatManager::Render( sf::RenderWindow* ctx) {
 	std::shared_ptr<Entity> ui_banner_entity = EntityManager::GetInstance()->GetEntities("UI_ChatLogBanner")[0];
 	auto banner = ui_banner_entity->GetComponent<CSprite>();
 
@@ -101,7 +101,7 @@ void GlobalChatManager::Render( sf::RenderWindow* ctx) {
 
 };
 
-void GlobalChatManager::HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx) {
+void GUI::GlobalChatManager::HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx) {
 
 	auto logs = EntityManager::GetInstance()->GetEntities("ChatLog");
 	if (logs.size() > 5) {
@@ -155,4 +155,4 @@ void GlobalChatManager::HandleScrollEvent(sf::Event* e, sf::RenderWindow* ctx) {
 }
 
 
-GlobalChatManager::~GlobalChatManager() {};
+GUI::GlobalChatManager::~GlobalChatManager() {};
