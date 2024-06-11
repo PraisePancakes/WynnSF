@@ -14,8 +14,8 @@ Game::Game(const std::string & title) {
 	
 	m_sceneManager = std::make_unique<SceneManager>(&this->m_Window);
 	m_sceneManager->SetScene(Scenes::SCENE_MENU);
-
 	m_Cam.setSize(WINDOW_W, WINDOW_H);
+	this->m_Gui = std::make_unique<GUIManager>(&m_Window);
 	
 
 };
@@ -62,7 +62,8 @@ void Game::sUserInput() {
 
 		if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
 			m_Player->HandleInput(&e);
-			GUI::GlobalChatManager::GetInstance().HandleScrollEvent(&e, &m_Window);
+			m_Gui->HandleEvents(&e);
+			
 		}
 
 		m_sceneManager->HandleEvents(&e);
@@ -84,7 +85,8 @@ void Game::sUpdate() {
 	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
 		m_Player->Update();
 		updateCam();
-		GUI::GlobalChatManager::GetInstance().Update(&this->m_Window);
+		m_Gui->Update();
+		
 	}
 
 	
@@ -160,7 +162,7 @@ void Game::sRenderer() {
 	m_sceneManager->RenderScene();
 	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
 		m_Player->Render(this->m_Window);
-		GUI::GlobalChatManager::GetInstance().Render(&m_Window);
+		m_Gui->Render();
 
 	}
 	

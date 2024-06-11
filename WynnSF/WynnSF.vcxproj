@@ -165,6 +165,7 @@
     <ClInclude Include="core\Utils\Utils.hpp" />
     <ClInclude Include="src\GlobalChatManager.hpp" />
     <ClInclude Include="src\Game.hpp" />
+    <ClInclude Include="src\GUIManager.hpp" />
     <ClInclude Include="src\Menu.hpp" />
     <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\Scene.hpp" />

@@ -42,23 +42,22 @@ void Player::PlayMovingAnimation() {
 	ac->Play(50, 300, .1f);
 };
 
-void updateHealth() {
-	std::shared_ptr<Entity> healthE = EntityManager::GetInstance()->GetEntities("Player-Health")[0];
-	auto player = EntityManager::GetInstance()->GetEntities("Player")[0];
-	auto tc = player->GetComponent<CTransform>();
-	auto healthTxtC = healthE->GetComponent<CText>();
 
-	healthTxtC->text.setPosition(tc->Position.x, tc->Position.y - 50);
-	auto healthC = healthE->GetComponent<CHealth>();
-	healthTxtC->text.setString(std::to_string(healthC->CurrHp));
+static void validateHealth() {
+	std::shared_ptr<Entity> playerHealthE = EntityManager::GetInstance()->GetEntities("Player-Health")[0];
+	std::shared_ptr<CHealth> healthC = playerHealthE->GetComponent<CHealth>();
 
+	if (healthC->CurrHp <= 0) {
+		healthC->CurrHp = 0;
+	}
+	if (healthC->CurrHp >= healthC->MaxHP) {
+		healthC->CurrHp = healthC->MaxHP;
+	}
 }
 
-
-void Player::Update() {
+void Player::_updateMovement() {
 	auto tc = entity->GetComponent<CTransform>();
 	auto ac = entity->GetComponent<CAnimator>();
-	updateHealth();
 
 	ac->sprite.setPosition(tc->Position.x, tc->Position.y);
 	if (IsMoving() && !movingAnimationInitialized) {
@@ -76,20 +75,25 @@ void Player::Update() {
 	else if (!lookingLeft) {
 		ac->sprite.setScale(1.28f, 1.6f);
 	}
+}
+
+
+void Player::Update() {
+	validateHealth();
+	_updateMovement();
 
 }
 
 void Player::Render(sf::RenderWindow& ctx) {
 	auto ac = entity->GetComponent<CAnimator>();
-	std::shared_ptr<Entity> healthE = EntityManager::GetInstance()->GetEntities("Player-Health")[0];
-	auto healthTxtC = healthE->GetComponent<CText>();
+
 	if (!moving) {
 		PlayIdleAnimation();
 	}
 	else {
 		PlayMovingAnimation();
 	}
-	ctx.draw(healthTxtC->text);
+	
 	ctx.draw(ac->sprite);
 };
 

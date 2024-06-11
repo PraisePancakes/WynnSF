@@ -11,7 +11,7 @@ class Player {
 	bool movingAnimationInitialized = false;
 	bool lookingLeft = false;
 	bool sprinting = false;
-
+	void _updateMovement();
 
 public:
 	Player(float spawnX, float spawnY);

@@ -6,8 +6,9 @@
 #include "SceneManager.hpp"
 #include "Player.hpp"
 #include "GlobalChatManager.hpp"
-
+#include "GUIManager.hpp"
 #include <cmath>
+#include <memory>
 
 #define WINDOW_W 1280
 #define WINDOW_H 720
@@ -22,7 +23,7 @@ class Game {
 	sf::View m_Cam;
 	std::unique_ptr<Player> m_Player = nullptr;
 	std::unique_ptr<SceneManager> m_sceneManager;
-	
+	std::unique_ptr<GUIManager> m_Gui;
 
 	void sUserInput();
 	void sMovement();

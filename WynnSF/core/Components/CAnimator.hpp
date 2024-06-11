@@ -53,8 +53,8 @@ public:
 	};
 
 
-	void Play(int minFrame, int maxFrame, float fps) {
-		if (m_Clock.getElapsedTime().asSeconds() > fps) {
+	void Play(int minFrame, int maxFrame, float dt) {
+		if (m_Clock.getElapsedTime().asSeconds() > dt) {
 
 			if (this->srcRect.left == maxFrame) {
 				this->srcRect.left = minFrame;
