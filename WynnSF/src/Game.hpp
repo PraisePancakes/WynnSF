@@ -9,6 +9,7 @@
 #include "GUIManager.hpp"
 #include <cmath>
 #include <memory>
+#include "KitSelection.hpp"
 
 #define WINDOW_W 1280
 #define WINDOW_H 720
@@ -24,6 +25,7 @@ class Game {
 	std::unique_ptr<Player> m_Player = nullptr;
 	std::unique_ptr<SceneManager> m_sceneManager;
 	std::unique_ptr<GUIManager> m_Gui;
+	std::unique_ptr<KitSelection> m_KitSelection;
 
 	void sUserInput();
 	void sMovement();

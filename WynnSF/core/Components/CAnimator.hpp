@@ -4,7 +4,7 @@
 
 
 
-//TO DO incorporate state machine to play, stop, set, pause animations
+//TO DO implement minframe and maxframe members that can be modified based on different sprite sheet paths
 
 
 
@@ -13,8 +13,13 @@ public:
 	sf::Sprite sprite;
 	sf::Texture texture;
 	sf::IntRect srcRect;
-
+	std::string path;
 	sf::Clock m_Clock;
+	
+	int maxFrame = 0;
+	int minFrame = 0;
+	int frameWidth = 0;
+
 
 	void scaleToN(sf::IntRect* rect, const int nx, const int ny) {
 		const int MAX_DIM_X = nx;
@@ -35,8 +40,60 @@ public:
 		sprite.setScale(newWidth, newHeight);
 
 	}
+
 	CAnimator() {};
-	CAnimator(const std::string& texturePath, sf::IntRect srcRect, const int finalDimensionX, const int finalDimensionY)  {
+	CAnimator(const std::string& texturePath, sf::IntRect srcRect, const int finalDimensionX, const int finalDimensionY, int minFrame, int maxFrame, int frameWidth)  {
+		this->maxFrame = maxFrame;
+		this->minFrame = minFrame;
+		this->frameWidth = frameWidth;
+
+		this->path = texturePath;
+		if (!this->texture.loadFromFile(texturePath)) {
+			std::cerr << "Error opening file at path : " << texturePath << std::endl;
+		};
+		sprite.setTexture(this->texture);
+		sprite.setTextureRect(srcRect);
+		
+		scaleToN(&srcRect, finalDimensionX, finalDimensionY);
+		this->srcRect = srcRect;
+
+		sprite.setOrigin((float)(srcRect.left + srcRect.width / 2), (float)(srcRect.top + srcRect.height / 2));
+		
+	};
+
+
+	void SetTexturePath(const std::string& path) {
+		this->texture.loadFromFile(path);
+	}
+
+
+	void Play(float dt) {
+		
+
+	
+		if (m_Clock.getElapsedTime().asSeconds() > dt) {
+			
+			if (this->srcRect.left >= maxFrame) {
+				this->srcRect.left = minFrame;
+			}
+			else {
+				this->srcRect.left += frameWidth;
+				
+			}
+			sprite.setTextureRect(srcRect);
+
+			m_Clock.restart();
+		}
+
+	
+	};
+
+	void Reset(const std::string& texturePath, sf::IntRect srcRect, const int finalDimensionX, const int finalDimensionY,  int minFrame, int maxFrame, int frameWidth) {
+		this->maxFrame = maxFrame;
+		this->minFrame = minFrame;
+		this->frameWidth = frameWidth;
+
+		this->path = texturePath;
 		if (!this->texture.loadFromFile(texturePath)) {
 			std::cerr << "Error opening file at path : " << texturePath << std::endl;
 		};
@@ -44,28 +101,10 @@ public:
 		sprite.setTextureRect(srcRect);
 
 		scaleToN(&srcRect, finalDimensionX, finalDimensionY);
-		std::cout << "Scale : " << sprite.getScale().x << " : " << sprite.getScale().y << std::endl;
-		std::cout << "Sprite Dimensions : " << sprite.getGlobalBounds().width << " : " << sprite.getGlobalBounds().height << std::endl;
 
 
 		sprite.setOrigin((float)(srcRect.left + srcRect.width / 2), (float)(srcRect.top + srcRect.height / 2));
 
-	};
-
-
-	void Play(int minFrame, int maxFrame, float dt) {
-		if (m_Clock.getElapsedTime().asSeconds() > dt) {
-
-			if (this->srcRect.left == maxFrame) {
-				this->srcRect.left = minFrame;
-			}
-			else {
-				this->srcRect.left += minFrame;
-			}
-			sprite.setTextureRect(srcRect);
-
-			m_Clock.restart();
-		}
 	};
 
 	void Set(sf::IntRect srcRect) {

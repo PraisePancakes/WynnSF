@@ -14,10 +14,12 @@ class SceneManager {
 	std::string getSceneFilePath(Scenes id);
 	void initTable();
 	void handleMenuEvent();
+	
 
 public:
 	SceneManager(sf::RenderWindow* ctx);
 
+	
 	void HandleEvents(sf::Event* e);
 	void SetScene(Scenes scene);
 	void RenderScene();

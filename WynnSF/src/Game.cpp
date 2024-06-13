@@ -10,11 +10,14 @@ Game::Game(const std::string & title) {
 	m_running = true;
 	m_Window.create(sf::VideoMode::VideoMode(WINDOW_W, WINDOW_H), title, sf::Style::Titlebar | sf::Style::Close);
 	m_Window.setFramerateLimit(60);
-	spawnPlayer();
+
 	
 	m_sceneManager = std::make_unique<SceneManager>(&this->m_Window);
 	m_sceneManager->SetScene(Scenes::SCENE_MENU);
 	m_Cam.setSize(WINDOW_W, WINDOW_H);
+	this->m_KitSelection = std::make_unique<KitSelection>(&m_Window);
+
+	spawnPlayer();
 	this->m_Gui = std::make_unique<GUIManager>(&m_Window);
 	
 
@@ -34,7 +37,7 @@ void Game::Run() {
 			m_Window.close();
 		}
 		//handle game events
-		if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
+		if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
 			sCollider();
 			sMovement();
 			
@@ -60,10 +63,13 @@ void Game::sUserInput() {
 
 		
 
-		if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
+		if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
 			m_Player->HandleInput(&e);
 			m_Gui->HandleEvents(&e);
 			
+		}
+		else if (m_sceneManager->GetCurrentScene()->GetID() == Scenes::SCENE_KIT_SELECTION) {
+			m_KitSelection->HandleEvents();
 		}
 
 		m_sceneManager->HandleEvents(&e);
@@ -82,14 +88,14 @@ void Game::updateCam() {
 
 void Game::sUpdate() {
 	
-	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
+	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
 		m_Player->Update();
 		updateCam();
 		m_Gui->Update();
 		
 	}
 
-	
+	m_KitSelection->Update();
 	
 }
 /*
@@ -160,10 +166,13 @@ void Game::spawnPlayer() {
 
 void Game::sRenderer() {
 	m_sceneManager->RenderScene();
-	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU) {
+	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
 		m_Player->Render(this->m_Window);
 		m_Gui->Render();
 
+	}
+	else if (m_sceneManager->GetCurrentScene()->GetID() == Scenes::SCENE_KIT_SELECTION) {
+		m_KitSelection->Render();
 	}
 	
 

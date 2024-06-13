@@ -33,21 +33,23 @@ public:
 	
 
 	void OnHover(sf::RenderWindow* ctx, std::function<void()> callback) {
+		
 		sf::Mouse m;
-
+		
+		
 		float mx = m.getPosition(*ctx).x;
 		float my = m.getPosition(*ctx).y;
 
-	
+		
 		if (mx >= buttonRect.getPosition().x && mx <= buttonRect.getPosition().x + buttonRect.getGlobalBounds().width &&
 			my >= buttonRect.getPosition().y && my <= buttonRect.getPosition().y + buttonRect.getGlobalBounds().height) {
-			if (!hovered) {
+			
 				hovered = true;
 				callback(); 
-			}
+		
 		}
 		else {
-		
+			
 				hovered = false;
 		
 		}
@@ -55,6 +57,8 @@ public:
 		if (!hovered) {
 			this->buttonRect = initialRect;
 		}
+
+
 
 	
 	}

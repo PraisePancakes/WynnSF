@@ -12,8 +12,11 @@ Player::Player(float spawnX, float spawnY) {
 
 	auto tc = entity->AddComponent<CTransform>(Core::Physics::Vec2D(spawnX, spawnY), Core::Physics::Vec2D(0, 0), 0);
 	entity->AddComponent<CInput>();
+
+	
+
 	std::cout << "Player" << std::endl;
-	auto ac = entity->AddComponent<CAnimator>("src/Assets/Sprites/Player/playersheet.png", sf::IntRect(0, 0, 50, 40), 64, 64);
+	auto ac = entity->AddComponent<CAnimator>("src/Assets/Sprites/Player/playersheet.png", sf::IntRect(0, 0, 50, 40), 64, 64, 0, 150, 50);
 	entity->AddComponent<CCollider>(ac->sprite.getGlobalBounds().width / 2);
 
 	auto healthC = playerHealthE->AddComponent<CHealth>(100);
@@ -24,6 +27,7 @@ Player::Player(float spawnX, float spawnY) {
 
 void Player::InitIdleAnimation() {
 	auto ac = entity->GetComponent<CAnimator>();
+	
 	ac->Set(sf::IntRect(0, 0, 50, 40));
 };
 
@@ -34,12 +38,12 @@ void Player::InitMovingAnimation() {
 
 void Player::PlayIdleAnimation() {
 	auto ac = entity->GetComponent<CAnimator>();
-	ac->Play(50, 150, .1f);
+	ac->Play(.4f);
 };
 
 void Player::PlayMovingAnimation() {
 	auto ac = entity->GetComponent<CAnimator>();
-	ac->Play(50, 300, .1f);
+	ac->Play(.1f);
 };
 
 

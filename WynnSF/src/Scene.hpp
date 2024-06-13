@@ -11,6 +11,7 @@
 
 enum class Scenes {
 	SCENE_MENU,
+	SCENE_KIT_SELECTION,
 	SCENE_RAGNI,
 	SCENE_DETLAS,
 	SCENE_ALMUJ,
@@ -95,6 +96,8 @@ class Scene {
 	void initExternals() {
 		switch (m_id) {
 		case Scenes::SCENE_MENU:
+			break;
+		case Scenes::SCENE_KIT_SELECTION:
 			break;
 		case Scenes::SCENE_RAGNI:
 			externalScenes->InitExternalScenes(Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI);

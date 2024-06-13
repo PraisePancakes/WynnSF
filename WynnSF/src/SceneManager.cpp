@@ -6,6 +6,8 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 		switch (id) {
 		case Scenes::SCENE_MENU:
 			break;
+		case Scenes::SCENE_KIT_SELECTION:
+			break;
 		case Scenes::SCENE_RAGNI:
 			path = "src/Data/Scenes/ragni.txt";
 			GUI::GlobalChatManager::GetInstance().Log("Testing");
@@ -40,7 +42,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			int event = menu->GetMenuEvents();
 			switch (event) {
 			case 1:
-				currentSceneToProcess = Scenes::SCENE_RAGNI;
+				currentSceneToProcess = Scenes::SCENE_KIT_SELECTION;
 				break;
 			case 2:
 				currentSceneToProcess = Scenes::SCENE_QUIT;
@@ -51,6 +53,8 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 		}
 	}
+
+	
 
 	SceneManager::SceneManager(sf::RenderWindow* ctx) {
 		menu = std::make_unique<Menu>(ctx);
@@ -78,6 +82,11 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			menu->Render();
 			return;
 		}
+		else if (this->currentSceneToProcess == Scenes::SCENE_KIT_SELECTION) {
+			//render kit selection scene
+			return;
+		}
+	
 
 		sceneTable[(int)currentSceneToProcess]->RenderScene(ctx);
 

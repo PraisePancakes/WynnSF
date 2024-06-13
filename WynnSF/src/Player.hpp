@@ -4,6 +4,7 @@
 #include "../core/Components/CAnimator.hpp"
 #include "../core/Physics/Vec2D.hpp"
 
+
 class Player {
 
 	std::shared_ptr<Entity> entity = nullptr;
@@ -12,6 +13,7 @@ class Player {
 	bool lookingLeft = false;
 	bool sprinting = false;
 	void _updateMovement();
+	
 
 public:
 	Player(float spawnX, float spawnY);
