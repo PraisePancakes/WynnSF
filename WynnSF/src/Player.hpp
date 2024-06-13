@@ -3,7 +3,7 @@
 #include "../core/Manager/EntityManager.hpp"
 #include "../core/Components/CAnimator.hpp"
 #include "../core/Physics/Vec2D.hpp"
-
+#include "Kit.hpp"
 
 class Player {
 
@@ -13,11 +13,12 @@ class Player {
 	bool lookingLeft = false;
 	bool sprinting = false;
 	void _updateMovement();
-	
+	std::shared_ptr<Kit> kit{ nullptr };
 
 public:
 	Player(float spawnX, float spawnY);
 
+	void SetKit(std::shared_ptr<Kit> kit);
 	void InitIdleAnimation();
 	void InitMovingAnimation();
 	void PlayIdleAnimation();

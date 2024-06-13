@@ -4,13 +4,29 @@
 #include "../core/Manager/EntityManager.hpp"
 #include "../core/Components/CAnimator.hpp"
 #include "../core/Components/CButton.hpp"
+#include "Kit.hpp"
 
 constexpr float SPRITE_END = 360;
 
 
 class KitSelection {
 	sf::RenderWindow* ctx{ nullptr };
+	std::shared_ptr<Kit> archer{ nullptr };
+	std::shared_ptr<Kit> assassin{ nullptr };
+	std::shared_ptr<Kit> warrior{ nullptr };
+	std::shared_ptr<Kit> wizard{ nullptr };
+	Player* player;
+	SceneManager* sm;
+
 	bool idleInit = false;
+	void _initKits() {
+		archer = std::make_shared<Kit>("Archer");
+		assassin = std::make_shared<Kit>("Assassin");
+		warrior = std::make_shared<Kit>("Warrior");
+		wizard = std::make_shared<Kit>("Wizard");
+
+	}
+
 	void _initKitSprites() {
 		std::shared_ptr<Entity> archerKit = EntityManager::GetInstance()->AddEntity("KitSelection");
 		std::shared_ptr<Entity> assassinKit = EntityManager::GetInstance()->AddEntity("KitSelection");
@@ -71,28 +87,67 @@ class KitSelection {
 
 
 public:
-	KitSelection(sf::RenderWindow* ctx) {
+	KitSelection(sf::RenderWindow* ctx, Player* player, SceneManager* sceneManager) {
 		this->ctx = ctx;
-	
+		this->player = player;
+		this->sm = sceneManager;
+
 		std::shared_ptr<Entity> title = EntityManager::GetInstance()->AddEntity("KitSelection-Title");
 		auto titleText = title->AddComponent<CText>("Select A Kit", "src/Assets/Fonts/PixelFont.ttf", 72, (float)ctx->getSize().x / 2, 100, true);
 
+		_initKits();
 		_initKitSprites();
 		_initKitButtons();
+		
 			
 	};
 
 	
 	void HandleEvents() const {
 		auto kits = EntityManager::GetInstance()->GetEntities("KitSelection");
+		int kit_iterator = -1;
+		bool selected = false;
 
-		for (auto& kit : kits) {
+		for (int i = 0; i < kits.size(); ++i) {
+			auto& kit = kits[i];
 			auto ac = kit->GetComponent<CAnimator>();
 			auto btn = kit->GetComponent<CButton>();
+
 			btn->OnHover(ctx, [btn]() {
 				btn->buttonRect.setOutlineColor(sf::Color::Green);
+				});
+
+			btn->OnClick(ctx, [this, &selected, i, &kit_iterator]() {
+				if (!selected) {
+					selected = true;
+					kit_iterator = i;
+				}
 			});
 		}
+
+		if (selected) {
+			// set kit based on selectedKit
+			switch (kit_iterator) {
+			case 0:
+				player->SetKit(archer);
+				break;
+			case 1:
+				player->SetKit(assassin);
+				break;
+			case 2:
+				player->SetKit(warrior);
+				break;
+			case 3:
+				player->SetKit(wizard);
+				break;
+			default:
+				break;
+			}
+			selected = false; // reset selection
+			this->sm->SetScene(Scenes::SCENE_RAGNI);
+		}
+
+		
 	
 	};
 	

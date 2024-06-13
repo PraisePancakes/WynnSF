@@ -26,7 +26,6 @@ class Game {
 	std::unique_ptr<SceneManager> m_sceneManager;
 	std::unique_ptr<GUIManager> m_Gui;
 	std::unique_ptr<KitSelection> m_KitSelection;
-
 	void sUserInput();
 	void sMovement();
 	void sUpdate();

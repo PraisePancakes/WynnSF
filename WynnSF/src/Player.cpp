@@ -25,6 +25,11 @@ Player::Player(float spawnX, float spawnY) {
 	InitIdleAnimation();
 };
 
+void Player::SetKit(std::shared_ptr<Kit> kit) {
+	this->kit = kit;
+	std::cout << this->kit->GetKitTitle();
+}
+
 void Player::InitIdleAnimation() {
 	auto ac = entity->GetComponent<CAnimator>();
 	
