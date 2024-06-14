@@ -2,9 +2,11 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+
 #include "../core/Manager/EntityManager.hpp"
 #include "SceneManager.hpp"
 #include "Player.hpp"
+
 #include "GlobalChatManager.hpp"
 #include "GUIManager.hpp"
 #include <cmath>

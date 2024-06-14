@@ -58,12 +58,12 @@ public:
 	
 	};
 
-	void ScaleToN(sf::IntRect* rect, const int nx, const int ny) {
+	void ScaleToN( const int nx, const int ny) {
 		const int MAX_DIM_X = nx;
 		const int MAX_DIM_Y = ny;
 
-		float w = (float)rect->getSize().x;
-		float h = (float)rect->getSize().y;
+		float w = (float)this->srcRect.getSize().x;
+		float h = (float)this->srcRect.getSize().y;
 		float wScale = 0;
 		float hScale = 0;
 

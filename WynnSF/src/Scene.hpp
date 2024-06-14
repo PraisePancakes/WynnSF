@@ -367,7 +367,7 @@ public:
 
 
 
-	void RenderScene(sf::RenderWindow* ctx) {
+	void RenderScene(sf::RenderWindow* ctx) const {
 		//render base layer
 		auto blTiles = EntityManager::GetInstance()->GetEntities(sceneBLUniqueKey);
 		for (auto& blt : blTiles) { //im hungry can u tell

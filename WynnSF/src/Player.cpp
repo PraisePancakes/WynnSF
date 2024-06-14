@@ -68,6 +68,13 @@ void Player::_updateMovement() {
 		movingAnimationInitialized = false;
 	}
 
+	if (lookingLeft) {
+		this->kit->animator.sprite.setScale(-1.28, 1.28);
+	}
+	else {
+		this->kit->animator.sprite.setScale(1.28, 1.28);
+	}
+
 }
 
 

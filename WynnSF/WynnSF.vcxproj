@@ -144,6 +144,8 @@
     <ClCompile Include="core\Utils\Utils.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GlobalChatManager.cpp" />
+    <ClCompile Include="src\GUIManager.cpp" />
+    <ClCompile Include="src\KitSelection.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Player.cpp" />

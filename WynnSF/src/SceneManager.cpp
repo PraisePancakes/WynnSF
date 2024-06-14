@@ -96,3 +96,6 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 	std::shared_ptr<Scene> SceneManager::GetCurrentScene() const {
 		return sceneTable[(int)currentSceneToProcess];
 	}
+
+
+	SceneManager::~SceneManager() {};

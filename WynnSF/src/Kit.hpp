@@ -14,9 +14,9 @@ public:
 		this->kitTitle = title;
 		this->kitBasePath = basePath;
 		this->animator = animator;
-		
+
 	};
-	
+
 
 	std::string GetKitTitle() const {
 		return kitTitle;
