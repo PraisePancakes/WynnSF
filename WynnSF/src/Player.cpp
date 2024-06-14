@@ -13,43 +13,35 @@ Player::Player(float spawnX, float spawnY) {
 	auto tc = entity->AddComponent<CTransform>(Core::Physics::Vec2D(spawnX, spawnY), Core::Physics::Vec2D(0, 0), 0);
 	entity->AddComponent<CInput>();
 
-	
-
-	std::cout << "Player" << std::endl;
-	auto ac = entity->AddComponent<CAnimator>("src/Assets/Sprites/Player/playersheet.png", sf::IntRect(0, 0, 50, 40), 64, 64, 0, 150, 50);
-	entity->AddComponent<CCollider>(ac->sprite.getGlobalBounds().width / 2);
 
 	auto healthC = playerHealthE->AddComponent<CHealth>(100);
 	auto healthTxtC= playerHealthE->AddComponent<CText>("", "src/Assets/Fonts/PixelFont.ttf", 24, 0, 0, true);
 	
-	InitIdleAnimation();
 };
 
 void Player::SetKit(std::shared_ptr<Kit> kit) {
+	
 	this->kit = kit;
-	std::cout << this->kit->GetKitTitle();
+	this->entity->AddComponent<CCollider>(this->kit->animator.sprite.getGlobalBounds().width / 2);
+	
+	InitIdleAnimation();
+
 }
 
 void Player::InitIdleAnimation() {
-	auto ac = entity->GetComponent<CAnimator>();
+	std::string kitPath = kit->kitBasePath + "Idle.png";
+	std::cout << kitPath;
+	auto tc = entity->GetComponent<CTransform>();
+	this->kit->animator.Reset(kitPath, this->kit->animator.srcRect, this->kit->animator.maxFrame, this->kit->animator.frameWidth);
 	
-	ac->Set(sf::IntRect(0, 0, 50, 40));
 };
 
 void Player::InitMovingAnimation() {
-	auto ac = entity->GetComponent<CAnimator>();
-	ac->Set(sf::IntRect(50, 40, 50, 40));
+	std::string kitPath = kit->kitBasePath + "Run.png";
+
+	this->kit->animator.Reset(kitPath, this->kit->animator.srcRect, this->kit->animator.maxFrame, this->kit->animator.frameWidth);
+	
 }
-
-void Player::PlayIdleAnimation() {
-	auto ac = entity->GetComponent<CAnimator>();
-	ac->Play(.4f);
-};
-
-void Player::PlayMovingAnimation() {
-	auto ac = entity->GetComponent<CAnimator>();
-	ac->Play(.1f);
-};
 
 
 static void validateHealth() {
@@ -65,10 +57,8 @@ static void validateHealth() {
 }
 
 void Player::_updateMovement() {
-	auto tc = entity->GetComponent<CTransform>();
-	auto ac = entity->GetComponent<CAnimator>();
-
-	ac->sprite.setPosition(tc->Position.x, tc->Position.y);
+	
+	
 	if (IsMoving() && !movingAnimationInitialized) {
 		InitMovingAnimation();
 		movingAnimationInitialized = true;
@@ -78,32 +68,27 @@ void Player::_updateMovement() {
 		movingAnimationInitialized = false;
 	}
 
-	if (lookingLeft) {
-		ac->sprite.setScale(-1.28f, 1.6f); //scaled to 64 x 64
-	}
-	else if (!lookingLeft) {
-		ac->sprite.setScale(1.28f, 1.6f);
-	}
 }
 
 
 void Player::Update() {
 	validateHealth();
 	_updateMovement();
+	
 
 }
 
 void Player::Render(sf::RenderWindow& ctx) {
-	auto ac = entity->GetComponent<CAnimator>();
-
-	if (!moving) {
-		PlayIdleAnimation();
-	}
-	else {
-		PlayMovingAnimation();
-	}
 	
-	ctx.draw(ac->sprite);
+
+	
+	this->kit->animator.Play(.1f);
+	
+	
+	std::cout << this->kit->animator.sprite.getPosition().x << std::endl;
+	std::cout << "here" << kit->animator.path << std::endl;
+	ctx.draw(this->kit->animator.sprite);
+	
 };
 
 
@@ -111,8 +96,7 @@ void Player::SetPos(float x, float y) {
 	auto tc = this->entity->GetComponent<CTransform>();
 	tc->Position.x = x;
 	tc->Position.y = y;
-	auto ac = entity->GetComponent<CAnimator>();
-	ac->sprite.setPosition(x, y);
+	this->kit->animator.sprite.setPosition(x, y);
 
 }
 
@@ -223,4 +207,6 @@ void Player::HandleMovement() {
 	tc->Velocity.y *= MOVEMENT_SPEED;
 
 	tc->Position += tc->Velocity;
+
+	this->kit->animator.sprite.setPosition(tc->Position.x, tc->Position.y);
 }

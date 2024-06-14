@@ -89,13 +89,16 @@ void Game::updateCam() {
 void Game::sUpdate() {
 	
 	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
+		
 		m_Player->Update();
 		updateCam();
 		m_Gui->Update();
 		
 	}
-
-	m_KitSelection->Update();
+	if (m_sceneManager->GetCurrentScene()->GetID() == Scenes::SCENE_KIT_SELECTION) {
+		m_KitSelection->Update();
+	}
+	
 	
 }
 /*

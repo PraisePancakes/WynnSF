@@ -9,6 +9,9 @@
 constexpr float SPRITE_END = 360;
 
 
+
+
+
 class KitSelection {
 	sf::RenderWindow* ctx{ nullptr };
 	std::shared_ptr<Kit> archer{ nullptr };
@@ -20,10 +23,15 @@ class KitSelection {
 
 	bool idleInit = false;
 	void _initKits() {
-		archer = std::make_shared<Kit>("Archer");
-		assassin = std::make_shared<Kit>("Assassin");
-		warrior = std::make_shared<Kit>("Warrior");
-		wizard = std::make_shared<Kit>("Wizard");
+		CAnimator archerAnimator("", sf::IntRect(0, 0, 100, 100), 900, 100);
+		CAnimator assassinAnimator("", sf::IntRect(0, 0, 200, 200),  600, 200);
+		CAnimator warriorAnimator("", sf::IntRect(0, 0, 162, 162),  1458, 162);
+		CAnimator wizardAnimator("", sf::IntRect(0, 0, 230, 190),  925, 230);
+
+		archer = std::make_shared<Kit>("Archer", "src/Assets/Sprites/Player/Archer/Sprites/Character/", archerAnimator);
+		assassin = std::make_shared<Kit>("Assassin", "src/Assets/Sprites/Player/Assassin/Sprites/Character/", assassinAnimator);
+		warrior = std::make_shared<Kit>("Warrior", "src/Assets/Sprites/Player/Warrior/Sprites/Character/", warriorAnimator);
+		wizard = std::make_shared<Kit>("Wizard", "src/Assets/Sprites/Player/Wizard/Sprites/Character/", wizardAnimator);
 
 	}
 
@@ -34,10 +42,10 @@ class KitSelection {
 		std::shared_ptr<Entity> wizardKit = EntityManager::GetInstance()->AddEntity("KitSelection");
 
 
-		auto archerAc = archerKit->AddComponent<CAnimator>("src/Assets/Sprites/Player/Archer/Sprites/Character/Idle.png", sf::IntRect(0, 0, 100, 100), 256, 256, 0, 900, 100);
-		auto assassinAc = assassinKit->AddComponent<CAnimator>("src/Assets/Sprites/Player/Assassin/Sprites/Character/Idle.png", sf::IntRect(0, 0, 200, 200), 356, 356, 0, 600, 200);
-		auto warriorAc = warriorKit->AddComponent<CAnimator>("src/Assets/Sprites/Player/Warrior/Sprites/Character/Idle.png", sf::IntRect(0, 0, 162, 162), 356, 356, 0, 1458, 162);
-		auto wizardAc = wizardKit->AddComponent<CAnimator>("src/Assets/Sprites/Player/Wizard/Sprites/Character/Idle.png", sf::IntRect(0, 0, 230, 190), 256, 256, 0 ,925, 230);
+		auto archerAc = archerKit->AddComponent<CAnimator>("src/Assets/Sprites/Player/Archer/Sprites/Character/Idle.png", sf::IntRect(0, 0, 100, 100), 900, 100);
+		auto assassinAc = assassinKit->AddComponent<CAnimator>("src/Assets/Sprites/Player/Assassin/Sprites/Character/Idle.png", sf::IntRect(0, 0, 200, 200),  600, 200);
+		auto warriorAc = warriorKit->AddComponent<CAnimator>("src/Assets/Sprites/Player/Warrior/Sprites/Character/Idle.png", sf::IntRect(0, 0, 162, 162), 1458, 162);
+		auto wizardAc = wizardKit->AddComponent<CAnimator>("src/Assets/Sprites/Player/Wizard/Sprites/Character/Idle.png", sf::IntRect(0, 0, 230, 190), 925, 230);
 
 
 

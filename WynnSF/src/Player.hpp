@@ -21,8 +21,7 @@ public:
 	void SetKit(std::shared_ptr<Kit> kit);
 	void InitIdleAnimation();
 	void InitMovingAnimation();
-	void PlayIdleAnimation();
-	void PlayMovingAnimation();
+
 	inline std::shared_ptr<Entity> GetEntityInstance() const { return this->entity; };
 	void Update();
 	void Render(sf::RenderWindow& ctx);
