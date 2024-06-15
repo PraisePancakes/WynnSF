@@ -102,36 +102,32 @@ void Player::Update() {
 
 void Player::Render(sf::RenderWindow& ctx) {
 	
-
-	
 	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
-	if (kitPtr) {
 
+	if (kitPtr) {
 		auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
+		auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
+		auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
+		auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
+
 		if (archerKit) {
-			archerKit->GetCurrentAnimator().Play(.2f);
+			archerKit->PlayCurrentAnimator(.2f);
 			ctx.draw(archerKit->GetCurrentAnimator().sprite);
 		}
-
-		auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
-		if (assassinKit) {
-			assassinKit->GetCurrentAnimator().Play(.2f);
+		else if (assassinKit) {
+			assassinKit->PlayCurrentAnimator(.2f);
 			ctx.draw(assassinKit->GetCurrentAnimator().sprite);
 		}
-
-		auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
-		if (warriorKit) {
-			warriorKit->GetCurrentAnimator().Play(.2f);
+		else if (warriorKit) {
+			warriorKit->PlayCurrentAnimator(.2f);
 			ctx.draw(warriorKit->GetCurrentAnimator().sprite);
 		}
-
-		auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
-		if (wizardKit) {
-			wizardKit->GetCurrentAnimator().Play(.2f);
+		else if (wizardKit) {
+			wizardKit->PlayCurrentAnimator(.2f);
 			ctx.draw(wizardKit->GetCurrentAnimator().sprite);
 		}
-		
 	}
+
 	
 };
 

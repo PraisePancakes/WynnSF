@@ -96,6 +96,10 @@ public:
 		}
 	
 	}
+	void PlayCurrentAnimator(float dt) {
+		currentAnimator.Play(dt);
+	}
+
 	~WizardKit() {};
 };
 
@@ -131,6 +135,11 @@ public:
 		}
 
 	}
+
+	void PlayCurrentAnimator(float dt) {
+		currentAnimator.Play(dt);
+	}
+
 	~AssassinKit() {};
 };
 
@@ -164,6 +173,11 @@ public:
 			break;
 		}
 
+	}
+
+
+	void PlayCurrentAnimator(float dt) {
+		currentAnimator.Play(dt);
 	}
 	
 
@@ -199,6 +213,11 @@ public:
 			break;
 		}
 
+	}
+
+
+	void PlayCurrentAnimator(float dt) {
+		currentAnimator.Play(dt);
 	}
 
 
