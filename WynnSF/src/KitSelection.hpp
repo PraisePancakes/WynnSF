@@ -21,21 +21,14 @@ class KitSelection {
 	SceneManager* sm;
 
 	bool idleInit = false;
-
-
-	void _initKitSprites();
-
-	void _initKitButtons();
+	void _initKitSelectionSprites();
+	void _initKitSelectionButtons();
 
 
 public:
 	KitSelection(sf::RenderWindow* ctx, Player* player, SceneManager* sceneManager);
 
-
 	void HandleEvents() const;
-
-	void Update();
-
 	void Render();
 
 	~KitSelection();

@@ -61,7 +61,6 @@ void Game::sUserInput() {
 			m_running = false;
 		}
 
-		
 
 		if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
 			m_Player->HandleInput(&e);
@@ -96,7 +95,7 @@ void Game::sUpdate() {
 		
 	}
 	if (m_sceneManager->GetCurrentScene()->GetID() == Scenes::SCENE_KIT_SELECTION) {
-		m_KitSelection->Update();
+		
 	}
 	
 	

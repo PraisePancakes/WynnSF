@@ -58,7 +58,7 @@ public:
 	
 	};
 
-	void ScaleToN( const int nx, const int ny) {
+	void ScaleToNxN( const int nx, const int ny) {
 		const int MAX_DIM_X = nx;
 		const int MAX_DIM_Y = ny;
 

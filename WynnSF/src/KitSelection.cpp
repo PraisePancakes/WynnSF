@@ -3,7 +3,7 @@
 
 
 
-	void KitSelection::_initKitSprites() {
+	void KitSelection::_initKitSelectionSprites() {
 		std::shared_ptr<Entity> archerKit = EntityManager::GetInstance()->AddEntity("KitSelection");
 		std::shared_ptr<Entity> assassinKit = EntityManager::GetInstance()->AddEntity("KitSelection");
 		std::shared_ptr<Entity> warriorKit = EntityManager::GetInstance()->AddEntity("KitSelection");
@@ -15,10 +15,10 @@
 		auto warriorAc = warriorKit->AddComponent<CAnimator>("src/Assets/Sprites/Player/Warrior/Sprites/Character/Idle.png", sf::IntRect(0, 0, 162, 162), 1458, 162);
 		auto wizardAc = wizardKit->AddComponent<CAnimator>("src/Assets/Sprites/Player/Wizard/Sprites/Character/Idle.png", sf::IntRect(0, 0, 230, 190), 925, 230);
 
-		archerAc->ScaleToN(256, 256);
-		assassinAc->ScaleToN(356, 356);
-		warriorAc->ScaleToN(356, 356);
-		wizardAc->ScaleToN(256, 256);
+		archerAc->ScaleToNxN(256, 256);
+		assassinAc->ScaleToNxN(356, 356);
+		warriorAc->ScaleToNxN(356, 356);
+		wizardAc->ScaleToNxN(256, 256);
 
 		archerAc->sprite.setPosition((float)ctx->getSize().x / 2 + SPRITE_END, (float)ctx->getSize().y / 2);
 		assassinAc->sprite.setPosition((float)ctx->getSize().x / 2 + SPRITE_END - 256, (float)ctx->getSize().y / 2);
@@ -31,7 +31,7 @@
 		auto wizardTxt = wizardKit->AddComponent<CText>("Wizard", "src/Assets/Fonts/PixelFont.ttf", 24, wizardAc->sprite.getPosition().x, wizardAc->sprite.getPosition().y - 100, true);
 	}
 
-	void KitSelection::_initKitButtons() {
+	void KitSelection::_initKitSelectionButtons() {
 		std::shared_ptr<Entity> archerKit = EntityManager::GetInstance()->GetEntities("KitSelection")[0];
 		std::shared_ptr<Entity> assassinKit = EntityManager::GetInstance()->GetEntities("KitSelection")[1];
 		std::shared_ptr<Entity> warriorKit = EntityManager::GetInstance()->GetEntities("KitSelection")[2];
@@ -73,8 +73,8 @@
 		auto titleText = title->AddComponent<CText>("Select A Kit", "src/Assets/Fonts/PixelFont.ttf", 72, (float)ctx->getSize().x / 2, 100, true);
 
 	
-		_initKitSprites();
-		_initKitButtons();
+		_initKitSelectionSprites();
+		_initKitSelectionButtons();
 
 
 	};
@@ -129,21 +129,6 @@
 
 	};
 
-	void KitSelection::Update() {
-		auto kitSprites = EntityManager::GetInstance()->GetEntities("KitSelection");
-
-		auto archer = kitSprites[0]->GetComponent<CAnimator>();;
-		auto assassin = kitSprites[1]->GetComponent<CAnimator>();;
-		auto warrior = kitSprites[2]->GetComponent<CAnimator>();;
-		auto wizard = kitSprites[3]->GetComponent<CAnimator>();
-
-		archer->Play(.2f);
-		assassin->Play(.2f);
-		warrior->Play(.2f);
-		wizard->Play(.2f);
-
-	};
-
 	void KitSelection::Render()
 	{
 		auto kitSprites = EntityManager::GetInstance()->GetEntities("KitSelection");
@@ -158,6 +143,7 @@
 			ctx->draw(btn->buttonRect);
 			ctx->draw(ac->sprite);
 			ctx->draw(txt->text);
+			ac->Play(.2f);
 		}
 
 		ctx->draw(titleText->text);

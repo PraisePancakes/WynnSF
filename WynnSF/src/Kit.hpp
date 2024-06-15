@@ -86,10 +86,10 @@ public:
 		case AnimationType::ATTACK:
 			break;
 		case AnimationType::LOOKING_LEFT:
-			currentAnimator.ScaleToN(-128, 128);
+			currentAnimator.ScaleToNxN(-128, 128);
 			break;
 		case AnimationType::LOOKING_RIGHT:
-			currentAnimator.ScaleToN(128, 128);
+			currentAnimator.ScaleToNxN(128, 128);
 			break;
 		default:
 			break;
@@ -125,10 +125,10 @@ public:
 		case AnimationType::ATTACK:
 			break;
 		case AnimationType::LOOKING_LEFT:
-			currentAnimator.ScaleToN(-128, 128);
+			currentAnimator.ScaleToNxN(-128, 128);
 			break;
 		case AnimationType::LOOKING_RIGHT:
-			currentAnimator.ScaleToN(128, 128);
+			currentAnimator.ScaleToNxN(128, 128);
 			break;
 		default:
 			break;
@@ -164,10 +164,10 @@ public:
 		case AnimationType::ATTACK:
 			break;
 		case AnimationType::LOOKING_LEFT:
-			currentAnimator.ScaleToN(-128, 128);
+			currentAnimator.ScaleToNxN(-128, 128);
 			break;
 		case AnimationType::LOOKING_RIGHT:
-			currentAnimator.ScaleToN(128, 128);
+			currentAnimator.ScaleToNxN(128, 128);
 			break;
 		default:
 			break;
@@ -205,9 +205,9 @@ public:
 		case AnimationType::ATTACK:
 			break;
 		case AnimationType::LOOKING_LEFT:
-			currentAnimator.ScaleToN(-128, 128);
+			currentAnimator.ScaleToNxN(-128, 128);
 		case AnimationType::LOOKING_RIGHT:
-			currentAnimator.ScaleToN(128, 128);
+			currentAnimator.ScaleToNxN(128, 128);
 			break;
 		default:
 			break;
