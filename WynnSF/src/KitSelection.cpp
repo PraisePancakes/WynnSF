@@ -1,18 +1,7 @@
 #include "KitSelection.hpp"
 
 
-	void KitSelection::_initKits() {
-		CAnimator archerAnimator("", sf::IntRect(0, 0, 100, 100), 900, 100);
-		CAnimator assassinAnimator("", sf::IntRect(0, 0, 200, 200), 600, 200);
-		CAnimator warriorAnimator("", sf::IntRect(0, 0, 162, 162), 1458, 162);
-		CAnimator wizardAnimator("", sf::IntRect(0, 0, 230, 190), 925, 230);
 
-		archer = std::make_shared<Kit>("Archer", "src/Assets/Sprites/Player/Archer/Sprites/Character/", archerAnimator);
-		assassin = std::make_shared<Kit>("Assassin", "src/Assets/Sprites/Player/Assassin/Sprites/Character/", assassinAnimator);
-		warrior = std::make_shared<Kit>("Warrior", "src/Assets/Sprites/Player/Warrior/Sprites/Character/", warriorAnimator);
-		wizard = std::make_shared<Kit>("Wizard", "src/Assets/Sprites/Player/Wizard/Sprites/Character/", wizardAnimator);
-
-	}
 
 	void KitSelection::_initKitSprites() {
 		std::shared_ptr<Entity> archerKit = EntityManager::GetInstance()->AddEntity("KitSelection");
@@ -83,7 +72,7 @@
 		std::shared_ptr<Entity> title = EntityManager::GetInstance()->AddEntity("KitSelection-Title");
 		auto titleText = title->AddComponent<CText>("Select A Kit", "src/Assets/Fonts/PixelFont.ttf", 72, (float)ctx->getSize().x / 2, 100, true);
 
-		_initKits();
+	
 		_initKitSprites();
 		_initKitButtons();
 
@@ -117,18 +106,19 @@
 			// set kit based on selectedKit
 			switch (kit_iterator) {
 			case 0:
-				player->SetKit(archer);
+				player->SetKit(KitTypes::KIT_ARCHER);
 				break;
 			case 1:
-				player->SetKit(assassin);
+				player->SetKit(KitTypes::KIT_ASSASSIN);
 				break;
 			case 2:
-				player->SetKit(warrior);
+				player->SetKit(KitTypes::KIT_WARRIOR);
 				break;
 			case 3:
-				player->SetKit(wizard);
+				player->SetKit(KitTypes::KIT_WIZARD);
 				break;
 			default:
+				//player->SetKit(KitTypes::KIT_NONE);
 				break;
 			}
 			selected = false; // reset selection

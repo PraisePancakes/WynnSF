@@ -87,11 +87,6 @@ public:
 		};
 		sprite.setTexture(this->texture);
 		sprite.setTextureRect(srcRect);
-
-		
-
-		
-
 	};
 
 	

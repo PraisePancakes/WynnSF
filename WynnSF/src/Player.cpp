@@ -16,30 +16,80 @@ Player::Player(float spawnX, float spawnY) {
 
 	auto healthC = playerHealthE->AddComponent<CHealth>(100);
 	auto healthTxtC= playerHealthE->AddComponent<CText>("", "src/Assets/Fonts/PixelFont.ttf", 24, 0, 0, true);
-	
+	_initKits();
 };
 
-void Player::SetKit(std::shared_ptr<Kit> kit) {
-	
-	this->kit = kit;
-	this->entity->AddComponent<CCollider>(this->kit->animator.sprite.getGlobalBounds().width / 2);
-	
-	InitIdleAnimation();
+void Player::_initKits() {
+	this->kits.push_back(std::make_shared<ArcherKit>());
+	this->kits.push_back(std::make_shared<AssassinKit>());
+	this->kits.push_back(std::make_shared<WarriorKit>());
+	this->kits.push_back(std::make_shared<WizardKit>());
+}
 
+void Player::SetKit(KitTypes kit) {
+	
+	this->currentKitType = kit;
+	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
+	if (kitPtr) {
+		this->entity->AddComponent<CCollider>(this->kits[(int)currentKitType]->GetCurrentAnimator().sprite.getLocalBounds().width / 2);
+	}
 }
 
 void Player::InitIdleAnimation() {
-	std::string kitPath = kit->kitBasePath + "Idle.png";
-	std::cout << kitPath;
-	auto tc = entity->GetComponent<CTransform>();
-	this->kit->animator.Reset(kitPath, this->kit->animator.srcRect, this->kit->animator.maxFrame, this->kit->animator.frameWidth);
+	
+	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
+	
+	if (kitPtr) {
+		auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
+		if (archerKit) {
+			archerKit->SetCurrentAnimator(archerKit->animatorData.idle);
+		}
+
+		auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
+		if (assassinKit) {
+			assassinKit->SetCurrentAnimator(assassinKit->animatorData.idle);
+		}
+
+		auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
+		if (warriorKit) {
+			warriorKit->SetCurrentAnimator(warriorKit->animatorData.idle);
+		}
+
+		auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
+		if (wizardKit) {
+			wizardKit->SetCurrentAnimator(wizardKit->animatorData.idle);
+		}
+	}
+
 	
 };
 
 void Player::InitMovingAnimation() {
-	std::string kitPath = kit->kitBasePath + "Run.png";
+	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
 
-	this->kit->animator.Reset(kitPath, this->kit->animator.srcRect, this->kit->animator.maxFrame, this->kit->animator.frameWidth);
+	if (kitPtr) {
+		auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
+		if (archerKit) {
+			archerKit->SetCurrentAnimator(archerKit->animatorData.run);
+		}
+
+		auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
+		if (assassinKit) {
+			assassinKit->SetCurrentAnimator(assassinKit->animatorData.run);
+		}
+
+		auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
+		if (warriorKit) {
+			warriorKit->SetCurrentAnimator(warriorKit->animatorData.run);
+		}
+
+		auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
+		if (wizardKit) {
+			wizardKit->SetCurrentAnimator(wizardKit->animatorData.run);
+		}
+	}
+
+
 	
 }
 
@@ -57,7 +107,7 @@ static void validateHealth() {
 }
 
 void Player::_updateMovement() {
-	
+	_setPosRelativeToTransform();
 	
 	if (IsMoving() && !movingAnimationInitialized) {
 		InitMovingAnimation();
@@ -69,10 +119,55 @@ void Player::_updateMovement() {
 	}
 
 	if (lookingLeft) {
-		this->kit->animator.sprite.setScale(-1.28, 1.28);
+		std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
+		if (kitPtr) {
+
+			auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
+			if (archerKit) {
+				archerKit->GetCurrentAnimator().ScaleToN(-128, 128);
+			}
+
+			auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
+			if (assassinKit) {
+				assassinKit->GetCurrentAnimator().ScaleToN(-128, 128);
+			}
+
+			auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
+			if (warriorKit) {
+				warriorKit->GetCurrentAnimator().ScaleToN(-128, 128);
+			}
+
+			auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
+			if (wizardKit) {
+				
+				wizardKit->GetCurrentAnimator().ScaleToN(-128, 128);
+			}
+		}
 	}
 	else {
-		this->kit->animator.sprite.setScale(1.28, 1.28);
+		std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
+		if (kitPtr) {
+
+			auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
+			if (archerKit) {
+				archerKit->GetCurrentAnimator().ScaleToN(128, 128);
+			}
+
+			auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
+			if (assassinKit) {
+				assassinKit->GetCurrentAnimator().ScaleToN(128, 128);
+			}
+
+			auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
+			if (warriorKit) {
+				warriorKit->GetCurrentAnimator().ScaleToN(128, 128);
+			}
+
+			auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
+			if (wizardKit) {
+				wizardKit->GetCurrentAnimator().ScaleToN(128, 128);
+			}
+		}
 	}
 
 }
@@ -89,21 +184,105 @@ void Player::Render(sf::RenderWindow& ctx) {
 	
 
 	
-	this->kit->animator.Play(.1f);
-	
-	
-	std::cout << this->kit->animator.sprite.getPosition().x << std::endl;
-	std::cout << "here" << kit->animator.path << std::endl;
-	ctx.draw(this->kit->animator.sprite);
+	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
+	if (kitPtr) {
+
+		auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
+		if (archerKit) {
+			archerKit->GetCurrentAnimator().Play(.2f);
+			ctx.draw(archerKit->GetCurrentAnimator().sprite);
+		}
+
+		auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
+		if (assassinKit) {
+			assassinKit->GetCurrentAnimator().Play(.2f);
+			ctx.draw(assassinKit->GetCurrentAnimator().sprite);
+		}
+
+		auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
+		if (warriorKit) {
+			warriorKit->GetCurrentAnimator().Play(.2f);
+			ctx.draw(warriorKit->GetCurrentAnimator().sprite);
+		}
+
+		auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
+		if (wizardKit) {
+			wizardKit->GetCurrentAnimator().Play(.2f);
+			ctx.draw(wizardKit->GetCurrentAnimator().sprite);
+		}
+		
+	}
 	
 };
+
+
+void Player::_setPosRelativeToTransform() {
+	auto tc = this->entity->GetComponent<CTransform>();
+	tc->Position.x;
+	tc->Position.y;
+
+	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
+	if (kitPtr) {
+		auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
+		if (archerKit) {
+			archerKit->GetCurrentAnimator().sprite.setPosition(tc->Position.x, tc->Position.y);
+		}
+
+		auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
+		if (assassinKit) {
+			assassinKit->GetCurrentAnimator().sprite.setPosition(tc->Position.x, tc->Position.y);
+			
+		}
+
+		auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
+		if (warriorKit) {
+			warriorKit->GetCurrentAnimator().sprite.setPosition(tc->Position.x, tc->Position.y);
+
+		}
+
+		auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
+		if (wizardKit) {
+			wizardKit->GetCurrentAnimator().sprite.setPosition(tc->Position.x, tc->Position.y);
+
+		}
+	}
+
+}
 
 
 void Player::SetPos(float x, float y) {
 	auto tc = this->entity->GetComponent<CTransform>();
 	tc->Position.x = x;
 	tc->Position.y = y;
-	this->kit->animator.sprite.setPosition(x, y);
+
+	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
+	if (kitPtr) {
+		auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
+		if (archerKit) {
+			archerKit->GetCurrentAnimator().sprite.setPosition(x, y);
+		}
+
+		auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
+		if (assassinKit) {
+			
+			assassinKit->GetCurrentAnimator().sprite.setPosition(x, y);
+		}
+
+		auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
+		if (warriorKit) {
+
+			warriorKit->GetCurrentAnimator().sprite.setPosition(x, y);
+		}
+
+		auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
+		if (wizardKit) {
+
+			wizardKit->GetCurrentAnimator().sprite.setPosition(x, y);
+		}
+
+	}
+
+	
 
 }
 
@@ -215,5 +394,6 @@ void Player::HandleMovement() {
 
 	tc->Position += tc->Velocity;
 
-	this->kit->animator.sprite.setPosition(tc->Position.x, tc->Position.y);
+
+
 }
