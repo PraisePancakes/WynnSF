@@ -11,6 +11,16 @@ enum class KitTypes {
 	KIT_WIZARD
 };
 
+
+enum class AnimationType {
+	IDLE,
+	RUN,
+	ATTACK,
+	LOOKING_LEFT,
+	LOOKING_RIGHT,
+
+};
+
 class Kit {
 public:
 	std::string kitTitle;
@@ -21,7 +31,7 @@ public:
 	};
 
 	virtual CAnimator& GetCurrentAnimator() = 0;
-	virtual void SetCurrentAnimator(CAnimator animator) = 0;
+	virtual void SetCurrentAnimator(AnimationType animatorType) = 0;
 
 	std::string GetKitTitle() const {
 		return kitTitle;
@@ -64,8 +74,27 @@ public:
 		return this->currentAnimator;
 	}
 
-	void SetCurrentAnimator(CAnimator animator) override {
-		this->currentAnimator = animator;
+	void SetCurrentAnimator(AnimationType animatorType) override {
+		switch (animatorType)
+		{
+		case AnimationType::IDLE:
+			this->currentAnimator = animatorData.idle;
+			break;
+		case AnimationType::RUN:
+			this->currentAnimator = animatorData.run;
+			break;
+		case AnimationType::ATTACK:
+			break;
+		case AnimationType::LOOKING_LEFT:
+			currentAnimator.ScaleToN(-128, 128);
+			break;
+		case AnimationType::LOOKING_RIGHT:
+			currentAnimator.ScaleToN(128, 128);
+			break;
+		default:
+			break;
+		}
+	
 	}
 	~WizardKit() {};
 };
@@ -80,8 +109,27 @@ public:
 		return this->currentAnimator;
 	}
 
-	void SetCurrentAnimator(CAnimator animator) override {
-		this->currentAnimator = animator;
+	void SetCurrentAnimator(AnimationType animatorType) override {
+		switch (animatorType)
+		{
+		case AnimationType::IDLE:
+			this->currentAnimator = animatorData.idle;
+			break;
+		case AnimationType::RUN:
+			this->currentAnimator = animatorData.run;
+			break;
+		case AnimationType::ATTACK:
+			break;
+		case AnimationType::LOOKING_LEFT:
+			currentAnimator.ScaleToN(-128, 128);
+			break;
+		case AnimationType::LOOKING_RIGHT:
+			currentAnimator.ScaleToN(128, 128);
+			break;
+		default:
+			break;
+		}
+
 	}
 	~AssassinKit() {};
 };
@@ -95,10 +143,28 @@ public:
 		return this->currentAnimator;
 	}
 
-	void SetCurrentAnimator(CAnimator animator) override {
-		this->currentAnimator = animator;
-	}
+	void SetCurrentAnimator(AnimationType animatorType) override {
+		switch (animatorType)
+		{
+		case AnimationType::IDLE:
+			this->currentAnimator = animatorData.idle;
+			break;
+		case AnimationType::RUN:
+			this->currentAnimator = animatorData.run;
+			break;
+		case AnimationType::ATTACK:
+			break;
+		case AnimationType::LOOKING_LEFT:
+			currentAnimator.ScaleToN(-128, 128);
+			break;
+		case AnimationType::LOOKING_RIGHT:
+			currentAnimator.ScaleToN(128, 128);
+			break;
+		default:
+			break;
+		}
 
+	}
 	
 
 	~ArcherKit() {};
@@ -113,11 +179,27 @@ public:
 	CAnimator& GetCurrentAnimator() override {
 		return this->currentAnimator;
 	}
+	void SetCurrentAnimator(AnimationType animatorType) override {
+		switch (animatorType)
+		{
+		case AnimationType::IDLE:
+			this->currentAnimator = animatorData.idle;
+			break;
+		case AnimationType::RUN:
+			this->currentAnimator = animatorData.run;
+			break;
+		case AnimationType::ATTACK:
+			break;
+		case AnimationType::LOOKING_LEFT:
+			currentAnimator.ScaleToN(-128, 128);
+		case AnimationType::LOOKING_RIGHT:
+			currentAnimator.ScaleToN(128, 128);
+			break;
+		default:
+			break;
+		}
 
-	void SetCurrentAnimator(CAnimator animator) override {
-		this->currentAnimator = animator;
 	}
-
 
 
 	~WarriorKit() {};

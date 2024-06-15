@@ -6,6 +6,8 @@
 #include "../core/Components/CHealth.hpp"
 #include "../core/Components/CText.hpp"
 
+//TO:DO REFACTOR KIT TYPE CASTING
+
 Player::Player(float spawnX, float spawnY) {
 	this->entity = EntityManager::GetInstance()->AddEntity("Player");
 	auto playerHealthE = EntityManager::GetInstance()->AddEntity("Player-Health");
@@ -35,63 +37,26 @@ void Player::SetKit(KitTypes kit) {
 	}
 }
 
-void Player::InitIdleAnimation() {
-	
+void Player::_initAnimation(AnimationType type) {
 	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
-	
-	if (kitPtr) {
-		auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
-		if (archerKit) {
-			archerKit->SetCurrentAnimator(archerKit->animatorData.idle);
-		}
 
-		auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
-		if (assassinKit) {
-			assassinKit->SetCurrentAnimator(assassinKit->animatorData.idle);
-		}
+		if (kitPtr) {
+			auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
+			auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
+			auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
+			auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
 
-		auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
-		if (warriorKit) {
-			warriorKit->SetCurrentAnimator(warriorKit->animatorData.idle);
-		}
-
-		auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
-		if (wizardKit) {
-			wizardKit->SetCurrentAnimator(wizardKit->animatorData.idle);
-		}
-	}
-
-	
+			if (archerKit) {
+				archerKit->SetCurrentAnimator(type);
+			} else if (assassinKit) {
+				assassinKit->SetCurrentAnimator(type);
+			} else if (warriorKit) {
+				warriorKit->SetCurrentAnimator(type);
+			} else if (wizardKit) {
+				wizardKit->SetCurrentAnimator(type);
+			}
+		}	
 };
-
-void Player::InitMovingAnimation() {
-	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
-
-	if (kitPtr) {
-		auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
-		if (archerKit) {
-			archerKit->SetCurrentAnimator(archerKit->animatorData.run);
-		}
-
-		auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
-		if (assassinKit) {
-			assassinKit->SetCurrentAnimator(assassinKit->animatorData.run);
-		}
-
-		auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
-		if (warriorKit) {
-			warriorKit->SetCurrentAnimator(warriorKit->animatorData.run);
-		}
-
-		auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
-		if (wizardKit) {
-			wizardKit->SetCurrentAnimator(wizardKit->animatorData.run);
-		}
-	}
-
-
-	
-}
 
 
 static void validateHealth() {
@@ -110,64 +75,19 @@ void Player::_updateMovement() {
 	_setPosRelativeToTransform();
 	
 	if (IsMoving() && !movingAnimationInitialized) {
-		InitMovingAnimation();
+		_initAnimation(AnimationType::RUN);
 		movingAnimationInitialized = true;
 	}
 	else if (!IsMoving() && movingAnimationInitialized) {
-		InitIdleAnimation();
+		_initAnimation(AnimationType::IDLE);
 		movingAnimationInitialized = false;
 	}
 
 	if (lookingLeft) {
-		std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
-		if (kitPtr) {
-
-			auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
-			if (archerKit) {
-				archerKit->GetCurrentAnimator().ScaleToN(-128, 128);
-			}
-
-			auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
-			if (assassinKit) {
-				assassinKit->GetCurrentAnimator().ScaleToN(-128, 128);
-			}
-
-			auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
-			if (warriorKit) {
-				warriorKit->GetCurrentAnimator().ScaleToN(-128, 128);
-			}
-
-			auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
-			if (wizardKit) {
-				
-				wizardKit->GetCurrentAnimator().ScaleToN(-128, 128);
-			}
-		}
+		_initAnimation(AnimationType::LOOKING_LEFT);
 	}
 	else {
-		std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
-		if (kitPtr) {
-
-			auto archerKit = dynamic_cast<ArcherKit*>(kitPtr.get());
-			if (archerKit) {
-				archerKit->GetCurrentAnimator().ScaleToN(128, 128);
-			}
-
-			auto assassinKit = dynamic_cast<AssassinKit*>(kitPtr.get());
-			if (assassinKit) {
-				assassinKit->GetCurrentAnimator().ScaleToN(128, 128);
-			}
-
-			auto warriorKit = dynamic_cast<WarriorKit*>(kitPtr.get());
-			if (warriorKit) {
-				warriorKit->GetCurrentAnimator().ScaleToN(128, 128);
-			}
-
-			auto wizardKit = dynamic_cast<WizardKit*>(kitPtr.get());
-			if (wizardKit) {
-				wizardKit->GetCurrentAnimator().ScaleToN(128, 128);
-			}
-		}
+		_initAnimation(AnimationType::LOOKING_RIGHT);
 	}
 
 }

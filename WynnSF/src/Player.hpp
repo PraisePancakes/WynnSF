@@ -6,6 +6,7 @@
 #include "Kit.hpp"
 #include <vector>
 
+
 class Player {
 
 	std::shared_ptr<Entity> entity = nullptr;
@@ -16,7 +17,7 @@ class Player {
 	void _updateMovement();
 	std::vector<std::shared_ptr<Kit>> kits;
 	KitTypes currentKitType = KitTypes::KIT_NONE;
-	
+	void _initAnimation(AnimationType type);
 	void _initKits();
 	void _setPosRelativeToTransform();
 public:
@@ -24,8 +25,7 @@ public:
 
 	
 	void SetKit(KitTypes kit);
-	void InitIdleAnimation();
-	void InitMovingAnimation();
+
 
 	inline std::shared_ptr<Entity> GetEntityInstance() const { return this->entity; };
 	void Update();
