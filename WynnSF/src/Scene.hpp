@@ -268,6 +268,7 @@ class Scene {
 					auto sc = leftWall->AddComponent<CSprite>(tlTiles->TXWallSetPath, tlTiles->leftWall, 128, 128);
 					sc->sprite.setPosition(i * 128, j * 128);
 					leftWall->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+					
 				}
 				break;
 				case 2:
@@ -276,6 +277,8 @@ class Scene {
 					auto sc = rightWall->AddComponent<CSprite>(tlTiles->TXWallSetPath, tlTiles->rightWall, 128, 128);
 					sc->sprite.setPosition((i * 128) + 50, j * 128);
 					rightWall->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+					
+			
 				}
 				break;
 
@@ -285,6 +288,7 @@ class Scene {
 					auto sc = wallTile->AddComponent<CSprite>(tlTiles->TXWallSetPath, tlTiles->wall, 128, 128);
 					sc->sprite.setPosition(i * 128, j * 128);
 					wallTile->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+					
 				}
 				break;
 				case 5:
@@ -293,13 +297,14 @@ class Scene {
 					auto sc = cornerWall->AddComponent<CSprite>(tlTiles->TXWallSetPath, tlTiles->cornerWall, 128, 128);
 					sc->sprite.setPosition(i * 128, j * 128);
 					cornerWall->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+					
 				}
 				break;
 				case 6:
 				{
 					auto grassPatchTile = EntityManager::GetInstance()->AddEntity(sceneTLUniqueKey);
 					auto sc = grassPatchTile->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->grass_patch, 128, 128);
-					sc->sprite.setPosition(i * 128, j * 128);
+					 sc->sprite.setPosition(i * 128, j * 128);
 				}
 				break;
 				case 7:
@@ -307,7 +312,8 @@ class Scene {
 					auto tree1 = EntityManager::GetInstance()->AddEntity(sceneTLUniqueKey);
 					auto sc = tree1->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->tree1, 256, 256);
 					sc->sprite.setPosition(i * 128, j * 128);
-					tree1->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+				 tree1->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+					
 				}
 				break;
 				case 8:
@@ -316,6 +322,7 @@ class Scene {
 					auto sc = bushSmall->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->bushSmall, 64, 64);
 					sc->sprite.setPosition(i * 128, j * 128);
 					bushSmall->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+					
 				}
 				break;
 				case 9:
@@ -324,6 +331,7 @@ class Scene {
 					auto sc = bushBig->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->bushBig, 75, 75);
 					sc->sprite.setPosition(i * 128, j * 128);
 					bushBig->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+					
 				}
 				break;
 				case 10:
@@ -332,6 +340,7 @@ class Scene {
 					auto sc = house1->AddComponent<CSprite>(tlTiles->TXSVSet, tlTiles->house1, 256, 256);
 					sc->sprite.setPosition(i * 128, j * 128);
 					house1->AddComponent<CCollider>(sc->sprite.getGlobalBounds().height / 2);
+					
 				}
 				break;
 				default:
@@ -379,6 +388,7 @@ public:
 
 		for (auto& tlt : tlTiles) {
 			ctx->draw(tlt->GetComponent<CSprite>()->sprite);
+			
 		}
 	
 	}

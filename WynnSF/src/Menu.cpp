@@ -147,7 +147,7 @@ void Menu::renderLogo() {
 		}
 
 	}
-	sc->ScaleToN(&sc->srcRect, currentX, currentY);
+	sc->ScaleToNxN(currentX, currentY);
 
 
 

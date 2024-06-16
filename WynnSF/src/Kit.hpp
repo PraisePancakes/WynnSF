@@ -2,6 +2,9 @@
 #include <iostream>
 #include "../core/Manager/EntityManager.hpp"
 #include "../core/Components/CAnimator.hpp"
+#include "../core/Components/CCollider.hpp"
+
+#define __KIT_COLLIDER_RADIUS_SCALE 25
 
 enum class KitTypes {
 	KIT_NONE = -1,
@@ -32,6 +35,7 @@ public:
 
 	virtual CAnimator& GetCurrentAnimator() = 0;
 	virtual void SetCurrentAnimator(AnimationType animatorType) = 0;
+	virtual CCollider& GetCollider() = 0;
 
 	std::string GetKitTitle() const {
 		return kitTitle;
@@ -68,11 +72,21 @@ class WizardKit : public Kit {
 public:
 	WizardAnimatorData animatorData;
 	CAnimator currentAnimator = animatorData.idle;
+	CCollider *collider;
 
-	WizardKit() : Kit("Wizard") {};
+	WizardKit() : Kit("Wizard") {
+		this->currentAnimator.ScaleToNxN(128, 128);
+		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS_SCALE);
+	};
+
 	CAnimator& GetCurrentAnimator() override {
 		return this->currentAnimator;
 	}
+
+	CCollider& GetCollider() override {
+		return *collider;
+	}
+
 
 	void SetCurrentAnimator(AnimationType animatorType) override {
 		switch (animatorType)
@@ -100,18 +114,27 @@ public:
 		currentAnimator.Play(dt);
 	}
 
-	~WizardKit() {};
+	~WizardKit() {
+		delete collider;
+	};
 };
 
 class AssassinKit : public Kit {
 public:
 	AssassinAnimatorData animatorData;
 	CAnimator currentAnimator = animatorData.idle;
+	CCollider* collider;
 
-	AssassinKit() : Kit("Assassin") {};
+	AssassinKit() : Kit("Assassin") {
+		this->currentAnimator.ScaleToNxN(128, 128);
+		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS_SCALE);
+	
+	};
 	CAnimator& GetCurrentAnimator() override {
 		return this->currentAnimator;
 	}
+
+
 
 	void SetCurrentAnimator(AnimationType animatorType) override {
 		switch (animatorType)
@@ -134,22 +157,37 @@ public:
 			break;
 		}
 
+	}
+
+	CCollider& GetCollider() override {
+		return *collider;
 	}
 
 	void PlayCurrentAnimator(float dt) {
 		currentAnimator.Play(dt);
 	}
 
-	~AssassinKit() {};
+	~AssassinKit() {
+		delete collider;
+	};
 };
 
 class ArcherKit : public Kit {
 public:
 	ArcherAnimationData animatorData;
 	CAnimator currentAnimator = animatorData.idle;
-	ArcherKit() : Kit("Archer") {};
+	CCollider *collider;
+
+	ArcherKit() : Kit("Archer") {
+		this->currentAnimator.ScaleToNxN(128, 128);
+		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS_SCALE);
+	};
 	CAnimator& GetCurrentAnimator() override {
 		return this->currentAnimator;
+	}
+
+	CCollider& GetCollider() override {
+		return *collider;
 	}
 
 	void SetCurrentAnimator(AnimationType animatorType) override {
@@ -172,6 +210,8 @@ public:
 		default:
 			break;
 		}
+
+
 
 	}
 
@@ -181,7 +221,9 @@ public:
 	}
 	
 
-	~ArcherKit() {};
+	~ArcherKit() {
+		delete collider;
+	};
 
 };
 
@@ -189,7 +231,11 @@ class WarriorKit : public Kit {
 public:
 	WarriorAnimatorData animatorData;
 	CAnimator currentAnimator = animatorData.idle;
-	WarriorKit() : Kit("Warrior") {};
+	CCollider *collider;
+	WarriorKit() : Kit("Warrior") {
+		this->currentAnimator.ScaleToNxN(128, 128);
+		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS_SCALE);
+	};
 	CAnimator& GetCurrentAnimator() override {
 		return this->currentAnimator;
 	}
@@ -214,13 +260,17 @@ public:
 		}
 
 	}
-
+	CCollider& GetCollider() override {
+		return *collider;
+	}
 
 	void PlayCurrentAnimator(float dt) {
 		currentAnimator.Play(dt);
 	}
 
 
-	~WarriorKit() {};
+	~WarriorKit() {
+		delete collider;
+	};
 
 };

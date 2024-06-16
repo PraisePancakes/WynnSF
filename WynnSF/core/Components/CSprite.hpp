@@ -26,17 +26,17 @@ public:
 		sf::FloatRect gb = sprite.getGlobalBounds();
 
 		
-		ScaleToN(&srcRect, finalDimensionX, finalDimensionY);
+		ScaleToNxN(finalDimensionX, finalDimensionY);
 		sprite.setOrigin(gb.width / 2, gb.height / 2);
 	};
 
 
-	void ScaleToN(sf::IntRect* rect, const int nx, const int ny) {
+	void ScaleToNxN(const int nx, const int ny) {
 		const int MAX_DIM_X = nx;
 		const int MAX_DIM_Y = ny;
 
-		float w = rect->getSize().x;
-		float h = rect->getSize().y;
+		float w = srcRect.getSize().x;
+		float h = srcRect.getSize().y;
 		float wScale = 0;
 		float hScale = 0;
 

@@ -33,7 +33,8 @@ void Player::SetKit(KitTypes kit) {
 	this->currentKitType = kit;
 	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
 	if (kitPtr) {
-		this->entity->AddComponent<CCollider>(this->kits[(int)currentKitType]->GetCurrentAnimator().sprite.getLocalBounds().width / 2);
+		auto c = this->entity->AddComponent<CCollider>(kitPtr->GetCollider());
+		
 	}
 }
 
@@ -162,6 +163,7 @@ void Player::_setPosRelativeToTransform() {
 
 		}
 	}
+
 
 }
 
