@@ -4,6 +4,7 @@
 #include "Player.hpp"
 #include <map>
 #include <functional>
+#include "../core/Manager/EntityManager.hpp"
 /*
 *		
 		quests could be implemented using a vector since the quests in this game will be sequential
@@ -132,15 +133,37 @@ protected:
 
 	
 	void initQuests() {
-		table[(int)QuestID::QUEST_A_NEW_BEGINNING] = new Quest("A new Beginning", QuestID::QUEST_A_NEW_BEGINNING, 0, []() -> bool {
+		table[(int)QuestID::QUEST_A_NEW_BEGINNING] = new Quest("A new Beginning", QuestID::QUEST_A_NEW_BEGINNING, 0, [this]() -> bool {
 			
-			/*
-				quest processes go in here
-			
-			*/
+			static size_t __func_calls = 0;
+
+			static Core::Physics::Vec2D plStartingPos;
+
+			if (__func_calls == 0) {
+				plStartingPos = player->GetPos();
+
+				__func_calls++;
+			}
+
+			Core::Physics::Vec2D plCurrentPos = player->GetPos();
+
+			float x1 = plStartingPos.x;
+			float x2 = plCurrentPos.x;
+			float y1 = plStartingPos.y;
+			float y2 = plCurrentPos.y;
+			float dx = x2 - x1;
+			float dy = y2 - y1;
+
+			float distance = std::sqrt((dx) * dx + (dy) * dy);
 
 
-			return true;
+			if (distance >= 500) {
+				return true;
+			}
+
+
+			
+			return false;
 		});
 	};
 
