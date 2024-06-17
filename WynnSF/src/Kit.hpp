@@ -4,7 +4,7 @@
 #include "../core/Components/CAnimator.hpp"
 #include "../core/Components/CCollider.hpp"
 
-#define __KIT_COLLIDER_RADIUS_SCALE 25
+#define __KIT_COLLIDER_RADIUS 25
 
 enum class KitTypes {
 	KIT_NONE = -1,
@@ -76,7 +76,7 @@ public:
 
 	WizardKit() : Kit("Wizard") {
 		this->currentAnimator.ScaleToNxN(128, 128);
-		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS_SCALE);
+		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS);
 	};
 
 	CAnimator& GetCurrentAnimator() override {
@@ -127,7 +127,7 @@ public:
 
 	AssassinKit() : Kit("Assassin") {
 		this->currentAnimator.ScaleToNxN(128, 128);
-		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS_SCALE);
+		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS);
 	
 	};
 	CAnimator& GetCurrentAnimator() override {
@@ -180,7 +180,7 @@ public:
 
 	ArcherKit() : Kit("Archer") {
 		this->currentAnimator.ScaleToNxN(128, 128);
-		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS_SCALE);
+		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS);
 	};
 	CAnimator& GetCurrentAnimator() override {
 		return this->currentAnimator;
@@ -234,7 +234,7 @@ public:
 	CCollider *collider;
 	WarriorKit() : Kit("Warrior") {
 		this->currentAnimator.ScaleToNxN(128, 128);
-		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS_SCALE);
+		this->collider = new CCollider((currentAnimator.sprite.getGlobalBounds().width / 2 + currentAnimator.sprite.getOrigin().x) - __KIT_COLLIDER_RADIUS);
 	};
 	CAnimator& GetCurrentAnimator() override {
 		return this->currentAnimator;
@@ -251,8 +251,11 @@ public:
 		case AnimationType::ATTACK:
 			break;
 		case AnimationType::LOOKING_LEFT:
+			
 			currentAnimator.ScaleToNxN(-128, 128);
+			break;
 		case AnimationType::LOOKING_RIGHT:
+
 			currentAnimator.ScaleToNxN(128, 128);
 			break;
 		default:

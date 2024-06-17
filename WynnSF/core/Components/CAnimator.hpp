@@ -73,7 +73,7 @@ public:
 
 		float newWidth = 1 * wScale;
 		float newHeight = 1 * hScale;
-
+		std::cout << newWidth << std::endl;
 		sprite.setScale(newWidth, newHeight);
 
 	}

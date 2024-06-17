@@ -148,10 +148,6 @@ void Menu::renderLogo() {
 
 	}
 	sc->ScaleToNxN(currentX, currentY);
-
-
-
-
 	ctx->draw(sc->sprite);
 }
 
