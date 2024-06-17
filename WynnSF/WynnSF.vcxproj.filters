@@ -116,6 +116,9 @@
     <ClInclude Include="src\Kit.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Quest.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\Assets\Player\Run\run0.png">

@@ -251,11 +251,9 @@ public:
 		case AnimationType::ATTACK:
 			break;
 		case AnimationType::LOOKING_LEFT:
-			
 			currentAnimator.ScaleToNxN(-128, 128);
 			break;
 		case AnimationType::LOOKING_RIGHT:
-
 			currentAnimator.ScaleToNxN(128, 128);
 			break;
 		default:

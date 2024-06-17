@@ -15,8 +15,10 @@ Game::Game(const std::string & title) {
 	m_sceneManager = std::make_unique<SceneManager>(&this->m_Window);
 	m_sceneManager->SetScene(Scenes::SCENE_MENU);
 	m_Cam.setSize(WINDOW_W, WINDOW_H);
-	
 	spawnPlayer();
+
+	m_QuestData = std::make_unique<QuestDB>(m_Player.get());
+
 	this->m_KitSelection = std::make_unique<KitSelection>(&m_Window, m_Player.get(), this->m_sceneManager.get());
 	this->m_Gui = std::make_unique<GUIManager>(&m_Window);
 	
@@ -92,6 +94,7 @@ void Game::sUpdate() {
 		m_Player->Update();
 		updateCam();
 		m_Gui->Update();
+		m_QuestData->Update();
 		
 	}
 	if (m_sceneManager->GetCurrentScene()->GetID() == Scenes::SCENE_KIT_SELECTION) {
@@ -162,7 +165,7 @@ void Game::spawnPlayer() {
 	float spawnX = WINDOW_W / 2 + 50;
 	float spawnY = WINDOW_H / 2 + 100;
 
-	m_Player = std::make_unique<Player>(spawnX, spawnY);
+	m_Player = std::make_shared<Player>(spawnX, spawnY);
 
 };
 

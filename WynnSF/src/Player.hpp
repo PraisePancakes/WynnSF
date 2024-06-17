@@ -10,6 +10,7 @@
 class Player {
 
 	std::shared_ptr<Entity> entity = nullptr;
+	
 	bool moving = false;
 	bool movingAnimationInitialized = false;
 	bool lookingLeft = false;
@@ -23,6 +24,7 @@ class Player {
 public:
 	Player(float spawnX, float spawnY);
 
+	int CurrentLevel = 0;
 	
 	void SetKit(KitTypes kit);
 

@@ -16,6 +16,7 @@
 #define WINDOW_W 1280
 #define WINDOW_H 720
 
+#include "Quest.hpp"
 
 
 class Game {
@@ -24,10 +25,11 @@ class Game {
 	sf::RenderWindow m_Window;
 
 	sf::View m_Cam;
-	std::unique_ptr<Player> m_Player = nullptr;
+	std::shared_ptr<Player> m_Player = nullptr;
 	std::unique_ptr<SceneManager> m_sceneManager;
 	std::unique_ptr<GUIManager> m_Gui;
 	std::unique_ptr<KitSelection> m_KitSelection;
+	std::unique_ptr<QuestDB> m_QuestData;
 	void sUserInput();
 	void sMovement();
 	void sUpdate();

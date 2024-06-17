@@ -172,6 +172,7 @@
     <ClInclude Include="src\KitSelection.hpp" />
     <ClInclude Include="src\Menu.hpp" />
     <ClInclude Include="src\Player.hpp" />
+    <ClInclude Include="src\Quest.hpp" />
     <ClInclude Include="src\Scene.hpp" />
     <ClInclude Include="src\SceneManager.hpp" />
   </ItemGroup>
