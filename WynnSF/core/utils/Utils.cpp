@@ -15,7 +15,7 @@ namespace Core {
 			i = 0x5f3759df - (i >> 1);
 			y = *(float*)&i;
 			y = y * (threehalfs - (x2 * y * y));
-
+			// no need to have second guess thanks to the newtonian method, first and second guess resolve the same tangent on the curve, mind blowing...
 
 			return y;
 		}

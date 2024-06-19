@@ -9,9 +9,6 @@
 
 constexpr float SPRITE_END = 360;
 
-
-
-
 class KitSelection {
 	sf::RenderWindow* ctx{ nullptr };
 
