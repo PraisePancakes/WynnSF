@@ -1,5 +1,5 @@
 #include "SceneManager.hpp"
-
+#include "../core/Utils/Utils.hpp"
 
 std::string SceneManager::getSceneFilePath(Scenes id) {
 		std::string path = "";
@@ -56,20 +56,53 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 	
 
-	SceneManager::SceneManager(sf::RenderWindow* ctx) {
+	SceneManager::SceneManager(sf::RenderWindow* ctx, Player* player) {
+		this->ctx = ctx;
+		this->player = player;
+		this->m_KitSelection = std::make_unique<KitSelection>(ctx);
 		menu = std::make_unique<Menu>(ctx);
 		initTable();
-		this->ctx = ctx;
+		
 	};
+
+	void SceneManager::handleKitSelectionEvent() {
+		int type = m_KitSelection->HandleEvents();
+
+		switch (type) {
+		case 0:
+
+			player->SetKit(KitTypes::KIT_ARCHER);
+			SetScene(Scenes::SCENE_RAGNI);
+			break;
+		case 1:
+			player->SetKit(KitTypes::KIT_ASSASSIN);
+			SetScene(Scenes::SCENE_RAGNI);
+			break;
+		case 2:
+			player->SetKit(KitTypes::KIT_WARRIOR);
+			SetScene(Scenes::SCENE_RAGNI);
+			break;
+		case 3:
+			player->SetKit(KitTypes::KIT_WIZARD);
+			SetScene(Scenes::SCENE_RAGNI);
+			break;
+		default:
+
+			break;
+		}
+	}
 
 
 	void SceneManager::HandleEvents(sf::Event* e) {
 		if (currentSceneToProcess == Scenes::SCENE_MENU) {
 			handleMenuEvent();
 		}
-		else {
+		else if(currentSceneToProcess == Scenes::SCENE_KIT_SELECTION) {
 			//handle scene events if there are any
-		}
+			handleKitSelectionEvent();
+
+		   }
+	
 	};
 
 	void SceneManager::SetScene(Scenes scene) {
@@ -83,13 +116,11 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			return;
 		}
 		else if (this->currentSceneToProcess == Scenes::SCENE_KIT_SELECTION) {
-			//render kit selection scene
-			return;
+			m_KitSelection->Render();
 		}
-	
-
-		sceneTable[(int)currentSceneToProcess]->RenderScene(ctx);
-
+		else {
+			sceneTable[(int)currentSceneToProcess]->RenderScene(ctx);
+		}
 
 	}
 

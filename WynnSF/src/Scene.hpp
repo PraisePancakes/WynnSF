@@ -378,6 +378,10 @@ public:
 
 	void RenderScene(sf::RenderWindow* ctx) const {
 		//render base layer
+		if (this->m_id == Scenes::SCENE_MENU || this->m_id == Scenes::SCENE_KIT_SELECTION || this->m_id == Scenes::SCENE_QUIT) {
+			return;
+		}
+
 		auto blTiles = EntityManager::GetInstance()->GetEntities(sceneBLUniqueKey);
 		for (auto& blt : blTiles) { //im hungry can u tell
 			ctx->draw(blt->GetComponent<CSprite>()->sprite);

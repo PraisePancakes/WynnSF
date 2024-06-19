@@ -5,8 +5,6 @@
 #include "../core/Components/CAnimator.hpp"
 #include "../core/Components/CButton.hpp"
 #include "../core/Components/CText.hpp"
-#include "Player.hpp"
-#include "SceneManager.hpp"
 #include "Kit.hpp"
 
 constexpr float SPRITE_END = 360;
@@ -16,9 +14,7 @@ constexpr float SPRITE_END = 360;
 
 class KitSelection {
 	sf::RenderWindow* ctx{ nullptr };
-	
-	Player* player;
-	SceneManager* sm;
+
 
 	bool idleInit = false;
 	void _initKitSelectionSprites();
@@ -26,9 +22,9 @@ class KitSelection {
 
 
 public:
-	KitSelection(sf::RenderWindow* ctx, Player* player, SceneManager* sceneManager);
+	KitSelection(sf::RenderWindow* ctx);
 
-	void HandleEvents() const;
+	int HandleEvents() const;
 	void Render();
 
 	~KitSelection();

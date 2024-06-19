@@ -199,7 +199,7 @@ public:
 		
 	}
 
-	std::map<int, Quest*>& GetTable() {
+	[[nodiscard]] std::map<int, Quest*>& GetTable() {
 		return table;
 	};
 

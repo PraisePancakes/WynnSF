@@ -119,6 +119,9 @@
     <ClInclude Include="src\Quest.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\QuestBook.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\Assets\Player\Run\run0.png">
@@ -287,6 +290,15 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="src\Assets\UI\UI_ChatLog.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Downloads\game_items_pack_2_free\PNG\128px\questbook.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Downloads\game_items_pack_2_free\PNG\128px\UI_QuestBook.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Assets\UI\UI_QuestBook.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -10,16 +10,15 @@ Game::Game(const std::string & title) {
 	m_running = true;
 	m_Window.create(sf::VideoMode::VideoMode(WINDOW_W, WINDOW_H), title, sf::Style::Titlebar | sf::Style::Close);
 	m_Window.setFramerateLimit(60);
-
-	
-	m_sceneManager = std::make_unique<SceneManager>(&this->m_Window);
-	m_sceneManager->SetScene(Scenes::SCENE_MENU);
 	m_Cam.setSize(WINDOW_W, WINDOW_H);
+
 	spawnPlayer();
+	m_sceneManager = std::make_unique<SceneManager>(&this->m_Window, m_Player.get());
+	m_sceneManager->SetScene(Scenes::SCENE_MENU);
 
-	m_QuestData = std::make_unique<QuestDB>(m_Player.get());
+	m_QuestData = std::make_shared<QuestDB>(m_Player.get());
+	m_QuestBook = std::make_unique<QuestBook>(m_QuestData.get(), &this->m_Window);
 
-	this->m_KitSelection = std::make_unique<KitSelection>(&m_Window, m_Player.get(), this->m_sceneManager.get());
 	this->m_Gui = std::make_unique<GUIManager>(&m_Window);
 	
 
@@ -67,11 +66,10 @@ void Game::sUserInput() {
 		if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
 			m_Player->HandleInput(&e);
 			m_Gui->HandleEvents(&e);
+			m_QuestBook->HandleEvents();
 			
 		}
-		else if (m_sceneManager->GetCurrentScene()->GetID() == Scenes::SCENE_KIT_SELECTION) {
-			m_KitSelection->HandleEvents();
-		}
+		
 
 		m_sceneManager->HandleEvents(&e);
 	}
@@ -95,13 +93,10 @@ void Game::sUpdate() {
 		updateCam();
 		m_Gui->Update();
 		m_QuestData->Update();
+		m_QuestBook->Update();
 		
 	}
-	if (m_sceneManager->GetCurrentScene()->GetID() == Scenes::SCENE_KIT_SELECTION) {
-		
-	}
-	
-	
+
 }
 /*
 	since we are using a circle collider, the collision system will work based positioning of each circle collider when collision occurs
@@ -174,12 +169,8 @@ void Game::sRenderer() {
 	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
 		m_Player->Render(this->m_Window);
 		m_Gui->Render();
+		m_QuestBook->Render();
 
 	}
-	else if (m_sceneManager->GetCurrentScene()->GetID() == Scenes::SCENE_KIT_SELECTION) {
-		m_KitSelection->Render();
-	}
-	
-
 
 };

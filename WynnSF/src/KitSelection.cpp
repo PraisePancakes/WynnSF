@@ -64,10 +64,8 @@
 		wizardKit->AddComponent<CButton>(wizardAcBtnShape, wizardAcPos, sf::Color::White, sf::Color::Transparent);
 	}
 
-	KitSelection::KitSelection(sf::RenderWindow* ctx, Player* player, SceneManager* sceneManager) {
+	KitSelection::KitSelection(sf::RenderWindow* ctx) {
 		this->ctx = ctx;
-		this->player = player;
-		this->sm = sceneManager;
 
 		std::shared_ptr<Entity> title = EntityManager::GetInstance()->AddEntity("KitSelection-Title");
 		auto titleText = title->AddComponent<CText>("Select A Kit", "src/Assets/Fonts/PixelFont.ttf", 72, (float)ctx->getSize().x / 2, 100, true);
@@ -80,9 +78,10 @@
 	};
 
 
-	void KitSelection::HandleEvents() const {
+	int KitSelection::HandleEvents() const {
 		auto kits = EntityManager::GetInstance()->GetEntities("KitSelection");
-		int kit_iterator = -1;
+		
+		int kit_idx = -1;
 		bool selected = false;
 
 		for (int i = 0; i < kits.size(); ++i) {
@@ -94,38 +93,19 @@
 				btn->buttonRect.setOutlineColor(sf::Color::Green);
 				});
 
-			btn->OnClick(ctx, [this, &selected, i, &kit_iterator]() {
-				if (!selected) {
+			btn->OnClick(ctx, [this , &i, &selected, &kit_idx]() {
+					
 					selected = true;
-					kit_iterator = i;
-				}
+					kit_idx = i;
 				});
 		}
 
 		if (selected) {
-			// set kit based on selectedKit
-			switch (kit_iterator) {
-			case 0:
-				player->SetKit(KitTypes::KIT_ARCHER);
-				break;
-			case 1:
-				player->SetKit(KitTypes::KIT_ASSASSIN);
-				break;
-			case 2:
-				player->SetKit(KitTypes::KIT_WARRIOR);
-				break;
-			case 3:
-				player->SetKit(KitTypes::KIT_WIZARD);
-				break;
-			default:
-				//player->SetKit(KitTypes::KIT_NONE);
-				break;
-			}
-			selected = false; // reset selection
-			this->sm->SetScene(Scenes::SCENE_RAGNI);
+			
+			return kit_idx;
 		}
-
-
+		
+		return -1;
 
 	};
 

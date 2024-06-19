@@ -111,6 +111,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -173,10 +174,13 @@
     <ClInclude Include="src\Menu.hpp" />
     <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\Quest.hpp" />
+    <ClInclude Include="src\QuestBook.hpp" />
     <ClInclude Include="src\Scene.hpp" />
     <ClInclude Include="src\SceneManager.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\..\Downloads\game_items_pack_2_free\PNG\128px\questbook.png" />
+    <Image Include="..\..\..\..\..\Downloads\game_items_pack_2_free\PNG\128px\UI_QuestBook.png" />
     <Image Include="diagrams\collision.png" />
     <Image Include="src\Assets\Sprites\Logo\logo.png" />
     <Image Include="src\Assets\Player\Idle\idle0.png" />
@@ -233,6 +237,7 @@
     <Image Include="src\Assets\Tiles\Wall\Wall_1.png" />
     <Image Include="src\Assets\Tiles\Water.png" />
     <Image Include="src\Assets\UI\UI_ChatLog.png" />
+    <Image Include="src\Assets\UI\UI_QuestBook.png" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="src\Assets\Fonts\PixelFont.ttf" />

@@ -17,6 +17,7 @@
 #define WINDOW_H 720
 
 #include "Quest.hpp"
+#include "QuestBook.hpp"
 
 
 class Game {
@@ -28,8 +29,9 @@ class Game {
 	std::shared_ptr<Player> m_Player = nullptr;
 	std::unique_ptr<SceneManager> m_sceneManager;
 	std::unique_ptr<GUIManager> m_Gui;
-	std::unique_ptr<KitSelection> m_KitSelection;
-	std::unique_ptr<QuestDB> m_QuestData;
+
+	std::shared_ptr<QuestDB> m_QuestData;
+	std::unique_ptr<QuestBook> m_QuestBook;
 	void sUserInput();
 	void sMovement();
 	void sUpdate();

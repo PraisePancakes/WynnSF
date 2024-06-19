@@ -32,7 +32,7 @@ public:
 	};
 	
 
-	void OnHover(sf::RenderWindow* ctx, std::function<void()> callback) {
+	bool OnHover(sf::RenderWindow* ctx, std::function<void()> callback) {
 		
 		sf::Mouse m;
 		
@@ -46,6 +46,7 @@ public:
 			
 				hovered = true;
 				callback(); 
+				return true;
 		
 		}
 		else {
@@ -59,7 +60,7 @@ public:
 		}
 
 
-
+		return false;
 	
 	}
 
