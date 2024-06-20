@@ -239,6 +239,7 @@
     <Image Include="src\Assets\UI\UI_Back.png" />
     <Image Include="src\Assets\UI\UI_ChatLog.png" />
     <Image Include="src\Assets\UI\UI_QuestBook.png" />
+    <Image Include="src\Assets\UI\UI_QuestPage.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="src\Assets\Fonts\PixelFont.ttf" />

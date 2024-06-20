@@ -48,7 +48,7 @@ class QuestBook {
 		static int padY = 0;
 		for (auto& e : entityVec) {
 			auto txt = e->GetComponent<CText>();
-			txt->text.setPosition(view.getCenter().x - (view.getSize().x / 2) + 100, view.getCenter().y - (view.getSize().y / 2) + padY);
+			txt->text.setPosition(view.getCenter().x - (view.getSize().x / 4), (view.getCenter().y - (view.getSize().y / 2) + padY) + 100);
 			padY += 25;
 		}
 
@@ -81,14 +81,28 @@ class QuestBook {
 		
 	}
 
+	void _updateQuestPagePos() {
+		std::shared_ptr<Entity> page = EntityManager::GetInstance()->GetEntities("QuestBook-Page")[0];
+		auto pageSc = page->GetComponent<CSprite>();
+		sf::View view = ctx->getView();
+
+		pageSc->sprite.setPosition(view.getCenter().x, view.getCenter().y);
+
+
+	}
+
 	void _updateQuestBookOpened() {
 		_updateReturnButtonPos();
 		_updateQuestTitlesPos();
 		_updateQuestTitleStatus();
+		_updateQuestPagePos();
 		//check if quest is completed, make text green, check if text is in progress, make text yellow, and if locked, make red and display the min lvl required next to it
 
 		
 	}
+
+
+	
 
 
 	void _initSprites() {
@@ -98,6 +112,11 @@ class QuestBook {
 		std::shared_ptr<Entity> close = EntityManager::GetInstance()->AddEntity("QuestBook-Close");
 		close->AddComponent<CSprite>("src/Assets/UI/UI_Back.png", sf::IntRect(0, 0, 100, 100), 64, 64);
 		close->AddComponent<CButton>(sf::RectangleShape(sf::Vector2f(64, 64)), sf::Vector2f(SPRITE_BOOK_PADDING, SPRITE_BOOK_PADDING), sf::Color::Transparent, sf::Color::Transparent);
+
+		std::shared_ptr<Entity> page = EntityManager::GetInstance()->AddEntity("QuestBook-Page");
+		auto sc = page->AddComponent<CSprite>("src/Assets/UI/UI_QuestPage.jpg", sf::IntRect(0, 0, 4500, 6000), this->ctx->getSize().x, this->ctx->getSize().y);
+		const sf::Color pageColor{180, 180, 180, 255};
+		sc->sprite.setColor(pageColor);
 	}
 
 	void _initUIQuests() {
@@ -169,12 +188,13 @@ public:
 		auto bookSc = book->GetComponent<CSprite>();
 		auto closeSc = close->GetComponent<CSprite>();
 		auto questVector = EntityManager::GetInstance()->GetEntities("Quests");
-
+		std::shared_ptr<Entity> page = EntityManager::GetInstance()->GetEntities("QuestBook-Page")[0];
+		auto pageSc = page->GetComponent<CSprite>();
 
 		
 		if (_opened) {
 			//render book open relative to view
-
+			ctx->draw(pageSc->sprite);
 			ctx->draw(closeSc->sprite);
 			for (auto& e : questVector) {
 				auto txt = e->GetComponent<CText>();
