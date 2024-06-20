@@ -71,13 +71,15 @@ void Game::sUserInput() {
 		}
 		
 
+
 		m_sceneManager->HandleEvents(&e);
 	}
 
 };
 
 void Game::sMovement() {
-	m_Player->HandleMovement();
+	if(!m_QuestBook->IsOpen())
+		m_Player->HandleMovement();
 };
 
 void Game::updateCam() {
@@ -89,9 +91,13 @@ void Game::sUpdate() {
 	
 	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
 		
-		m_Player->Update();
+		if (!m_QuestBook->IsOpen()) {
+			m_Player->Update();
+			m_Gui->Update();
+		}
+		
 		updateCam();
-		m_Gui->Update();
+		
 		m_QuestData->Update();
 		m_QuestBook->Update();
 		
@@ -166,11 +172,18 @@ void Game::spawnPlayer() {
 
 void Game::sRenderer() {
 	m_sceneManager->RenderScene();
-	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
+
+	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION && !m_QuestBook->IsOpen()) {
 		m_Player->Render(this->m_Window);
 		m_Gui->Render();
-		m_QuestBook->Render();
+		
 
 	}
+	
+	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
 
+		m_QuestBook->Render();
+	}
+
+	
 };

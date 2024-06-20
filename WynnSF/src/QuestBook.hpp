@@ -10,7 +10,7 @@ class QuestBook {
 	QuestDB* db{ nullptr };
 	bool _opened = false;
 	sf::RenderWindow* ctx{ nullptr };
-
+	
 
 	void _updateQuestBookSpritePos() {
 		sf::View view = ctx->getView();
@@ -64,11 +64,15 @@ class QuestBook {
 		size_t questIdx = 0;
 
 		for (auto& q : this->db->GetTable()){
+			auto txt = entityVec[questIdx]->GetComponent<CText>();
+
 			if (q.second->state.isCompleted()) {
-			
-				auto txt = entityVec[questIdx]->GetComponent<CText>();
 				txt->text.setFillColor(sf::Color::Green);
-				
+			} else if (q.second->state.isInProgress()) {
+				txt->text.setFillColor(sf::Color::Yellow);
+			}
+			else if (q.second->state.isLocked()) {
+				txt->text.setFillColor(sf::Color::Red);
 			}
 
 			questIdx++;
