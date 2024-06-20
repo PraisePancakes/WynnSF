@@ -92,12 +92,12 @@ void Game::sUpdate() {
 	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
 		
 		if (!m_QuestBook->IsOpen()) {
-			m_Player->Update();
-			m_Gui->Update();
+			m_Player->Update();	
+			updateCam();
+			//put gui update in here for gui transition effect
 		}
-		
-		updateCam();
-		
+
+		m_Gui->Update();
 		m_QuestData->Update();
 		m_QuestBook->Update();
 		

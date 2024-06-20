@@ -28,6 +28,11 @@
 
 	void GUIManager::updateHealthBarUI() {
 
+
+		sf::View view = ctx->getView();
+		const sf::Vector2f center = view.getCenter();
+
+
 		const std::shared_ptr<Entity> healthE = EntityManager::GetInstance()->GetEntities("Player-Health")[0];
 		const auto healthTxtC = healthE->GetComponent<CText>();
 		const auto healthC = healthE->GetComponent<CHealth>();
@@ -37,9 +42,8 @@
 		}
 		const int scaledHP = healthC->CurrHp << 1;
 
-		const sf::Vector2f viewCenter = ctx->getView().getCenter();
-		const sf::Vector2f viewSize = ctx->getView().getSize();
-		const sf::Vector2f topRight(viewCenter.x + (viewSize.x / 2) - healthBarContainer.getSize().x - 25, viewCenter.y - (viewSize.y / 2) + healthBarContainer.getSize().y);
+
+		const sf::Vector2f topRight(((center.x + (view.getSize().x / 2)) - healthBarContainer.getSize().x) - 25, (center.y - (view.getSize().y / 2)) + healthBarContainer.getSize().y);
 
 		healthBarContainer.setPosition(topRight.x, topRight.y);
 		healthBar.setPosition(healthBarContainer.getPosition().x, healthBarContainer.getPosition().y);
