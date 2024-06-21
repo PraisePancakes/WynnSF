@@ -50,7 +50,7 @@ class QuestBook {
 		for (auto& e : entityVec) {
 			auto txt = e->GetComponent<CText>();
 			txt->text.setPosition(view.getCenter().x - (view.getSize().x / 2) + 50, (view.getCenter().y - (view.getSize().y / 2) + padY) + 100);
-			padY += 25;
+			padY += 100;
 		}
 	}
 
@@ -74,8 +74,6 @@ class QuestBook {
 			
 			padY = titleY + 50;
 			padX = titleX + 20;
-
-		
 
 			desctxt->text.setPosition(padX, padY);
 			

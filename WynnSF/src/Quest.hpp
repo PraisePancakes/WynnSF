@@ -47,6 +47,9 @@
 enum class QuestID {
 	QUEST_INVALID = -1,
 	QUEST_A_NEW_BEGINNING,
+	QUEST_ENZANS_BROTHER,
+
+	QUEST_MAX_ENUM
 
 };
 
@@ -169,6 +172,10 @@ protected:
 			
 			return false;
 		});
+
+		table[(int)QuestID::QUEST_ENZANS_BROTHER] = new Quest("Enzan's Brother", "Help Enzan find his brother", QuestID::QUEST_ENZANS_BROTHER, 2, [this]()->bool {
+			return false;
+			});
 	};
 
 public:
