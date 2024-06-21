@@ -45,16 +45,44 @@ class QuestBook {
 
 		sf::View view = ctx->getView();
 
-		static int padY = 0;
+        int padY = 0;
 		for (auto& e : entityVec) {
 			auto txt = e->GetComponent<CText>();
-			txt->text.setPosition(view.getCenter().x - (view.getSize().x / 4), (view.getCenter().y - (view.getSize().y / 2) + padY) + 100);
+			txt->text.setPosition(view.getCenter().x - (view.getSize().x / 2) + 50, (view.getCenter().y - (view.getSize().y / 2) + padY) + 100);
 			padY += 25;
 		}
+	}
 
-		if (padY == entityVec.size() * padY) {
-			padY = 0;
+	void _updateQuestDescriptionPos() {
+		auto questVec = EntityManager::GetInstance()->GetEntities("Quests");
+		auto descVec = EntityManager::GetInstance()->GetEntities("Quests-Description");
+
+		sf::View view = ctx->getView();
+		size_t _iter = 0;
+		int padY = 0;
+		int padX = 0;
+
+		for (auto& e : descVec) {
+			
+			auto desctxt = e->GetComponent<CText>();
+			auto& quest = questVec[_iter];
+			auto titletxt = quest->GetComponent<CText>();
+
+			int titleX = titletxt->text.getGlobalBounds().getPosition().x;
+			int titleY = titletxt->text.getGlobalBounds().getPosition().y;
+			
+			padY = titleY + 20;
+			padX = titleX + 20;
+
+			std::cout << "PadY : " << padY << std::endl;
+
+			desctxt->text.setPosition(padX, padY);
+			std::cout << "descY : " << desctxt->text.getGlobalBounds().getPosition().y;
+			
+			_iter++;
 		}
+
+		
 	}
 
 	void _updateQuestTitleStatus() {
@@ -94,6 +122,7 @@ class QuestBook {
 	void _updateQuestBookOpened() {
 		_updateReturnButtonPos();
 		_updateQuestTitlesPos();
+		_updateQuestDescriptionPos();
 		_updateQuestTitleStatus();
 		_updateQuestPagePos();
 		//check if quest is completed, make text green, check if text is in progress, make text yellow, and if locked, make red and display the min lvl required next to it
@@ -124,7 +153,11 @@ class QuestBook {
 		
 		for (auto& quest : table) {
 			auto questE = EntityManager::GetInstance()->AddEntity("Quests");
-			auto text = questE->AddComponent<CText>(quest.second->GetTitle(), font_path, 24, 0, 0, false);
+			auto descriptionE = EntityManager::GetInstance()->AddEntity("Quests-Description");
+			auto descTxt = descriptionE->AddComponent<CText>(quest.second->GetDescription(), font_path, 24, 0, 0, false);
+			questE->AddComponent<CText>(quest.second->GetTitle(), font_path, 36, 0, 0, false);
+
+			descTxt->text.setFillColor(sf::Color::Black);
 		}
 	}
 
@@ -188,6 +221,7 @@ public:
 		auto bookSc = book->GetComponent<CSprite>();
 		auto closeSc = close->GetComponent<CSprite>();
 		auto questVector = EntityManager::GetInstance()->GetEntities("Quests");
+		auto questDescVector = EntityManager::GetInstance()->GetEntities("Quests-Description");
 		std::shared_ptr<Entity> page = EntityManager::GetInstance()->GetEntities("QuestBook-Page")[0];
 		auto pageSc = page->GetComponent<CSprite>();
 
@@ -198,6 +232,11 @@ public:
 			ctx->draw(closeSc->sprite);
 			for (auto& e : questVector) {
 				auto txt = e->GetComponent<CText>();
+				ctx->draw(txt->text);
+			}
+
+			for (auto& d : questDescVector) {
+				auto txt = d->GetComponent<CText>();
 				ctx->draw(txt->text);
 			}
 		}

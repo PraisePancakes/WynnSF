@@ -94,7 +94,7 @@ void Game::sUpdate() {
 		if (!m_QuestBook->IsOpen()) {
 			m_Player->Update();	
 			updateCam();
-			//put gui update in here for gui transition effect
+			//put gui->supdate in here for gui transition effect
 		}
 
 		m_Gui->Update();

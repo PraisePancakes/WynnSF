@@ -98,23 +98,27 @@ struct QuestState {
 };
 
 class Quest {
-
+	
 	using Process = std::function<bool()>;
 	Process process;
 	std::string _title = "";
 	QuestID _id = QuestID::QUEST_INVALID;
-
+	std::string _desc = "";
 
 public:
 	QuestState state{};
 	
 
-	Quest(const std::string& title, QuestID id, const int required, Process processCallback) : _title(title), _id(id), RequiredLevel(required), process(std::move(processCallback)) {};
+	Quest(const std::string& title, const std::string& desc, QuestID id, const int required, Process processCallback) : _title(title), _desc(desc), _id(id), RequiredLevel(required), process(std::move(processCallback)) {};
 
 	int RequiredLevel = 0;
 
 	std::string GetTitle() const {
 		return _title;
+	}
+
+	std::string GetDescription() const {
+		return _desc;
 	}
 
 	bool processed() {
@@ -133,7 +137,7 @@ protected:
 
 	
 	void initQuests() {
-		table[(int)QuestID::QUEST_A_NEW_BEGINNING] = new Quest("A new Beginning", QuestID::QUEST_A_NEW_BEGINNING, 0, [this]() -> bool {
+		table[(int)QuestID::QUEST_A_NEW_BEGINNING] = new Quest("A new Beginning", "Explore a little bit, harness your surroundings", QuestID::QUEST_A_NEW_BEGINNING, 0, [this]() -> bool {
 			
 			static size_t __func_calls = 0;
 
