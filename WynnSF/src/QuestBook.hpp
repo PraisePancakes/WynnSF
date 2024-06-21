@@ -118,12 +118,35 @@ class QuestBook {
 
 	}
 
+	void _updateQuestDescription() {
+		std::map<int, Quest*> table = db->GetTable();
+		auto descVec = EntityManager::GetInstance()->GetEntities("Quests-Description");
+		size_t _iter = 0;
+
+		for (auto& q : table) {
+
+			auto &descriptionE = descVec[_iter];
+			
+			auto descTxt = descriptionE->GetComponent<CText>();
+			
+			descTxt->text.setString(q.second->GetDescription());
+
+			descTxt->text.setFillColor(sf::Color::Black);
+
+			_iter++;
+		}
+
+
+	}
+
 	void _updateQuestBookOpened() {
 		_updateReturnButtonPos();
 		_updateQuestTitlesPos();
 		_updateQuestDescriptionPos();
 		_updateQuestTitleStatus();
+		_updateQuestDescription();
 		_updateQuestPagePos();
+		
 		//check if quest is completed, make text green, check if text is in progress, make text yellow, and if locked, make red and display the min lvl required next to it
 
 		
@@ -153,7 +176,7 @@ class QuestBook {
 		for (auto& quest : table) {
 			auto questE = EntityManager::GetInstance()->AddEntity("Quests");
 			auto descriptionE = EntityManager::GetInstance()->AddEntity("Quests-Description");
-			auto descTxt = descriptionE->AddComponent<CText>(quest.second->GetDescription(), font_path, 24, 0, 0, false);
+			auto descTxt = descriptionE->AddComponent<CText>("", font_path, 24, 0, 0, false);
 			questE->AddComponent<CText>(quest.second->GetTitle(), font_path, 36, 0, 0, false);
 
 			descTxt->text.setFillColor(sf::Color::Black);

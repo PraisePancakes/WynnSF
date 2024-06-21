@@ -100,19 +100,41 @@ struct QuestState {
 	~QuestState() = default;
 };
 
+using ProcessType = std::function<bool()>;
+
+struct Process {
+	std::string desc;
+	ProcessType process;
+
+	Process(const std::string& desc, ProcessType process) {
+		this->desc = desc;
+		this->process = process;
+	}
+
+	bool isSuccessful() const {
+		return process();
+	}
+
+	~Process() {};
+
+};
+
 class Quest {
+	/*
+		implement children of quests to recursively iterate until process returns false, if false then current process equals that process, description updates 
+	*/
 	
-	using Process = std::function<bool()>;
-	Process process;
 	std::string _title = "";
 	QuestID _id = QuestID::QUEST_INVALID;
-	std::string _desc = "";
+
+	int currIdxToProcess = 0;
+	std::vector<Process*> processes {};
 
 public:
 	QuestState state{};
 	
-
-	Quest(const std::string& title, const std::string& desc, QuestID id, const int required, Process processCallback) : _title(title), _desc(desc), _id(id), RequiredLevel(required), process(std::move(processCallback)) {};
+	//create add process method
+	Quest(const std::string& title, QuestID id, const int required) : _title(title), _id(id), RequiredLevel(required) {};
 
 	int RequiredLevel = 0;
 
@@ -121,14 +143,32 @@ public:
 	}
 
 	std::string GetDescription() const {
-		return _desc;
+		if (currIdxToProcess < processes.size()) {
+			return processes[currIdxToProcess]->desc;
+		}
+		return "Completed";
+	}
+
+	void Update() {
+		if (currIdxToProcess < processes.size() && processes[currIdxToProcess]->isSuccessful()) {
+			currIdxToProcess++;
+		}
+	}
+
+	void addProcess(const std::string& description, ProcessType callback) {
+		std::cout << processes.size();
+		processes.push_back(new Process(description, callback));
 	}
 
 	bool processed() {
-		return process();
+		return currIdxToProcess >= processes.size();
 	}
 
-	~Quest() {};
+	~Quest() {
+		for (size_t i = 0; i < processes.size(); i++) {
+			delete processes[i];
+		}
+	};
 };
 
 
@@ -140,10 +180,14 @@ protected:
 
 	
 	void initQuests() {
-		table[(int)QuestID::QUEST_A_NEW_BEGINNING] = new Quest("A new Beginning", "Explore a little bit, harness your surroundings", QuestID::QUEST_A_NEW_BEGINNING, 0, [this]() -> bool {
-			
-			static size_t __func_calls = 0;
 
+		table[(int)QuestID::QUEST_A_NEW_BEGINNING] = new Quest("A new Beginning", QuestID::QUEST_A_NEW_BEGINNING, 0);
+		auto q1 = table[(int)QuestID::QUEST_A_NEW_BEGINNING];
+		q1->addProcess("Explore a little bit, harness your surroundings", [this]() -> bool {
+			//(first step of the quest to process)
+		
+			static size_t __func_calls = 0;
+			
 			static Core::Physics::Vec2D plStartingPos;
 
 			if (__func_calls == 0) {
@@ -161,7 +205,7 @@ protected:
 			float dx = x2 - x1;
 			float dy = y2 - y1;
 
-			float distance = std::sqrt((dx) * dx + (dy) * dy);
+			float distance = std::sqrt((dx)*dx + (dy)*dy);
 
 
 			if (distance >= 500) {
@@ -169,13 +213,17 @@ protected:
 			}
 
 
-			
-			return false;
-		});
 
-		table[(int)QuestID::QUEST_ENZANS_BROTHER] = new Quest("Enzan's Brother", "Help Enzan find his brother", QuestID::QUEST_ENZANS_BROTHER, 2, [this]()->bool {
 			return false;
 			});
+
+			q1->addProcess("test", [this]()->bool {
+			//some process
+			return true;
+			});
+
+
+		
 	};
 
 public:
@@ -188,15 +236,16 @@ public:
 		
 		for (auto& pair : table) {
 			if (pair.second) {
-				
-				if (player->CurrentLevel >= pair.second->RequiredLevel && !pair.second->state.isCompleted()) {
-					pair.second->state.setInProgress();
-				}
 
 				
-				
-				if (pair.second->state.isInProgress() && !pair.second->state.isCompleted()) {
+				if (player->CurrentLevel >= pair.second->RequiredLevel && !pair.second->state.isCompleted()) {
 					
+					pair.second->state.setInProgress();
+					
+				}
+	
+				if (pair.second->state.isInProgress() && !pair.second->state.isCompleted()) {
+					pair.second->Update();
 					if (pair.second->processed()) {
 						std::cout << pair.second->GetTitle();
 						pair.second->state.complete();
