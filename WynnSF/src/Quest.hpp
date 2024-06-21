@@ -143,10 +143,14 @@ public:
 	}
 
 	std::string GetDescription() const {
-		if (currIdxToProcess < processes.size()) {
+		if (currIdxToProcess < processes.size() && !state.locked) {
 			return processes[currIdxToProcess]->desc;
 		}
-		return "Completed";
+		else if (state.locked) {
+			const std::string lockedMessage = "Unlock at level" + std::to_string(RequiredLevel);
+			return lockedMessage;
+		} else if(state.completed) 
+			return "Completed";
 	}
 
 	void Update() {
@@ -219,12 +223,28 @@ protected:
 
 			q1->addProcess("test", [this]()->bool {
 			//some process
-			return true;
+			return false;
 			});
+
+
+			table[(int)QuestID::QUEST_ENZANS_BROTHER] = new Quest("Enzan's Brother", QuestID::QUEST_ENZANS_BROTHER, 1);
+			auto q2 = table[(int)QuestID::QUEST_ENZANS_BROTHER];
+			q2->addProcess("Talk to Enzan close to the exit of Ragni", [this]() -> bool {
+				
+
+				return false;
+				});
+
+			q2->addProcess("test", [this]()->bool {
+				//some process
+				return false;
+				});
 
 
 		
 	};
+
+
 
 public:
 	QuestDB(Player* player) {
