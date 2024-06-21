@@ -243,6 +243,7 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="src\Assets\Fonts\PixelFont.ttf" />
+    <Font Include="src\Assets\Fonts\RingBearer.TTF" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\Data\Scenes\ragni.txt" />

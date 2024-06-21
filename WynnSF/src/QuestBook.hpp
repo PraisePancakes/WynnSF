@@ -4,7 +4,8 @@
 
 
 static constexpr float SPRITE_BOOK_PADDING = 10;
-static const std::string font_path = "src/Assets/Fonts/PixelFont.ttf";
+static constexpr float SPRITE_RETURN_PADDING = 10;
+static const std::string font_path = "src/Assets/Fonts/RingBearer.TTF";
 
 class QuestBook {
 	QuestDB* db{ nullptr };
@@ -32,10 +33,10 @@ class QuestBook {
 		auto sc = close->GetComponent<CSprite>();
 
 		const sf::Vector2f center = view.getCenter();
-		const sf::Vector2f topLeft((center.x - (view.getSize().x / 2)) + SPRITE_BOOK_PADDING, (center.y - (view.getSize().y / 2)) + SPRITE_BOOK_PADDING);
-		const sf::Vector2f bookSpriteOffset(32, 32);
+		const sf::Vector2f returnSpriteOffset(32, 32);
+		const sf::Vector2f topLeft(((center.x - (view.getSize().x / 2)) + SPRITE_RETURN_PADDING) + returnSpriteOffset.x, ((center.y - (view.getSize().y / 2)) + SPRITE_RETURN_PADDING) + returnSpriteOffset.y);
 
-		sc->sprite.setPosition(topLeft.x + bookSpriteOffset.x, topLeft.y + bookSpriteOffset.y);
+		sc->sprite.setPosition(topLeft.x , topLeft.y );
 	}
 
 	
@@ -71,13 +72,13 @@ class QuestBook {
 			int titleX = titletxt->text.getGlobalBounds().getPosition().x;
 			int titleY = titletxt->text.getGlobalBounds().getPosition().y;
 			
-			padY = titleY + 20;
+			padY = titleY + 50;
 			padX = titleX + 20;
 
-			std::cout << "PadY : " << padY << std::endl;
+		
 
 			desctxt->text.setPosition(padX, padY);
-			std::cout << "descY : " << desctxt->text.getGlobalBounds().getPosition().y;
+			
 			
 			_iter++;
 		}
