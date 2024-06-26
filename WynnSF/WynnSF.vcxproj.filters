@@ -314,5 +314,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\Data\Scenes\ragni.txt" />
+    <Text Include="src\Data\Scenes\pigmans.txt" />
   </ItemGroup>
 </Project>

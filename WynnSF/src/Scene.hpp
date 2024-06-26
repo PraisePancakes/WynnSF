@@ -7,12 +7,14 @@
 #include "../core/Manager/EntityManager.hpp"
 #include "../core/Components/CSprite.hpp"
 #include "../core/Components/CCollider.hpp"
-
+#include <queue>
+#include <utility>
 
 enum class Scenes {
 	SCENE_MENU,
 	SCENE_KIT_SELECTION,
 	SCENE_RAGNI,
+	SCENE_PIGMANS,
 	SCENE_DETLAS,
 	SCENE_ALMUJ,
 
@@ -79,20 +81,51 @@ struct  ExternalScenes {
 	~ExternalScenes() {};
 };
 
+enum class SIDE {
+	NONE,
+	LEFT,
+	RIGHT,
+	TOP,
+	BOTTOM
+};
+
+struct Point {
+	int x, y;
+	SIDE side;
+};
+
+
+
+
+
+
 class Scene {
 	Scenes m_id;
-	std::unique_ptr<ExternalScenes> externalScenes;
+	std::shared_ptr<ExternalScenes> externalScenes;
 	std::string scenePath = "";
 	
 
 	std::string sceneBLUniqueKey = "";
 	std::string sceneTLUniqueKey = "";
 
+
+
 	std::vector<std::vector<int>> scenetl = {};
 	std::vector<std::vector<int>> scenebl = {};
 
 	std::unique_ptr<TXBaseLayerTiles> blTiles	{ nullptr };
 	std::unique_ptr<TXTopLayerTiles> tlTiles	{ nullptr };
+
+	SIDE checkPerimeter(int x, int y, int rows, int cols) {
+		if (x == 0) return SIDE::LEFT;
+		if (x == rows - 1) return SIDE::RIGHT;
+		if (y == 0) return SIDE::TOP;
+		if (y == cols - 1) return SIDE::BOTTOM;
+		return SIDE::NONE;
+	}
+
+	
+
 
 	void initExternals() {
 		switch (m_id) {
@@ -101,6 +134,9 @@ class Scene {
 		case Scenes::SCENE_KIT_SELECTION:
 			break;
 		case Scenes::SCENE_RAGNI:
+			externalScenes->InitExternalScenes(Scenes::SCENE_RAGNI, Scenes::SCENE_PIGMANS, Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI);
+			break;
+		case Scenes::SCENE_PIGMANS:
 			externalScenes->InitExternalScenes(Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI);
 			break;
 		case Scenes::SCENE_DETLAS:
@@ -207,16 +243,20 @@ class Scene {
 			}
 		}
 
+		this->ExitPoints = findExitPoints();
 
 		file.close();
 	}
 
+	
+
 	void loadSceneBaseLayer() {
 		for (size_t i = 0; i < scenebl.size(); i++) {
+			
 			for (size_t j = 0; j < scenebl[i].size(); j++) {
 				switch (scenebl[j][i]) {
 				case 0:
-				{
+				{	
 					auto grassTile = EntityManager::GetInstance()->AddEntity(sceneBLUniqueKey);
 					auto sc = grassTile->AddComponent<CSprite>(blTiles->TXGrassSetPath, blTiles->grass, 128, 128);
 					sc->sprite.setPosition(i * 128, j * 128);
@@ -305,7 +345,7 @@ class Scene {
 				{
 					auto grassPatchTile = EntityManager::GetInstance()->AddEntity(sceneTLUniqueKey);
 					auto sc = grassPatchTile->AddComponent<CSprite>(tlTiles->TXPlantSetPath, tlTiles->grass_patch, 128, 128);
-					 sc->sprite.setPosition(i * 128, j * 128);
+					sc->sprite.setPosition(i * 128, j * 128);
 				}
 				break;
 				case 7:
@@ -351,6 +391,48 @@ class Scene {
 		}
 	}
 
+	std::vector<Point> findExitPoints() {
+		
+		std::vector<Point> exitPoints;
+	
+		int rows = this->scenetl.size();
+		int cols = this->scenetl[0].size();
+	
+		std::vector<std::vector<bool>> visited(rows, std::vector<bool>(cols, false));
+		std::queue<std::pair<int, int>> q;
+		
+		for (int i = 0; i < rows; ++i) {
+			for (int j = 0; j < cols; ++j) {
+				if (this->scenetl[i][j] == 0 && !visited[i][j]) {
+					q.push({ i, j});
+					visited[i][j] = true;
+				}
+			}
+		}
+
+		while (!q.empty()) {
+			auto [x, y] = q.front();
+			q.pop();
+			SIDE side = checkPerimeter(x, y, rows, cols);
+			if (side != SIDE::NONE) {
+				exitPoints.push_back({ x * 128, y * 128, side });  // Scale coordinates by 128
+			}
+
+			// Explore neighbors in four directions (up, down, left, right)
+			std::vector<std::pair<int, int>> directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
+			for (auto& dir : directions) {
+				int newX = x + dir.first;
+				int newY = y + dir.second;
+				if (newX >= 0 && newX < rows && newY >= 0 && newY < cols && !visited[newX][newY] && this->scenebl[newX][newY] == 0) {
+					q.push({ newX, newY });
+					visited[newX][newY] = true;
+				}
+			}
+		}
+
+		return exitPoints;
+	}
+
 	void loadScene() {
 		loadSceneBaseLayer();
 		loadSceneTopLayer();
@@ -358,6 +440,7 @@ class Scene {
 
 
 
+	
 
 public:
 	Scene(Scenes sceneId, const std::string& scenePath) {
@@ -367,15 +450,26 @@ public:
 		this->sceneTLUniqueKey = scenePath + "tl";
 		blTiles = std::make_unique<TXBaseLayerTiles>();
 		tlTiles = std::make_unique<TXTopLayerTiles>();
-
-		externalScenes = std::make_unique<ExternalScenes>();
+		
+		externalScenes = std::make_shared<ExternalScenes>();
 		initExternals();
 		parseSceneData();
+		
+		
 		loadScene();
 		
 	};
 
+	
+	std::vector<Point> ExitPoints;
 
+	Point GetEntrance(SIDE side) {
+		for (size_t i = 0; i < this->ExitPoints.size(); i++) {
+			if (ExitPoints[i].side == side) {
+				return ExitPoints[i];
+			}
+		}
+	};
 
 	void RenderScene(sf::RenderWindow* ctx) const {
 		//render base layer
@@ -397,8 +491,20 @@ public:
 		}
 	
 	}
+	sf::Vector2f GetBounds() {
+		//if player < 0 -> init and load the left external
+		//if player > right bound -> init and load right external
+		//etc...
 
+		return sf::Vector2f(scenebl.size() * 128, scenebl.size() * 128); // x128 for scale 
 
+	}
+
+	
+
+	std::shared_ptr<ExternalScenes> GetExternals() const {
+		return this->externalScenes;
+	}
 
 	Scenes GetID() const {
 		return m_id;

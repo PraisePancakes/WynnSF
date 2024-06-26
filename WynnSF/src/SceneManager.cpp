@@ -7,6 +7,8 @@ static std::string getSceneName(Scenes id) {
 		return "Ragni";
 	case Scenes::SCENE_DETLAS:
 		return "Detlas";
+	case Scenes::SCENE_PIGMANS:
+		return "Pigmen's Ravines";
 	case Scenes::SCENE_ALMUJ:
 		return "Almuj";
 	default: return "";
@@ -21,6 +23,8 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			
 		case Scenes::SCENE_DETLAS:
 			return "";
+		case Scenes::SCENE_PIGMANS:
+			return "src/Data/Scenes/pigmans.txt";
 		case Scenes::SCENE_ALMUJ:
 			return "";
 		default:
@@ -60,6 +64,64 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			return;
 		}
 
+		
+		std::vector<Point> exitPoints = this->sceneTable[(int)currentSceneToProcess]->ExitPoints;
+	
+		float pX = player->GetPos().x;
+		float pY = player->GetPos().y;
+		float pR = player->GetEntityInstance()->GetComponent<CCollider>()->radius;
+
+		const int pointR = 50;
+
+		for (auto& p : exitPoints) {
+			
+			float pointX = p.x;
+			float pointY = p.y;
+			
+			float xDiff = (pX - pointX) * (pX - pointX);
+			float yDiff = (pY - pointY) * (pY - pointY);
+
+			float distance = std::sqrt(xDiff + yDiff );
+			
+
+			if (distance < pR + pointR) {
+				
+				if (p.side == SIDE::LEFT) {
+					SetScene(this->sceneTable[(int)currentSceneToProcess]->GetExternals()->left);
+					Point right = this->sceneTable[(int)currentSceneToProcess]->GetEntrance(SIDE::RIGHT);
+				
+					player->SetPos(right.x - 128, right.y);
+				}
+
+				if (p.side == SIDE::RIGHT) {
+
+					SetScene(this->sceneTable[(int)currentSceneToProcess]->GetExternals()->right);
+					Point left = this->sceneTable[(int)currentSceneToProcess]->GetEntrance(SIDE::LEFT);
+					player->SetPos(left.x + 128, left.y);
+				}
+
+				if (p.side == SIDE::TOP) {
+
+					SetScene(this->sceneTable[(int)currentSceneToProcess]->GetExternals()->top);
+				
+				}
+				if (p.side == SIDE::BOTTOM) {
+					SetScene(this->sceneTable[(int)currentSceneToProcess]->GetExternals()->bottom);
+				}
+				
+				
+				
+			}
+			
+			
+			
+		}
+	
+
+
+			
+		
+
 		updateIntroduction();
 	}
 
@@ -67,7 +129,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 		std::shared_ptr<Entity> sceneIntroE = EntityManager::GetInstance()->GetEntities("Scene-Introduction")[0];
 		std::shared_ptr<CText> textC = sceneIntroE->GetComponent<CText>();
 
-		
+
 		static sf::Color currentColor = textC->text.getFillColor();
 		currentColor.a -= .001;
 
@@ -128,7 +190,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 		case 0:
 
 			player->SetKit(KitTypes::KIT_ARCHER);
-			SetScene(Scenes::SCENE_RAGNI);
+			SetScene(Scenes::SCENE_PIGMANS);
 			break;
 		case 1:
 			player->SetKit(KitTypes::KIT_ASSASSIN);
@@ -157,7 +219,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			//handle scene events if there are any
 			handleKitSelectionEvent();
 
-		   }
+		  }
 	
 	};
 
@@ -187,6 +249,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			m_KitSelection->Render();
 		}
 		else {
+			
 			sceneTable[(int)currentSceneToProcess]->RenderScene(ctx);
 			renderIntroduction();
 		}
