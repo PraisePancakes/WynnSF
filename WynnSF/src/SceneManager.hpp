@@ -19,12 +19,16 @@ class SceneManager {
 	void initTable();
 	void handleMenuEvent();
 	void handleKitSelectionEvent();
-	
+	void initIntroduction();
+
+	void updateIntroductionPos();
+	void updateIntroduction();
+	void renderIntroduction();
 
 public:
 	SceneManager(sf::RenderWindow* ctx, Player* player);
 
-	
+	void Update();
 	void HandleEvents(sf::Event* e);
 	void SetScene(Scenes scene);
 	void RenderScene();

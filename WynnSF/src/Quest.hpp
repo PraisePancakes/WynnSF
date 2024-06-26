@@ -221,11 +221,7 @@ protected:
 			return false;
 			});
 
-			q1->addProcess("test", [this]()->bool {
-			//some process
-			return false;
-			});
-
+			
 
 			table[(int)QuestID::QUEST_ENZANS_BROTHER] = new Quest("Enzan's Brother", QuestID::QUEST_ENZANS_BROTHER, 1);
 			auto q2 = table[(int)QuestID::QUEST_ENZANS_BROTHER];

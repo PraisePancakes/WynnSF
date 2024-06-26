@@ -1,33 +1,34 @@
 #include "SceneManager.hpp"
 #include "../core/Utils/Utils.hpp"
 
+static std::string getSceneName(Scenes id) {
+	switch (id) {
+	case Scenes::SCENE_RAGNI:
+		return "Ragni";
+	case Scenes::SCENE_DETLAS:
+		return "Detlas";
+	case Scenes::SCENE_ALMUJ:
+		return "Almuj";
+	default: return "";
+	}
+};
+
 std::string SceneManager::getSceneFilePath(Scenes id) {
-		std::string path = "";
+		
 		switch (id) {
-		case Scenes::SCENE_MENU:
-			break;
-		case Scenes::SCENE_KIT_SELECTION:
-			break;
 		case Scenes::SCENE_RAGNI:
-			path = "src/Data/Scenes/ragni.txt";
-			GUI::GlobalChatManager::GetInstance().Log("Testing");
-			GUI::GlobalChatManager::GetInstance().Log("Testing1");
-			GUI::GlobalChatManager::GetInstance().Log("Testing2");
-			GUI::GlobalChatManager::GetInstance().Log("Testing3");
-			GUI::GlobalChatManager::GetInstance().Log("Testing4");
-			GUI::GlobalChatManager::GetInstance().Log("Testing5");
-			GUI::GlobalChatManager::GetInstance().Log("Testing6");
-			GUI::GlobalChatManager::GetInstance().Log("Testing7");
-			break;
+			return "src/Data/Scenes/ragni.txt";
+			
 		case Scenes::SCENE_DETLAS:
-			break;
+			return "";
 		case Scenes::SCENE_ALMUJ:
-			break;
-		case Scenes::SCENE_QUIT:
-			break;
+			return "";
+		default:
+			return "";
+	
 		}
 
-		return path;
+	
 	};
 
 	void SceneManager::initTable() {
@@ -54,6 +55,61 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 		}
 	}
 
+	void SceneManager::Update() {
+		if (currentSceneToProcess == Scenes::SCENE_MENU || currentSceneToProcess == Scenes::SCENE_KIT_SELECTION || currentSceneToProcess == Scenes::SCENE_QUIT) {
+			return;
+		}
+
+		updateIntroduction();
+	}
+
+	static void updateIntroductionColor() {
+		std::shared_ptr<Entity> sceneIntroE = EntityManager::GetInstance()->GetEntities("Scene-Introduction")[0];
+		std::shared_ptr<CText> textC = sceneIntroE->GetComponent<CText>();
+
+		
+		static sf::Color currentColor = textC->text.getFillColor();
+		currentColor.a -= .001;
+
+		if (currentColor.a <= 0) {
+			sceneIntroE->DestroyEntity();
+
+		}
+
+		textC->text.setFillColor(currentColor);
+	}
+
+	void SceneManager::initIntroduction() {
+		if (currentSceneToProcess == Scenes::SCENE_MENU || currentSceneToProcess == Scenes::SCENE_KIT_SELECTION || currentSceneToProcess == Scenes::SCENE_QUIT) {
+			return;
+		}
+
+		sf::View view = ctx->getView();
+		sf::Vector2f center(view.getCenter().x, view.getCenter().y);
+		const std::string sceneName = getSceneName(currentSceneToProcess);
+		std::shared_ptr<Entity> sceneIntroE = EntityManager::GetInstance()->AddEntity("Scene-Introduction");
+		std::shared_ptr<CText> textC = sceneIntroE->AddComponent<CText>("Welcome to " + sceneName + "!", "src/Assets/Fonts/RingBearer.TTF", 72, 0, 0, true);
+		
+		
+		
+	}
+
+	void SceneManager::updateIntroduction() {
+		EntityVec vec = EntityManager::GetInstance()->GetEntities("Scene-Introduction");
+		if (vec.size() > 0) {
+			updateIntroductionColor();
+			updateIntroductionPos();
+		}
+	};
+
+	void SceneManager::updateIntroductionPos() {
+		sf::View view = ctx->getView();
+		sf::Vector2f pos(view.getCenter().x, view.getCenter().y - 200);
+		std::shared_ptr<Entity> sceneIntroE = EntityManager::GetInstance()->GetEntities("Scene-Introduction")[0];
+		std::shared_ptr<CText> textC = sceneIntroE->GetComponent<CText>();
+
+		textC->text.setPosition(pos.x, pos.y);
+	}
 	
 
 	SceneManager::SceneManager(sf::RenderWindow* ctx, Player* player) {
@@ -107,7 +163,19 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 	void SceneManager::SetScene(Scenes scene) {
 		this->currentSceneToProcess = scene;
+		initIntroduction();
 		//log welcome
+	}
+
+	void SceneManager::renderIntroduction() {
+		EntityVec vec = EntityManager::GetInstance()->GetEntities("Scene-Introduction");
+		if (vec.size() > 0) {
+			std::shared_ptr<Entity> introEntity = EntityManager::GetInstance()->GetEntities("Scene-Introduction")[0];
+			if (introEntity) {
+				auto txtC = introEntity->GetComponent<CText>();
+				ctx->draw(txtC->text);
+			}
+		}
 	}
 
 	void SceneManager::RenderScene() {
@@ -120,6 +188,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 		}
 		else {
 			sceneTable[(int)currentSceneToProcess]->RenderScene(ctx);
+			renderIntroduction();
 		}
 
 	}

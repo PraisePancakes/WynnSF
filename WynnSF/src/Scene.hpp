@@ -83,6 +83,7 @@ class Scene {
 	Scenes m_id;
 	std::unique_ptr<ExternalScenes> externalScenes;
 	std::string scenePath = "";
+	
 
 	std::string sceneBLUniqueKey = "";
 	std::string sceneTLUniqueKey = "";
@@ -396,6 +397,8 @@ public:
 		}
 	
 	}
+
+
 
 	Scenes GetID() const {
 		return m_id;

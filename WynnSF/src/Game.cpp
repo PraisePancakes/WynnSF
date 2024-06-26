@@ -100,6 +100,7 @@ void Game::sUpdate() {
 		m_Gui->Update();
 		m_QuestData->Update();
 		m_QuestBook->Update();
+		m_sceneManager->Update();
 		
 	}
 
