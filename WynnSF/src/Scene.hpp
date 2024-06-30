@@ -21,6 +21,31 @@ enum class Scenes {
 	SCENE_QUIT,
 };
 
+
+enum class Side {
+	SIDE_NONE,
+	SIDE_LEFT,
+	SIDE_RIGHT,
+	SIDE_TOP,
+	SIDE_BOTTOM
+};
+
+struct Entrance {
+	Side side = Side::SIDE_NONE;
+	sf::Vector2f pos{ 0, 0 };
+	sf::Vector2f size{ 0, 0 };
+
+	Entrance() {};
+	Entrance(Side side, sf::Vector2f p, sf::Vector2f size) {
+		this->side = side;
+		this->pos = p;
+		this->size = size;
+	}
+
+
+	~Entrance() {};
+};
+
 const static std::string padtxBasePath = "src/Assets/Tiles/PATDTx/";
 const static std::string svrtxBasePath = "src/Assets/Tiles/SVRTx/";
 
@@ -81,22 +106,6 @@ struct  ExternalScenes {
 	~ExternalScenes() {};
 };
 
-enum class SIDE {
-	NONE,
-	LEFT,
-	RIGHT,
-	TOP,
-	BOTTOM
-};
-
-struct Point {
-	int x, y;
-	SIDE side;
-};
-
-
-
-
 
 
 class Scene {
@@ -116,13 +125,7 @@ class Scene {
 	std::unique_ptr<TXBaseLayerTiles> blTiles	{ nullptr };
 	std::unique_ptr<TXTopLayerTiles> tlTiles	{ nullptr };
 
-	SIDE checkPerimeter(int x, int y, int rows, int cols) {
-		if (x == 0) return SIDE::LEFT;
-		if (x == rows - 1) return SIDE::RIGHT;
-		if (y == 0) return SIDE::TOP;
-		if (y == cols - 1) return SIDE::BOTTOM;
-		return SIDE::NONE;
-	}
+	std::vector<Entrance> entrances;
 
 	
 
@@ -134,7 +137,7 @@ class Scene {
 		case Scenes::SCENE_KIT_SELECTION:
 			break;
 		case Scenes::SCENE_RAGNI:
-			externalScenes->InitExternalScenes(Scenes::SCENE_RAGNI, Scenes::SCENE_PIGMANS, Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI);
+			externalScenes->InitExternalScenes(Scenes::SCENE_PIGMANS, Scenes::SCENE_PIGMANS, Scenes::SCENE_PIGMANS, Scenes::SCENE_PIGMANS);
 			break;
 		case Scenes::SCENE_PIGMANS:
 			externalScenes->InitExternalScenes(Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI, Scenes::SCENE_RAGNI);
@@ -243,9 +246,42 @@ class Scene {
 			}
 		}
 
-		this->ExitPoints = findExitPoints();
+		// TO DO fix bug where side is 0 in scenemanagers update
+		for (size_t r = 0; r < scenetl.size(); r++) {
+			for (size_t c = 0; c < scenetl[r].size(); c++) {
+				if (scenetl[r][c] == 0) {
+					sf::Vector2f pos(c * 128, r * 128);
+					sf::Vector2f size(128, 128);
+					
+					if (r == 0) {
+						entrances.push_back({ Side::SIDE_TOP, pos, size });
+					}
+					else if (r == scenetl.size() - 1) {
+						entrances.push_back({ Side::SIDE_BOTTOM, pos, size });
+					}
+					else if (c == 0) {
+						
+						entrances.push_back({ Side::SIDE_LEFT, pos, size });
+
+					}
+					else if (c == scenetl[r].size() - 1) {
+						
+						entrances.push_back({ Side::SIDE_RIGHT, pos, size });
+					}
+
+				
+
+				}
+			}
+		}
+		
+
+	
+		
 
 		file.close();
+
+		
 	}
 
 	
@@ -391,47 +427,7 @@ class Scene {
 		}
 	}
 
-	std::vector<Point> findExitPoints() {
-		
-		std::vector<Point> exitPoints;
 	
-		int rows = this->scenetl.size();
-		int cols = this->scenetl[0].size();
-	
-		std::vector<std::vector<bool>> visited(rows, std::vector<bool>(cols, false));
-		std::queue<std::pair<int, int>> q;
-		
-		for (int i = 0; i < rows; ++i) {
-			for (int j = 0; j < cols; ++j) {
-				if (this->scenetl[i][j] == 0 && !visited[i][j]) {
-					q.push({ i, j});
-					visited[i][j] = true;
-				}
-			}
-		}
-
-		while (!q.empty()) {
-			auto [x, y] = q.front();
-			q.pop();
-			SIDE side = checkPerimeter(x, y, rows, cols);
-			if (side != SIDE::NONE) {
-				exitPoints.push_back({ x * 128, y * 128, side });  // Scale coordinates by 128
-			}
-
-			// Explore neighbors in four directions (up, down, left, right)
-			std::vector<std::pair<int, int>> directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
-			for (auto& dir : directions) {
-				int newX = x + dir.first;
-				int newY = y + dir.second;
-				if (newX >= 0 && newX < rows && newY >= 0 && newY < cols && !visited[newX][newY] && this->scenebl[newX][newY] == 0) {
-					q.push({ newX, newY });
-					visited[newX][newY] = true;
-				}
-			}
-		}
-
-		return exitPoints;
-	}
 
 	void loadScene() {
 		loadSceneBaseLayer();
@@ -452,24 +448,24 @@ public:
 		tlTiles = std::make_unique<TXTopLayerTiles>();
 		
 		externalScenes = std::make_shared<ExternalScenes>();
+		
 		initExternals();
 		parseSceneData();
 		
+		for (size_t i = 0; i < entrances.size(); i++) {
+			std::cout << (int)entrances[i].side << std::endl;
+		}
 		
 		loadScene();
+
+		
 		
 	};
 
 	
-	std::vector<Point> ExitPoints;
-
-	Point GetEntrance(SIDE side) {
-		for (size_t i = 0; i < this->ExitPoints.size(); i++) {
-			if (ExitPoints[i].side == side) {
-				return ExitPoints[i];
-			}
-		}
-	};
+	std::vector<Entrance> GetEntranceVector() const {
+		return entrances;
+	}
 
 	void RenderScene(sf::RenderWindow* ctx) const {
 		//render base layer
@@ -491,17 +487,7 @@ public:
 		}
 	
 	}
-	sf::Vector2f GetBounds() {
-		//if player < 0 -> init and load the left external
-		//if player > right bound -> init and load right external
-		//etc...
-
-		return sf::Vector2f(scenebl.size() * 128, scenebl.size() * 128); // x128 for scale 
-
-	}
-
 	
-
 	std::shared_ptr<ExternalScenes> GetExternals() const {
 		return this->externalScenes;
 	}

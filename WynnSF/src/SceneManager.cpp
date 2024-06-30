@@ -37,8 +37,8 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 	void SceneManager::initTable() {
 		for (Scenes scene = (Scenes)0; scene < Scenes::SCENE_QUIT; scene = static_cast<Scenes>((size_t)scene + 1)) {
-			std::shared_ptr<Scene> item = std::make_shared<Scene>(scene, getSceneFilePath(scene));
-			sceneTable.push_back(item);
+			std::shared_ptr<Scene> s = std::make_shared<Scene>(scene, getSceneFilePath(scene));
+			sceneTable.push_back(s);
 		}
 	};
 
@@ -64,73 +64,94 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			return;
 		}
 
+		std::vector<Entrance> entranceV = this->sceneTable[(int)currentSceneToProcess]->GetEntranceVector();
+		Core::Physics::Vec2D plPos = player->GetPos();
 		
-		std::vector<Point> exitPoints = this->sceneTable[(int)currentSceneToProcess]->ExitPoints;
-	
-		float pX = player->GetPos().x;
-		float pY = player->GetPos().y;
-		float pR = player->GetEntityInstance()->GetComponent<CCollider>()->radius;
-
-		const int pointR = 50;
-
-		for (auto& p : exitPoints) {
+		for (size_t i = 0; i < entranceV.size(); i++) {
 			
-			float pointX = p.x;
-			float pointY = p.y;
-			
-			float xDiff = (pX - pointX) * (pX - pointX);
-			float yDiff = (pY - pointY) * (pY - pointY);
+			if (plPos.x >= entranceV[i].pos.x && plPos.x <= entranceV[i].pos.x + entranceV[i].size.x) {
+				if (plPos.y >= entranceV[i].pos.y && plPos.y <= entranceV[i].pos.y + entranceV[i].size.y) {
+					
+					switch (entranceV[i].side) {
+					
+					case Side::SIDE_LEFT:
+					{	
+						auto scene = this->sceneTable[(int)currentSceneToProcess]->GetExternals()->left;
+						SetScene(scene);
+						auto entrances = this->sceneTable[(int)currentSceneToProcess]->GetEntranceVector();
 
-			float distance = std::sqrt(xDiff + yDiff );
-			
+						for (auto e : entrances) {
+							if (e.side == Side::SIDE_RIGHT) {
+								player->SetPos(e.pos.x - 100, e.pos.y);
+							}
+						}
+						
+					}
+						
+						break;
+					case Side::SIDE_RIGHT:
+					{
+						auto scene = this->sceneTable[(int)currentSceneToProcess]->GetExternals()->right;
+						SetScene(scene);
 
-			if (distance < pR + pointR) {
-				
-				if (p.side == SIDE::LEFT) {
-					SetScene(this->sceneTable[(int)currentSceneToProcess]->GetExternals()->left);
-					Point right = this->sceneTable[(int)currentSceneToProcess]->GetEntrance(SIDE::RIGHT);
-				
-					player->SetPos(right.x - 128, right.y);
+						auto entrances = this->sceneTable[(int)currentSceneToProcess]->GetEntranceVector();
+
+						for (auto e : entrances) {
+							if (e.side == Side::SIDE_LEFT) {
+								player->SetPos(e.pos.x + 100, e.pos.y);
+							}
+						}
+
+					}
+						
+						break;
+					case Side::SIDE_TOP:
+					{
+						auto scene = this->sceneTable[(int)currentSceneToProcess]->GetExternals()->top;
+						SetScene(scene);
+						auto entrances = this->sceneTable[(int)currentSceneToProcess]->GetEntranceVector();
+
+						for (auto e : entrances) {
+							if (e.side == Side::SIDE_BOTTOM) {
+								player->SetPos(e.pos.x, e.pos.y - 100);
+							}
+						}
+					}
+						
+						break;
+					case Side::SIDE_BOTTOM:
+					{
+						auto scene = this->sceneTable[(int)currentSceneToProcess]->GetExternals()->bottom;
+						SetScene(scene);
+						auto entrances = this->sceneTable[(int)currentSceneToProcess]->GetEntranceVector();
+
+						for (auto e : entrances) {
+							if (e.side == Side::SIDE_TOP) {
+								player->SetPos(e.pos.x, e.pos.y + 100);
+							}
+						}
+					}
+						
+						break;
+					default:
+						break;
+					}
+					
 				}
-
-				if (p.side == SIDE::RIGHT) {
-
-					SetScene(this->sceneTable[(int)currentSceneToProcess]->GetExternals()->right);
-					Point left = this->sceneTable[(int)currentSceneToProcess]->GetEntrance(SIDE::LEFT);
-					player->SetPos(left.x + 128, left.y);
-				}
-
-				if (p.side == SIDE::TOP) {
-
-					SetScene(this->sceneTable[(int)currentSceneToProcess]->GetExternals()->top);
-				
-				}
-				if (p.side == SIDE::BOTTOM) {
-					SetScene(this->sceneTable[(int)currentSceneToProcess]->GetExternals()->bottom);
-				}
-				
-				
-				
 			}
-			
-			
-			
 		}
-	
 
-
-			
 		
 
 		updateIntroduction();
 	}
 
-	static void updateIntroductionColor() {
+	 void SceneManager::updateIntroductionColor() {
 		std::shared_ptr<Entity> sceneIntroE = EntityManager::GetInstance()->GetEntities("Scene-Introduction")[0];
 		std::shared_ptr<CText> textC = sceneIntroE->GetComponent<CText>();
 
 
-		static sf::Color currentColor = textC->text.getFillColor();
+		sf::Color currentColor = textC->text.getFillColor();
 		currentColor.a -= .001;
 
 		if (currentColor.a <= 0) {

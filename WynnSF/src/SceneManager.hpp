@@ -22,6 +22,7 @@ class SceneManager {
 	void handleKitSelectionEvent();
 	void initIntroduction();
 
+	void updateIntroductionColor();
 	void updateIntroductionPos();
 	void updateIntroduction();
 	void renderIntroduction();
