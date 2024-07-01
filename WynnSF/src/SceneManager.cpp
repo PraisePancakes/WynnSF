@@ -82,7 +82,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 						for (auto e : entrances) {
 							if (e.side == Side::SIDE_RIGHT) {
-								player->SetPos(e.pos.x - 100, e.pos.y);
+								player->SetPos(e.pos.x - 130, e.pos.y);
 							}
 						}
 						
@@ -98,7 +98,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 						for (auto e : entrances) {
 							if (e.side == Side::SIDE_LEFT) {
-								player->SetPos(e.pos.x + 100, e.pos.y);
+								player->SetPos(e.pos.x + 130, e.pos.y);
 							}
 						}
 
@@ -113,7 +113,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 						for (auto e : entrances) {
 							if (e.side == Side::SIDE_BOTTOM) {
-								player->SetPos(e.pos.x, e.pos.y - 100);
+								player->SetPos(e.pos.x, e.pos.y - 130);
 							}
 						}
 					}
@@ -127,7 +127,7 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 						for (auto e : entrances) {
 							if (e.side == Side::SIDE_TOP) {
-								player->SetPos(e.pos.x, e.pos.y + 100);
+								player->SetPos(e.pos.x, e.pos.y + 130);
 							}
 						}
 					}
@@ -147,19 +147,14 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 	}
 
 	 void SceneManager::updateIntroductionColor() {
-		std::shared_ptr<Entity> sceneIntroE = EntityManager::GetInstance()->GetEntities("Scene-Introduction")[0];
-		std::shared_ptr<CText> textC = sceneIntroE->GetComponent<CText>();
-
-
-		sf::Color currentColor = textC->text.getFillColor();
+		//TO DO FIX RECURRING INTRODUCTION 
+		sf::Color currentColor = this->currentIntroText->text.getFillColor();
 		currentColor.a -= .001;
 
 		if (currentColor.a <= 0) {
-			sceneIntroE->DestroyEntity();
-
+			std::cout << EntityManager::GetInstance()->GetEntities("Scene-Introduction").size() << std::endl;
 		}
-
-		textC->text.setFillColor(currentColor);
+		currentIntroText->text.setFillColor(currentColor);
 	}
 
 	void SceneManager::initIntroduction() {
@@ -167,19 +162,20 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			return;
 		}
 
+	
+		
+		
+		currentIntroText = nullptr;
 		sf::View view = ctx->getView();
 		sf::Vector2f center(view.getCenter().x, view.getCenter().y);
 		const std::string sceneName = getSceneName(currentSceneToProcess);
-		std::shared_ptr<Entity> sceneIntroE = EntityManager::GetInstance()->AddEntity("Scene-Introduction");
-		std::shared_ptr<CText> textC = sceneIntroE->AddComponent<CText>("Welcome to " + sceneName + "!", "src/Assets/Fonts/RingBearer.TTF", 72, 0, 0, true);
-		
-		
-		
+		this->currentIntroText = std::make_shared<CText>("Welcome to " + sceneName + "!", "src/Assets/Fonts/RingBearer.TTF", 72, 0, 0, true);
+	
 	}
 
 	void SceneManager::updateIntroduction() {
-		EntityVec vec = EntityManager::GetInstance()->GetEntities("Scene-Introduction");
-		if (vec.size() > 0) {
+		
+		if (this->currentIntroText != nullptr) {
 			updateIntroductionColor();
 			updateIntroductionPos();
 		}
@@ -188,10 +184,8 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 	void SceneManager::updateIntroductionPos() {
 		sf::View view = ctx->getView();
 		sf::Vector2f pos(view.getCenter().x, view.getCenter().y - 200);
-		std::shared_ptr<Entity> sceneIntroE = EntityManager::GetInstance()->GetEntities("Scene-Introduction")[0];
-		std::shared_ptr<CText> textC = sceneIntroE->GetComponent<CText>();
-
-		textC->text.setPosition(pos.x, pos.y);
+		this->currentIntroText->text.setPosition(pos.x, pos.y);
+		
 	}
 	
 
@@ -250,15 +244,8 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 		//log welcome
 	}
 
-	void SceneManager::renderIntroduction() {
-		EntityVec vec = EntityManager::GetInstance()->GetEntities("Scene-Introduction");
-		if (vec.size() > 0) {
-			std::shared_ptr<Entity> introEntity = EntityManager::GetInstance()->GetEntities("Scene-Introduction")[0];
-			if (introEntity) {
-				auto txtC = introEntity->GetComponent<CText>();
-				ctx->draw(txtC->text);
-			}
-		}
+	void SceneManager::renderIntroduction() {		
+		ctx->draw(this->currentIntroText->text);
 	}
 
 	void SceneManager::RenderScene() {

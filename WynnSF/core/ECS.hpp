@@ -98,7 +98,8 @@ public:
 	}
 
 	inline void DestroyEntity() {
-	
+		
+		
 		this->m_active = false;
 	
 	}

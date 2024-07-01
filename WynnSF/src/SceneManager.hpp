@@ -16,7 +16,7 @@ class SceneManager {
 	std::unique_ptr<Menu> menu;
 	Player* player;
 	std::string getSceneFilePath(Scenes id);
-	
+	std::shared_ptr<CText> currentIntroText;
 	void initTable();
 	void handleMenuEvent();
 	void handleKitSelectionEvent();
