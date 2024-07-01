@@ -10,7 +10,7 @@ class GUIManager {
 	sf::RenderWindow* ctx{nullptr};
 	sf::RectangleShape healthBarContainer;
 	sf::RectangleShape healthBar;
-
+	bool _disabled = false;
 	void _initHealthBarUI();
 
 
@@ -18,7 +18,7 @@ public:
 	GUIManager(sf::RenderWindow* ctx);
 
 	void updateHealthBarUI();
-
+	
 	void renderHealthBarUI();
 	void renderChatUI() const;
 

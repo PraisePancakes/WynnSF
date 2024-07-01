@@ -22,6 +22,7 @@ Player::Player(float spawnX, float spawnY) {
 };
 
 void Player::_initKits() {
+
 	this->kits.push_back(std::make_shared<ArcherKit>());
 	this->kits.push_back(std::make_shared<AssassinKit>());
 	this->kits.push_back(std::make_shared<WarriorKit>());
@@ -29,7 +30,7 @@ void Player::_initKits() {
 }
 
 void Player::SetKit(KitTypes kit) {
-	
+
 	this->currentKitType = kit;
 	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
 	if (kitPtr) {
@@ -61,6 +62,7 @@ void Player::_initAnimation(AnimationType type) {
 
 
 static void validateHealth() {
+	
 	std::shared_ptr<Entity> playerHealthE = EntityManager::GetInstance()->GetEntities("Player-Health")[0];
 	std::shared_ptr<CHealth> healthC = playerHealthE->GetComponent<CHealth>();
 
@@ -73,6 +75,7 @@ static void validateHealth() {
 }
 
 void Player::_updateMovement() {
+
 	_setPosRelativeToTransform();
 	
 	if (IsMoving() && !movingAnimationInitialized) {
@@ -95,6 +98,9 @@ void Player::_updateMovement() {
 
 
 void Player::Update() {
+	if (_disabled) {
+		return;
+	}
 	validateHealth();
 	_updateMovement();
 	
@@ -102,7 +108,9 @@ void Player::Update() {
 }
 
 void Player::Render(sf::RenderWindow& ctx) {
-	
+	if (_disabled) {
+		return;
+	}
 	std::shared_ptr<Kit> kitPtr = this->kits[(int)currentKitType];
 
 	if (kitPtr) {
@@ -134,6 +142,7 @@ void Player::Render(sf::RenderWindow& ctx) {
 
 
 void Player::_setPosRelativeToTransform() {
+	
 	auto tc = this->entity->GetComponent<CTransform>();
 	tc->Position.x;
 	tc->Position.y;
@@ -169,6 +178,7 @@ void Player::_setPosRelativeToTransform() {
 
 
 void Player::SetPos(float x, float y) {
+	
 	auto tc = this->entity->GetComponent<CTransform>();
 	tc->Position.x = x;
 	tc->Position.y = y;
@@ -214,7 +224,16 @@ bool Player::IsMoving() {
 }
 
 void Player::HandleInput(sf::Event* e) {
+	
 	auto ic = entity->GetComponent<CInput>();
+	if (_disabled) {
+			ic->iup = false;
+			ic->ileft = false;
+			ic->idown = false;
+			ic->iright = false;
+			sprinting = false;
+			return;
+	}
 	if (e->type == sf::Event::KeyPressed) {
 
 		if (e->key.scancode == sf::Keyboard::W) {
@@ -271,14 +290,16 @@ Core::Physics::Vec2D Player::GetPos() const {
 };
 
 void Player::HandleMovement() {
+	float MOVEMENT_SPEED = 3.0f;
 
 	auto playerInput = entity->GetComponent<CInput>();
-	float MOVEMENT_SPEED = 3.0f;
+	
 	auto tc = entity->GetComponent<CTransform>();
 
 	if (sprinting) {
 		MOVEMENT_SPEED = 4.f;
 	}
+
 
 	float velX = 0;
 	float velY = 0;

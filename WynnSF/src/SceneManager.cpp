@@ -59,36 +59,33 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 		}
 	}
 
-	void SceneManager::Update() {
-		if (currentSceneToProcess == Scenes::SCENE_MENU || currentSceneToProcess == Scenes::SCENE_KIT_SELECTION || currentSceneToProcess == Scenes::SCENE_QUIT) {
-			return;
-		}
+
+	void SceneManager::updateTransitioningPlayer() {
 
 		std::vector<Entrance> entranceV = this->sceneTable[(int)currentSceneToProcess]->GetEntranceVector();
 		Core::Physics::Vec2D plPos = player->GetPos();
-		
+
 		for (size_t i = 0; i < entranceV.size(); i++) {
-			
+
 			if (plPos.x >= entranceV[i].pos.x && plPos.x <= entranceV[i].pos.x + entranceV[i].size.x) {
 				if (plPos.y >= entranceV[i].pos.y && plPos.y <= entranceV[i].pos.y + entranceV[i].size.y) {
-					
 					switch (entranceV[i].side) {
-					
+
 					case Side::SIDE_LEFT:
-					{	
+					{
 						auto scene = this->sceneTable[(int)currentSceneToProcess]->GetExternals()->left;
 						SetScene(scene);
 						auto entrances = this->sceneTable[(int)currentSceneToProcess]->GetEntranceVector();
 
 						for (auto e : entrances) {
 							if (e.side == Side::SIDE_RIGHT) {
-								player->SetPos(e.pos.x - 130, e.pos.y);
+								player->SetPos(e.pos.x - 200, e.pos.y);
 							}
 						}
-						
+
 					}
-						
-						break;
+
+					break;
 					case Side::SIDE_RIGHT:
 					{
 						auto scene = this->sceneTable[(int)currentSceneToProcess]->GetExternals()->right;
@@ -98,13 +95,13 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 						for (auto e : entrances) {
 							if (e.side == Side::SIDE_LEFT) {
-								player->SetPos(e.pos.x + 130, e.pos.y);
+								player->SetPos(e.pos.x + 200, e.pos.y);
 							}
 						}
 
 					}
-						
-						break;
+
+					break;
 					case Side::SIDE_TOP:
 					{
 						auto scene = this->sceneTable[(int)currentSceneToProcess]->GetExternals()->top;
@@ -113,12 +110,12 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 						for (auto e : entrances) {
 							if (e.side == Side::SIDE_BOTTOM) {
-								player->SetPos(e.pos.x, e.pos.y - 130);
+								player->SetPos(e.pos.x, e.pos.y - 200);
 							}
 						}
 					}
-						
-						break;
+
+					break;
 					case Side::SIDE_BOTTOM:
 					{
 						auto scene = this->sceneTable[(int)currentSceneToProcess]->GetExternals()->bottom;
@@ -127,33 +124,91 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 						for (auto e : entrances) {
 							if (e.side == Side::SIDE_TOP) {
-								player->SetPos(e.pos.x, e.pos.y + 130);
+								player->SetPos(e.pos.x, e.pos.y + 200);
 							}
 						}
 					}
-						
-						break;
+
+					break;
 					default:
 						break;
 					}
-					
+
 				}
 			}
 		}
+	
+	};
 
+	void SceneManager::initTransition() {
+		sf::View v = ctx->getView();
+		sf::Vector2f size = { v.getSize().x , v.getSize().y  };
+		this->transititionOverlay = std::make_shared<sf::RectangleShape>(size);
+		transititionOverlay->setFillColor(sf::Color::Transparent);
 		
+	};
 
+	void SceneManager::updateTransitioningPos() {
+		sf::View v = ctx->getView();
+		sf::Vector2f topLeft = { v.getCenter().x - (v.getSize().x / 2) , v.getCenter().y - (v.getSize().y / 2)};
+		this->transititionOverlay->setPosition(topLeft);
+	};
+
+	void SceneManager::updateTransitioningAnimation() {
+
+			sf::Color color = transititionOverlay->getFillColor();
+			static bool flag = false;
+			static int __iter_count = 0;
+			
+			if (!flag) {
+				
+				color.a++;
+				__iter_count++;
+				transititionOverlay->setFillColor(color);
+				if (__iter_count >= 255) {
+					flag = true;
+				}
+			}
+			else if (flag) {
+				color.a--;
+				__iter_count--;
+				transititionOverlay->setFillColor(color);
+				if (__iter_count <= 0) {
+					isTransitioning = false;
+					flag = false;
+				}
+			}
+
+		}
+
+	
+
+	void SceneManager::updateTransitioning() {
+		if (isTransitioning) {
+			player->Disable();
+			updateTransitioningAnimation();
+			updateTransitioningPos();
+			
+		}
+		else {
+			player->Enable();
+		}
+		updateTransitioningPlayer();
+	}
+
+	void SceneManager::Update() {
+		if (currentSceneToProcess == Scenes::SCENE_MENU || currentSceneToProcess == Scenes::SCENE_KIT_SELECTION || currentSceneToProcess == Scenes::SCENE_QUIT) {
+			return;
+		}
+		updateTransitioning();
+		
+		
 		updateIntroduction();
 	}
 
 	 void SceneManager::updateIntroductionColor() {
-		//TO DO FIX RECURRING INTRODUCTION 
 		sf::Color currentColor = this->currentIntroText->text.getFillColor();
 		currentColor.a -= .001;
-
-		if (currentColor.a <= 0) {
-			std::cout << EntityManager::GetInstance()->GetEntities("Scene-Introduction").size() << std::endl;
-		}
 		currentIntroText->text.setFillColor(currentColor);
 	}
 
@@ -162,9 +217,6 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 			return;
 		}
 
-	
-		
-		
 		currentIntroText = nullptr;
 		sf::View view = ctx->getView();
 		sf::Vector2f center(view.getCenter().x, view.getCenter().y);
@@ -175,10 +227,12 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 	void SceneManager::updateIntroduction() {
 		
-		if (this->currentIntroText != nullptr) {
-			updateIntroductionColor();
-			updateIntroductionPos();
-		}
+			if (this->currentIntroText != nullptr) {
+				updateIntroductionColor();
+				updateIntroductionPos();
+			}
+		
+		
 	};
 
 	void SceneManager::updateIntroductionPos() {
@@ -240,7 +294,9 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 
 	void SceneManager::SetScene(Scenes scene) {
 		this->currentSceneToProcess = scene;
+		isTransitioning = true;
 		initIntroduction();
+		initTransition();
 		//log welcome
 	}
 
@@ -259,6 +315,10 @@ std::string SceneManager::getSceneFilePath(Scenes id) {
 		else {
 			
 			sceneTable[(int)currentSceneToProcess]->RenderScene(ctx);
+			if (isTransitioning) {
+				ctx->draw(*this->transititionOverlay);
+			}
+			
 			renderIntroduction();
 		}
 

@@ -21,6 +21,7 @@ class Player {
 	void _initAnimation(AnimationType type);
 	void _initKits();
 	void _setPosRelativeToTransform();
+	bool _disabled = false;
 public:
 	Player(float spawnX, float spawnY);
 
@@ -32,7 +33,13 @@ public:
 	inline std::shared_ptr<Entity> GetEntityInstance() const { return this->entity; };
 	void Update();
 	void Render(sf::RenderWindow& ctx);
-	
+	inline void Disable() {
+		_disabled = true;
+	};
+
+	inline void Enable() {
+		_disabled = false;
+	}
 	void SetPos(float x, float y);
 	bool IsMoving();
 	void HandleInput(sf::Event* e);

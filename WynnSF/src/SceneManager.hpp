@@ -17,11 +17,19 @@ class SceneManager {
 	Player* player;
 	std::string getSceneFilePath(Scenes id);
 	std::shared_ptr<CText> currentIntroText;
+	std::shared_ptr<sf::RectangleShape> transititionOverlay;
+	bool isTransitioning; 
+
 	void initTable();
 	void handleMenuEvent();
 	void handleKitSelectionEvent();
 	void initIntroduction();
+	void initTransition();
 
+	void updateTransitioningPos();
+	void updateTransitioningPlayer();
+	void updateTransitioningAnimation();
+	void updateTransitioning();
 	void updateIntroductionColor();
 	void updateIntroductionPos();
 	void updateIntroduction();
@@ -34,7 +42,9 @@ public:
 	void HandleEvents(sf::Event* e);
 	void SetScene(Scenes scene);
 	void RenderScene();
-
+	inline bool IsTransitioning() const {
+		return isTransitioning;
+	}
 	std::shared_ptr<Scene> GetCurrentScene() const;
 
 	~SceneManager();

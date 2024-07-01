@@ -78,8 +78,9 @@ void Game::sUserInput() {
 };
 
 void Game::sMovement() {
-	if(!m_QuestBook->IsOpen())
-		m_Player->HandleMovement();
+	if (m_QuestBook->IsOpen() || m_sceneManager->IsTransitioning()) return;
+
+	m_Player->HandleMovement();
 };
 
 void Game::updateCam() {
@@ -89,21 +90,19 @@ void Game::updateCam() {
 
 void Game::sUpdate() {
 	
-	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
+	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION ) {
 		
-		if (!m_QuestBook->IsOpen()) {
+		if (!m_QuestBook->IsOpen() ) {
 			m_Player->Update();	
 			updateCam();
+			m_Gui->Update();
 			//put gui->supdate in here for gui transition effect
-		}
-
-		m_Gui->Update();
+		}	
 		m_QuestData->Update();
 		m_QuestBook->Update();
-		m_sceneManager->Update();
-		
+	
 	}
-
+	m_sceneManager->Update();
 }
 /*
 	since we are using a circle collider, the collision system will work based positioning of each circle collider when collision occurs
@@ -175,13 +174,16 @@ void Game::sRenderer() {
 	m_sceneManager->RenderScene();
 
 	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION && !m_QuestBook->IsOpen()) {
+		if (!m_sceneManager->IsTransitioning()) {
+			m_Gui->Render();
+		}
 		m_Player->Render(this->m_Window);
-		m_Gui->Render();
-		
 
 	}
+
 	
-	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION) {
+	
+	if (m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_MENU && m_sceneManager->GetCurrentScene()->GetID() != Scenes::SCENE_KIT_SELECTION && !m_sceneManager->IsTransitioning()) {
 
 		m_QuestBook->Render();
 	}
